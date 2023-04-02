@@ -62,11 +62,11 @@ class Goal: Identifiable, ObservableObject {
         self.updateCompletionDate()
     }
 
-    var totalDays: Int {
+    fileprivate var totalDays: Int {
         steps.isEmpty ? daysEstimate : steps.totalDays
     }
 
-    var daysLeft: Int {
+    fileprivate var daysLeft: Int {
         steps.isEmpty ? (thisCompleted ? 0 : daysEstimate) : steps.daysLeft
     }
 
@@ -78,6 +78,7 @@ class Goal: Identifiable, ObservableObject {
         goal.parent = self
         steps.append(goal)
         updateProgress()
+        updateCompletionDate()
     }
 
     func updateProgressProperties() {
@@ -162,5 +163,22 @@ extension Goal: Hashable {
 
     func hash(into hasher: inout Hasher) {
         hasher.combine(id)
+    }
+}
+
+// Provided in this file because of fileprivate computed properties.
+extension [Goal] {
+
+    var totalDays: Int {
+        reduce(0) { $0 + $1.totalDays }
+    }
+
+    var daysLeft: Int {
+        reduce(0) { $0 + $1.daysLeft }
+    }
+
+    var progress: Double {
+        guard totalDays > 0 else { return 0 }
+        return Double(totalDays - daysLeft) / Double(totalDays)
     }
 }

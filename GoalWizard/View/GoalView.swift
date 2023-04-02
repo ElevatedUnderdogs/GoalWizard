@@ -101,6 +101,8 @@ struct GoalView: View {
                 } else {
                     VStack {
                         HStack {
+                            Spacer()
+                                .frame(width: 20)
                             Text(goal.title)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
@@ -114,8 +116,9 @@ struct GoalView: View {
                                     .frame(width: 24, height: 24)
                                     .aspectRatio(contentMode: .fit)
                             }
+                            Spacer()
+                                .frame(width: 20)
                         }
-
                         HStack {
                             ProgressBar(value: goal.progress)
                                 .frame(height: 20)
