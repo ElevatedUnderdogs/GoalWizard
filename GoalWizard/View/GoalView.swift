@@ -109,10 +109,8 @@ struct GoalView: View {
                         VStack {
                             HStack {
                                 if searchText.isEmpty {
-                                    Text("\(goal.steps.firstIndex(of: step)! + 1). \(step.title)")
+                                    Text("\(goal.steps.firstIndex(of: step)! + 1).")
                                         .font(.title2)
-                                } else {
-                                    Text("\(step.title)")
                                 }
                                 ProgressBar(value: step.progress)
                                     .frame(height: 10)
@@ -121,13 +119,30 @@ struct GoalView: View {
                                 Text(step.progressPercentage)
                             }
                             HStack {
-                                Text("(\(step.steps.count) sub-goals)")
-                                    .font(.caption2)
-                                Text("Est: " + step.estimatedCompletionDate)
-                                    .font(.caption2)
-                                    .foregroundColor(.blue)
+                                Text("\(step.title)")
+                                    .font(.title2)
+                                Spacer()
                             }
 
+                            Spacer()
+                                .frame(height: 10)
+                            HStack(alignment: .top) {
+                                Text("\(step.steps.count) sub-goals")
+                                    .font(.caption2)
+                                    .foregroundColor(Color(UIColor.systemTeal))
+                                Spacer()
+                                if step.isCompleted {
+                                    Image(systemName: "checkmark")
+                                        .resizable()
+                                        .scaledToFit()
+                                        .frame(width: 10, height: 10)
+                                        .foregroundColor(.green)
+                                } else {
+                                    Text("Est: " + step.estimatedCompletionDate)
+                                        .font(.caption2)
+                                        .foregroundColor(Color(UIColor.systemTeal))
+                                }
+                            }
                         }
                         Spacer()
                             .frame(width: 10)
@@ -146,7 +161,6 @@ struct GoalView: View {
             .sheet(isPresented: $showModal) {
                 AddGoalView(parentGoal: goal)
             }
-            
         }
     }
 }

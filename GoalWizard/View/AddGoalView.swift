@@ -31,9 +31,10 @@ struct AddGoalView: View {
                     .padding(.trailing)
                 }
             #endif
-                TextField("Goal title", text: $title)
+                TextEditor(text: $title)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
+                    .lineLimit(nil)
 
                 TextField("Days estimate (Default is 1 day)", text: $daysEstimate)
                     .padding()
