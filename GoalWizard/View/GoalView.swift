@@ -14,14 +14,12 @@ struct GoalView: View {
     @State var showSearchView = false
     @State var searchText: String = ""
 
-    @State var navigationLinkIsActive : Bool = false
-    @Binding var navigationLinkIsActiveBinding : Bool
-
     var filteredSteps: [Goal] {
         if searchText.isEmpty {
             return goal.steps
         } else {
-            return goal.steps.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+            return goal.steps.filter { $0.title.lowercased().contains(searchText.lowercased())
+            }
         }
     }
 
@@ -31,7 +29,7 @@ struct GoalView: View {
                 HStack {
                     if !goal.topGoal {
                         Button(action: {
-                            self.navigationLinkIsActiveBinding = false
+                          print("home")
                         }) {
                             Image(systemName: "house.fill")
                                 .resizable()
@@ -64,7 +62,7 @@ struct GoalView: View {
                 }
                 .padding(.horizontal)
 
-                if goal.topGoal && goal.steps.isEmpty {
+                if goal.topGoal {
                     Text(goal.title)
                         .font(.largeTitle)
                         .fontWeight(.bold)
@@ -109,23 +107,33 @@ struct GoalView: View {
                 List(filteredSteps) { step in
                     HStack {
                         VStack {
-                            if searchText.isEmpty {
-                                Text("\(goal.steps.firstIndex(of: step)! + 1). \(step.title)")
-                                    .font(.title2)
-                            } else {
-                                Text("\(step.title)")
+                            HStack {
+                                if searchText.isEmpty {
+                                    Text("\(goal.steps.firstIndex(of: step)! + 1). \(step.title)")
+                                        .font(.title2)
+                                } else {
+                                    Text("\(step.title)")
+                                }
+                                ProgressBar(value: step.progress)
+                                    .frame(height: 10)
+                                    .padding(.leading, 20)
+                                    .padding(.trailing, 10)
+                                Text(step.progressPercentage)
                             }
-                            Spacer()
-                            Text("(\(step.steps.count) sub-goals)")
-                                .font(.caption2)
+                            HStack {
+                                Text("(\(step.steps.count) sub-goals)")
+                                    .font(.caption2)
+                                Text("Est: " + step.estimatedCompletionDate)
+                                    .font(.caption2)
+                                    .foregroundColor(.blue)
+                            }
+
                         }
                         Spacer()
+                            .frame(width: 10)
                         NavigationLink(
-                            destination: GoalView(
-                                goal: step,
-                                navigationLinkIsActiveBinding: self.$navigationLinkIsActive),
-                            isActive: self.$navigationLinkIsActive
-                        ) {}
+                            destination: GoalView(goal: step)) {}
+                            .frame(maxWidth: 20)
                     }
                 }
                 .padding(.top)
@@ -145,6 +153,6 @@ struct GoalView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        GoalView(goal: Goal(title: "All Goals"), navigationLinkIsActiveBinding: .constant(true))
+        GoalView(goal: Goal(title: "All Goals"))
     }
 }

@@ -8,19 +8,12 @@
 import Foundation
 import Combine
 
-class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
-    }
-
-    static func == (lhs: Goal, rhs: Goal) -> Bool {
-        lhs.id == rhs.id
-    }
+class Goal: Identifiable, ObservableObject {
 
     let id: UUID
     let title: String
     let topGoal: Bool
+
     private weak var parent: Goal?
     @Published var steps: [Goal]
     @Published var daysEstimate: Int
@@ -42,7 +35,7 @@ class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
         self.daysEstimate = daysEstimate
         self.thisCompleted = false
         self.progress = 0
-        self.progressPercentage = ""
+        self.progressPercentage = "0%"
         self.steps = []
         self.topGoal = topGoal
     }
@@ -53,7 +46,7 @@ class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
         self.daysEstimate = daysEstimate
         self.thisCompleted = false
         self.progress = 0
-        self.progressPercentage = ""
+        self.progressPercentage = "0%"
         self.steps = []
         self.topGoal = false
     }
@@ -90,10 +83,19 @@ class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
         }
     }
 
-    enum CodingKeys: CodingKey {
-        case id, title, steps, daysEstimate, completed, topGoal, progress, progressPercentage
+    var estimatedCompletionDate: String {
+        let today = Date()
+        let calendar = Calendar.current
+        let date = calendar.date(byAdding: .day, value: daysLeft, to: today)!
+        if daysLeft < 7 {
+            return DateFormatter.dayOfWeekString(from: date)
+        } else if calendar.component(.year, from: date) == calendar.component(.year, from: today) {
+            return DateFormatter.monthDayDayOfWeekString(from: date)
+        }
+        return DateFormatter.monthDayYearString(from: date)
     }
 
+    // Required must be declared directly in class not extension.
     required init(from decoder: Decoder) throws {
         let container = try decoder.container(keyedBy: CodingKeys.self)
         id = try container.decode(UUID.self, forKey: .id)
@@ -104,6 +106,13 @@ class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
         topGoal = try container.decode(Bool.self, forKey: .topGoal)
         progress = try container.decode(Double.self, forKey: .progress)
         progressPercentage = try container.decode(String.self, forKey: .progressPercentage)
+    }
+}
+
+extension Goal: Codable {
+
+    enum CodingKeys: CodingKey {
+        case id, title, steps, daysEstimate, completed, topGoal, progress, progressPercentage
     }
 
     func encode(to encoder: Encoder) throws {
@@ -116,5 +125,19 @@ class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
         try container.encode(topGoal, forKey: .topGoal)
         try container.encode(progress, forKey: .progress)
         try container.encode(progressPercentage, forKey: .progressPercentage)
+    }
+}
+
+extension Goal: Equatable {
+
+    static func == (lhs: Goal, rhs: Goal) -> Bool {
+        lhs.id == rhs.id
+    }
+}
+
+extension Goal: Hashable {
+
+    func hash(into hasher: inout Hasher) {
+        hasher.combine(id)
     }
 }
