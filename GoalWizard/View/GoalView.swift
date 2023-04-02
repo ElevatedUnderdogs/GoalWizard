@@ -7,12 +7,17 @@
 
 import SwiftUI
 
+enum ModifyState: Int, Identifiable {
+    case edit, add
+    var id: Int { rawValue }
+}
+
 struct GoalView: View {
     
     @ObservedObject var goal: Goal
-    @State var showModal = false
     @State var showSearchView = false
     @State var searchText: String = ""
+    @State private var modifyState: ModifyState? = nil
 
     var filteredSteps: [Goal] {
         if searchText.isEmpty {
@@ -21,10 +26,6 @@ struct GoalView: View {
             return goal.steps.filter { $0.title.lowercased().contains(searchText.lowercased())
             }
         }
-    }
-
-    func editGoal() {
-
     }
 
     var body: some View {
@@ -55,7 +56,7 @@ struct GoalView: View {
                     .buttonStyle(SkeuomorphicButtonStyle())
 
                     Button(action: {
-                        showModal.toggle()
+                        modifyState = .add
                     }) {
                         Image(systemName: "plus.circle.fill")
                             .resizable()
@@ -89,7 +90,7 @@ struct GoalView: View {
                         Spacer()
                             .frame(width: 20)
                         Button(action: {
-                            // Edit goal action
+                            modifyState = .edit
                         }) {
                             Image(systemName: "pencil.circle")
                                 .resizable()
@@ -106,7 +107,7 @@ struct GoalView: View {
                                 .padding(.top)
                             Spacer()
                             Button(action: {
-                                // Edit goal action
+                                modifyState = .edit
                             }) {
                                 Image(systemName: "pencil.circle")
                                     .resizable()
@@ -185,8 +186,18 @@ struct GoalView: View {
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(goal.topGoal)
 #endif
-            .sheet(isPresented: $showModal) {
-                AddGoalView(parentGoal: goal)
+            .sheet(
+                item: $modifyState,
+                onDismiss: {
+                    modifyState = nil
+                }
+            ) { state in
+                switch state {
+                case .edit:
+                    EditGoalView(goal: goal)
+                case .add:
+                    AddGoalView(parentGoal: goal)
+                }
             }
 
         }
