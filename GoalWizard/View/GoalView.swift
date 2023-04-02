@@ -23,6 +23,10 @@ struct GoalView: View {
         }
     }
 
+    func editGoal() {
+
+    }
+
     var body: some View {
         NavigationStack {
             VStack {
@@ -67,6 +71,7 @@ struct GoalView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding(.top)
+
                 } else if goal.steps.isEmpty {
                     HStack(alignment: .center) {
                         Text(goal.title)
@@ -81,13 +86,35 @@ struct GoalView: View {
                             .onTapGesture {
                                 goal.thisCompleted.toggle()
                             }
+                        Spacer()
+                            .frame(width: 20)
+                        Button(action: {
+                            // Edit goal action
+                        }) {
+                            Image(systemName: "pencil.circle")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .aspectRatio(contentMode: .fit)
+                        }
                     }
                 } else {
                     VStack {
-                        Text(goal.title)
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .padding(.top)
+                        HStack {
+                            Text(goal.title)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                                .padding(.top)
+                            Spacer()
+                            Button(action: {
+                                // Edit goal action
+                            }) {
+                                Image(systemName: "pencil.circle")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .aspectRatio(contentMode: .fit)
+                            }
+                        }
+
                         HStack {
                             ProgressBar(value: goal.progress)
                                 .frame(height: 20)
@@ -161,6 +188,7 @@ struct GoalView: View {
             .sheet(isPresented: $showModal) {
                 AddGoalView(parentGoal: goal)
             }
+
         }
     }
 }

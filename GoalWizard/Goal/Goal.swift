@@ -11,10 +11,10 @@ import Combine
 class Goal: Identifiable, ObservableObject {
 
     let id: UUID
-    let title: String
     let topGoal: Bool
 
     private weak var parent: Goal?
+    @Published var title: String
     @Published var steps: [Goal]
     @Published var daysEstimate: Int
     @Published var thisCompleted: Bool {
