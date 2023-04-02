@@ -28,7 +28,7 @@ struct EditGoalView: View {
                 EmptyView()
             #else
                 HStack {
-                    Text("Add Goal")
+                    Text("Edit Goal")
                         .font(.headline)
                         .padding(.leading)
                     Spacer()
@@ -43,7 +43,7 @@ struct EditGoalView: View {
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .lineLimit(nil)
 
-                TextField("Days estimate (Default is 1 day)", text: daysEstimateBinding)
+                TextField("", text: daysEstimateBinding)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .modifier(NumberKeyboardModifier())
@@ -52,7 +52,7 @@ struct EditGoalView: View {
                     presentationMode
                         .wrappedValue.dismiss()
                 }) {
-                    Text("Add Goal")
+                    Text("Close (Saved)")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
@@ -65,7 +65,7 @@ struct EditGoalView: View {
             }
             .padding(.horizontal)
         #if os(iOS) || os(tvOS)
-            .navigationBarTitle("Add Goal", displayMode: .inline)
+            .navigationBarTitle("Edit goal", displayMode: .inline)
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
             })
