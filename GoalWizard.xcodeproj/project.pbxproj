@@ -22,6 +22,7 @@
 		75C0B13829D8BC4200D886CA /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13729D8BC4200D886CA /* RadioButton.swift */; };
 		75C0B13A29D8BEE200D886CA /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13929D8BEE200D886CA /* Color.swift */; };
 		75C0B13C29D8C39C00D886CA /* NumberKeyboardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13B29D8C39C00D886CA /* NumberKeyboardModifier.swift */; };
+		75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13F29D9223400D886CA /* ProgressBar.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -61,6 +62,7 @@
 		75C0B13729D8BC4200D886CA /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		75C0B13929D8BEE200D886CA /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		75C0B13B29D8C39C00D886CA /* NumberKeyboardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberKeyboardModifier.swift; sourceTree = "<group>"; };
+		75C0B13F29D9223400D886CA /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -173,6 +175,7 @@
 				75C0B10329D7EEA900D886CA /* GoalView.swift */,
 				75C0B13329D8BACD00D886CA /* AddGoalView.swift */,
 				75C0B13729D8BC4200D886CA /* RadioButton.swift */,
+				75C0B13F29D9223400D886CA /* ProgressBar.swift */,
 			);
 			path = View;
 			sourceTree = "<group>";
@@ -314,6 +317,7 @@
 				75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */,
 				75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */,
 				75C0B13A29D8BEE200D886CA /* Color.swift in Sources */,
+				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
 				75C0B13129D8B16E00D886CA /* Array.Goal.swift in Sources */,
 			);

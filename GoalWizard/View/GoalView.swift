@@ -13,20 +13,33 @@ struct GoalView: View {
     @State var showModal = false
     @State var showSearchView = false
     @State var searchText: String = ""
-    @State private var activeLink: UUID?
+
+    @State var navigationLinkIsActive : Bool = false
+    @Binding var navigationLinkIsActiveBinding : Bool
+
+    var filteredSteps: [Goal] {
+        if searchText.isEmpty {
+            return goal.steps
+        } else {
+            return goal.steps.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+        }
+    }
 
     var body: some View {
-        NavigationView {
+        NavigationStack {
             VStack {
                 HStack {
-                    Button(action: {}) {
-                        Image(systemName: "house.fill")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .aspectRatio(contentMode: .fit)
+                    if !goal.topGoal {
+                        Button(action: {
+                            self.navigationLinkIsActiveBinding = false
+                        }) {
+                            Image(systemName: "house.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .aspectRatio(contentMode: .fit)
+                        }
+                        .buttonStyle(SkeuomorphicButtonStyle())
                     }
-                    .buttonStyle(SkeuomorphicButtonStyle())
-
                     Spacer()
 
                     Button(action: {
@@ -51,64 +64,87 @@ struct GoalView: View {
                 }
                 .padding(.horizontal)
 
-                Text(goal.title)
-                    .font(.largeTitle)
-                    .fontWeight(.bold)
-                    .padding(.top)
+                if goal.topGoal && goal.steps.isEmpty {
+                    Text(goal.title)
+                        .font(.largeTitle)
+                        .fontWeight(.bold)
+                        .padding(.top)
+                } else if goal.steps.isEmpty {
+                    HStack(alignment: .center) {
+                        Text(goal.title)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding(.top)
+                        Spacer()
+                            .frame(width: 20)
+                        Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
+                            .resizable()
+                            .frame(width: 24, height: 24)
+                            .onTapGesture {
+                                goal.thisCompleted.toggle()
+                            }
+                    }
+                } else {
+                    VStack {
+                        Text(goal.title)
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding(.top)
+                        HStack {
+                            ProgressBar(value: goal.progress)
+                                .frame(height: 20)
+                                .padding(.leading, 20)
+                                .padding(.trailing, 10)
+                            Text(goal.progressPercentage)
+                                .padding(.trailing, 10)
+                        }
+                    }
+                }
 
                 if showSearchView {
                     TextField("Search", text: $searchText)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                 }
-
-                List {
-                    ForEach(filteredSteps) { step in
-                        HStack {
+                List(filteredSteps) { step in
+                    HStack {
+                        VStack {
                             if searchText.isEmpty {
                                 Text("\(goal.steps.firstIndex(of: step)! + 1). \(step.title)")
+                                    .font(.title2)
                             } else {
                                 Text("\(step.title)")
                             }
-                            if step.steps.count > 0 {
-                                Text("(\(step.steps.count) sub-goals)")
-                            } else {
-                                RadioButton(isChecked: step.completed)
-                            }
-                            
                             Spacer()
-                            Image(systemName: "arrow.right")
-                                .foregroundColor(.blue)
-                                .background(NavigationLink("", destination: GoalView(goal: step)).opacity(0).frame(width: 0, height: 0))
-                                .buttonStyle(PlainButtonStyle())
+                            Text("(\(step.steps.count) sub-goals)")
+                                .font(.caption2)
                         }
+                        Spacer()
+                        NavigationLink(
+                            destination: GoalView(
+                                goal: step,
+                                navigationLinkIsActiveBinding: self.$navigationLinkIsActive),
+                            isActive: self.$navigationLinkIsActive
+                        ) {}
                     }
                 }
                 .padding(.top)
-
                 Spacer()
             }
-        #if os(iOS)
+#if os(iOS)
             .navigationBarTitle("", displayMode: .inline)
-            .navigationBarHidden(true)
-        #endif
+            .navigationBarHidden(goal.topGoal)
+#endif
             .sheet(isPresented: $showModal) {
                 AddGoalView(parentGoal: goal)
             }
-        }
-    }
-
-    var filteredSteps: [Goal] {
-        if searchText.isEmpty {
-            return goal.steps
-        } else {
-            return goal.steps.filter { $0.title.lowercased().contains(searchText.lowercased()) }
+            
         }
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        GoalView(goal: Goal(title: "All Goals"))
+        GoalView(goal: Goal(title: "All Goals"), navigationLinkIsActiveBinding: .constant(true))
     }
 }

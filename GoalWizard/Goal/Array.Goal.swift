@@ -17,7 +17,8 @@ extension [Goal] {
         reduce(0) { $0 + $1.daysLeft }
     }
 
-    var progress: Decimal {
-        Decimal(daysLeft) / Decimal(totalDays)
+    var progress: Double {
+        guard totalDays > 0 else { return 0 }
+        return Double(daysLeft) / Double(totalDays)
     }
 }

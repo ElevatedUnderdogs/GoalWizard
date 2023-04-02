@@ -49,7 +49,7 @@ final class GoalTests: XCTestCase {
         goal.add(sub: subgoal1)
         goal.add(sub: subgoal2)
 
-        subgoal1.completed = true
+        subgoal1.thisCompleted = true
 
         XCTAssertEqual(goal.daysLeft, 3)
     }
@@ -83,7 +83,7 @@ final class GoalTests: XCTestCase {
 
     func testDaysLeftWhenCompleted() {
         let goal = Goal(title: "Test Goal", daysEstimate: 5)
-        goal.completed = true
+        goal.thisCompleted = true
         XCTAssertEqual(goal.daysLeft, 0)
     }
 
@@ -136,7 +136,7 @@ final class GoalTests: XCTestCase {
 
         XCTAssertEqual(goal.daysLeft, 0)
 
-        goal.completed = true
+        goal.thisCompleted = true
 
         XCTAssertEqual(goal.daysLeft, 0)
     }
@@ -178,12 +178,12 @@ final class GoalTests: XCTestCase {
         goal.add(sub: subgoal2)
         goal.add(sub: subgoal3)
 
-        subgoal1.completed = true
-        subgoal2.completed = true
+        subgoal1.thisCompleted = true
+        subgoal2.thisCompleted = true
         XCTAssertFalse(goal.isCompleted)
-        subgoal3.completed = true
+        subgoal3.thisCompleted = true
         XCTAssertTrue(goal.isCompleted)
-        subgoal3.completed = false
+        subgoal3.thisCompleted = false
         XCTAssertFalse(goal.isCompleted)
 
         subgoal1.add(sub: Goal(title: "SubGoal 4"))

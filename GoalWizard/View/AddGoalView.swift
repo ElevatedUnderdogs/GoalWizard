@@ -41,7 +41,7 @@ struct AddGoalView: View {
                     .modifier(NumberKeyboardModifier())
 
                 Button(action: {
-                    parentGoal.steps.append(Goal(title: title, daysEstimate: Int(daysEstimate) ?? 0))
+                    parentGoal.add(sub: Goal(title: title, daysEstimate: Int(daysEstimate) ?? 0))
                     presentationMode
                         .wrappedValue.dismiss()
                 }) {
