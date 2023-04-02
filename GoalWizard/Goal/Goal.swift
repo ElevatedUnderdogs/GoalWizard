@@ -74,6 +74,18 @@ class Goal: Identifiable, ObservableObject {
         steps.isEmpty ? thisCompleted : daysLeft == 0
     }
 
+    func move(fromOffsets source: IndexSet, toOffset destination: Int) {
+        steps.move(fromOffsets: source, toOffset: destination)
+        updateProgress()
+        updateCompletionDate()
+    }
+
+    func delete(at offsets: IndexSet) {
+        offsets.forEach { steps.remove(at: $0) }
+        updateProgress()
+        updateCompletionDate()
+    }
+
     func add(sub goal: Goal) {
         goal.parent = self
         steps.append(goal)

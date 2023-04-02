@@ -18,6 +18,7 @@ struct GoalView: View {
     @State var showSearchView = false
     @State var searchText: String = ""
     @State private var modifyState: ModifyState? = nil
+    @State private var isEditMode: Bool = false
 
     var filteredSteps: [Goal] {
         if searchText.isEmpty {
@@ -26,6 +27,16 @@ struct GoalView: View {
             return goal.steps.filter { $0.title.lowercased().contains(searchText.lowercased())
             }
         }
+    }
+
+    func move(from source: IndexSet, to destination: Int) {
+        goal.move(fromOffsets: source, toOffset: destination)
+        // Remove from persistence if needed
+    }
+
+    func delete(at offsets: IndexSet) {
+        goal.delete(at: offsets)
+        // Save the changes to persistence if needed
     }
 
     var body: some View {
@@ -135,52 +146,63 @@ struct GoalView: View {
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                 }
-                List(filteredSteps) { step in
-                    HStack {
-                        VStack {
-                            HStack {
-                                if searchText.isEmpty {
-                                    Text("\(goal.steps.firstIndex(of: step)! + 1).")
-                                        .font(.title2)
+                List {
+                    ForEach(filteredSteps.indices, id: \.self) { index in
+                        let step = filteredSteps[index]
+                        HStack {
+                            VStack {
+                                HStack {
+                                    if searchText.isEmpty {
+                                        Text("\(goal.steps.firstIndex(of: step)! + 1).")
+                                            .font(.title2)
+                                    }
+                                    ProgressBar(value: step.progress)
+                                        .frame(height: 10)
+                                        .padding(.leading, 20)
+                                        .padding(.trailing, 10)
+                                    Text(step.progressPercentage)
                                 }
-                                ProgressBar(value: step.progress)
-                                    .frame(height: 10)
-                                    .padding(.leading, 20)
-                                    .padding(.trailing, 10)
-                                Text(step.progressPercentage)
-                            }
-                            HStack {
-                                Text("\(step.title)")
-                                    .font(.title2)
-                                Spacer()
-                            }
+                                HStack {
+                                    Text("\(step.title)")
+                                        .font(.title2)
+                                    Spacer()
+                                }
 
-                            Spacer()
-                                .frame(height: 10)
-                            HStack(alignment: .top) {
-                                Text("\(step.steps.count) sub-goals")
-                                    .font(.caption2)
-                                    .foregroundColor(Color(UIColor.systemTeal))
                                 Spacer()
-                                if step.isCompleted {
-                                    Image(systemName: "checkmark")
-                                        .resizable()
-                                        .scaledToFit()
-                                        .frame(width: 10, height: 10)
-                                        .foregroundColor(.green)
-                                } else {
-                                    Text("Est: " + step.estimatedCompletionDate)
+                                    .frame(height: 10)
+                                HStack(alignment: .top) {
+                                    Text("\(step.steps.count) sub-goals")
                                         .font(.caption2)
                                         .foregroundColor(Color(UIColor.systemTeal))
+                                    Spacer()
+                                    if step.isCompleted {
+                                        Image(systemName: "checkmark")
+                                            .resizable()
+                                            .scaledToFit()
+                                            .frame(width: 10, height: 10)
+                                            .foregroundColor(.green)
+                                    } else {
+                                        Text("Est: " + step.estimatedCompletionDate)
+                                            .font(.caption2)
+                                            .foregroundColor(Color(UIColor.systemTeal))
+                                    }
                                 }
                             }
+                            Spacer()
+                                .frame(width: 10)
+                            NavigationLink(
+                                destination: GoalView(goal: step)) {}
+                                .frame(maxWidth: 20)
                         }
-                        Spacer()
-                            .frame(width: 10)
-                        NavigationLink(
-                            destination: GoalView(goal: step)) {}
-                            .frame(maxWidth: 20)
+                        .gesture(
+                            LongPressGesture(minimumDuration: 0.5)
+                                .onEnded { _ in
+                                    isEditMode.toggle()
+                                }
+                        )
                     }
+                    .onMove(perform: isEditMode ? move : nil)
+                    .onDelete(perform: delete)
                 }
                 .padding(.top)
                 Spacer()
