@@ -22,31 +22,13 @@ class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
     let title: String
     let topGoal: Bool
     private weak var parent: Goal?
-
-    private var root: Goal {
-        var up: Goal = self
-        while let parent = up.parent {
-            up = parent
-        }
-        return up
-    }
-
-    @Published var steps: [Goal] {
-        didSet {
-            progress = steps.isEmpty ? (thisCompleted ? 1 : 0) : steps.progress
-            progressPercentage = "\(progress / 1)%"
-        }
-    }
-
-    // The following properties are ignored in favor of children.
+    @Published var steps: [Goal]
     @Published var daysEstimate: Int
     @Published var thisCompleted: Bool {
         didSet {
-            let buffer = root.steps
-            root.steps = buffer
+            updateProgress()
         }
     }
-
     @Published private(set) var progress: Double
     @Published private(set) var progressPercentage: String
 
@@ -91,6 +73,21 @@ class Goal: Codable, Identifiable, Equatable, ObservableObject, Hashable {
     func add(sub goal: Goal) {
         goal.parent = self
         steps.append(goal)
+        updateProgress()
+    }
+
+    func updateProgressProperties() {
+        progress = steps.isEmpty ? (thisCompleted ? 1 : 0) : steps.progress
+        progressPercentage = "\(Int((progress / 1) * 100))%"
+    }
+
+    func updateProgress() {
+        var up: Goal = self
+        updateProgressProperties()
+        while let next = up.parent {
+            up = next
+            up.updateProgressProperties()
+        }
     }
 
     enum CodingKeys: CodingKey {

@@ -19,6 +19,6 @@ extension [Goal] {
 
     var progress: Double {
         guard totalDays > 0 else { return 0 }
-        return Double(daysLeft) / Double(totalDays)
+        return Double(totalDays - daysLeft) / Double(totalDays)
     }
 }

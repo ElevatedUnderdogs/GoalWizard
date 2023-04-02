@@ -35,13 +35,13 @@ struct AddGoalView: View {
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
 
-                TextField("Days estimate (optional)", text: $daysEstimate)
+                TextField("Days estimate (Default is 1 day)", text: $daysEstimate)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .modifier(NumberKeyboardModifier())
 
                 Button(action: {
-                    parentGoal.add(sub: Goal(title: title, daysEstimate: Int(daysEstimate) ?? 0))
+                    parentGoal.add(sub: Goal(title: title, daysEstimate: Int(daysEstimate) ?? 1))
                     presentationMode
                         .wrappedValue.dismiss()
                 }) {
