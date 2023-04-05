@@ -33,6 +33,7 @@ struct GoalView: View {
 
     func move(from source: IndexSet, to destination: Int) {
         goal.move(fromOffsets: source, toOffset: destination)
+
         // Remove from persistence if needed
     }
 
@@ -99,6 +100,14 @@ struct GoalView: View {
                             .frame(width: 24, height: 24)
                             .onTapGesture {
                                 goal.thisCompleted.toggle()
+                                NSPersistentContainer
+                                    .goalTable
+                                    .viewContext
+                                    .updateGoal(
+                                        goal: goal,
+                                        title: goal.notOptionalTitle,
+                                        estimatedTime: goal.daysEstimate
+                                    )
                             }
                         Spacer()
                             .frame(width: 20)
@@ -232,6 +241,7 @@ struct GoalView: View {
                     AddGoalView(parentGoal: goal)
                 }
             }
+
 
         }
     }

@@ -7,11 +7,37 @@
 
 import SwiftUI
 
+#if os(iOS)
+import UIKit
+#elseif os(macOS)
+import AppKit
+#endif
+
 struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal
 
+    #if os(macOS)
+    private let keyPublisher = NotificationCenter.default.publisher(for: NSEvent.keyDownNotification)
+    #endif
+
     var body: some View {
+        let titleBinder = Binding<String> (
+              get: {
+                  goal.notOptionalTitle
+              },
+              set: {
+                  goal.title = $0
+                  NSPersistentContainer
+                      .goalTable
+                      .viewContext
+                      .updateGoal(
+                        goal: goal,
+                        title: $0,
+                        estimatedTime: goal.daysEstimate
+                      )
+              }
+            )
         let daysEstimateBinding: Binding<String> = Binding<String>(
             get: {
                 String(goal.daysEstimate)
@@ -38,7 +64,7 @@ struct EditGoalView: View {
                     .padding(.trailing)
                 }
             #endif
-                TextEditor(text: $goal.notOptionalTitle)
+                TextEditor(text: titleBinder)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .lineLimit(nil)
@@ -70,6 +96,7 @@ struct EditGoalView: View {
                 presentationMode.wrappedValue.dismiss()
             })
         #endif
+
         }
     }
 }

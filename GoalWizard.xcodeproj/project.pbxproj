@@ -127,10 +127,10 @@
 			isa = PBXGroup;
 			children = (
 				75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */,
+				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
 				75C0B13E29D8C46F00D886CA /* FullWindowViews */,
 				75C0B1EE29DA3E0400D886CA /* Views */,
 				75C0B13D29D8C46500D886CA /* Utilities */,
-				75C0B13229D8B19F00D886CA /* Goal */,
 				75C0B10529D7EEAA00D886CA /* Assets.xcassets */,
 				75C0B10729D7EEAA00D886CA /* GoalWizard.entitlements */,
 				75C0B10829D7EEAA00D886CA /* Preview Content */,
@@ -162,14 +162,6 @@
 				75C0B11F29D7EEAA00D886CA /* GoalWizardUITestsLaunchTests.swift */,
 			);
 			path = GoalWizardUITests;
-			sourceTree = "<group>";
-		};
-		75C0B13229D8B19F00D886CA /* Goal */ = {
-			isa = PBXGroup;
-			children = (
-				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
-			);
-			path = Goal;
 			sourceTree = "<group>";
 		};
 		75C0B13D29D8C46500D886CA /* Utilities */ = {

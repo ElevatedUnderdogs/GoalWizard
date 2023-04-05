@@ -47,24 +47,29 @@ extension Goal {
         return goal
     }
 
-    private static var origin: Goal {
-        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
-        goal.estimatedCompletionDate = ""
-        goal.id = UUID()
-        goal.title = "All Goals"
-        goal.daysEstimate = 1
-        goal.thisCompleted = false
-        goal.progress = 0
-        goal.progressPercentage = ""
-        goal.steps = []
-        goal.topGoal = true
-        goal.updateProgressProperties()
-        goal.updateCompletionDate()
-        return goal
-    }
+//    private static var origin: Goal {
+//        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+//        goal.estimatedCompletionDate = ""
+//        goal.id = UUID()
+//        goal.title = "All Goals"
+//        goal.daysEstimate = 1
+//        goal.thisCompleted = false
+//        goal.progress = 0
+//        goal.progressPercentage = ""
+//        goal.steps = []
+//        goal.topGoal = true
+//        goal.updateProgressProperties()
+//        goal.updateCompletionDate()
+//        return goal
+//    }
 
     static var start: Goal {
-        NSPersistentContainer.goalTable.viewContext.topGoal ?? .origin
+        if let topGoal = NSPersistentContainer.goalTable.viewContext.topGoal {
+            return topGoal
+        } else {
+            let origin = NSPersistentContainer.goalTable.viewContext.createAndSaveGoal(title: "All Goals", isTopGoal: true)
+            return origin
+        }
     }
     
     public override func didChangeValue(forKey key: String) {
@@ -93,8 +98,15 @@ extension Goal {
         }
         mutableSteps.moveObjects(at: source, to: destination)
         steps = mutableSteps.copy() as? NSOrderedSet
-        updateProgress()
-        updateCompletionDate()
+
+        NSPersistentContainer
+            .goalTable
+            .viewContext
+            .updateGoal(
+                goal: self,
+                title: self.notOptionalTitle,
+                estimatedTime: self.daysEstimate
+            )
     }
 
     func delete(at offsets: IndexSet) {
@@ -105,8 +117,14 @@ extension Goal {
             mutableSteps.removeObject(at: index)
         }
         steps = mutableSteps.copy() as? NSOrderedSet
-        updateProgress()
-        updateCompletionDate()
+        NSPersistentContainer
+            .goalTable
+            .viewContext
+            .updateGoal(
+                goal: self,
+                title: self.notOptionalTitle,
+                estimatedTime: self.daysEstimate
+            )
     }
 
     func updateProgressProperties() {

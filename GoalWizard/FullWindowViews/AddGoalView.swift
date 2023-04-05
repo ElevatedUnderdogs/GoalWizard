@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 struct AddGoalView: View {
     @Environment(\.presentationMode) var presentationMode
@@ -42,15 +43,12 @@ struct AddGoalView: View {
                     .modifier(NumberKeyboardModifier())
 
                 Button(action: {
-                    parentGoal.add(
-                        sub: Goal.new(title: title, daysEstimate: Int64(daysEstimate) ?? 1)
-//                            Goal(
-//                            title: title,
-//                            daysEstimate: Int(daysEstimate) ?? 1
-//                        )
+                    NSPersistentContainer.goalTable.viewContext.createAndSaveGoal(
+                        title: title,
+                        estimatedTime: Int64(daysEstimate) ?? 1,
+                        parent: parentGoal
                     )
-                    presentationMode
-                        .wrappedValue.dismiss()
+                    presentationMode.wrappedValue.dismiss()
                 }) {
                     Text("Add Goal")
                         .font(.headline)
