@@ -9,47 +9,7 @@ import Foundation
 import Combine
 import CoreData
 
-enum TopGoalError: Error {
-    case multipleTopGoals
-}
-
-extension NSManagedObjectContext {
-    var topGoal: Goal? {
-        let fetchRequest: NSFetchRequest<Goal> = Goal.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "topGoal == %@", NSNumber(value: true))
-
-        do {
-            let goals = try fetch(fetchRequest)
-            if goals.count > 1 {
-                print(TopGoalError.multipleTopGoals.localizedDescription)
-                return nil
-            }
-            return goals.first
-        } catch {
-            print("Failed to fetch top goal: \(error)")
-            return nil
-        }
-    }
-}
-
-extension NSOrderedSet {
-
-    func addElement(_ element: Any) -> NSOrderedSet {
-        let mutableSet = mutableCopy() as! NSMutableOrderedSet
-        mutableSet.add(element)
-        return mutableSet.copy() as! NSOrderedSet
-    }
-
-    func removeElement(at index: Int) -> NSOrderedSet {
-        let mutableSet = mutableCopy() as! NSMutableOrderedSet
-        mutableSet.removeObject(at: index)
-        return mutableSet.copy() as! NSOrderedSet
-    }
-
-}
-
 extension Goal {
-    // @NSManaged public var nonOptionalTitle: String
 
     public var notOptionalTitle: String {
         get {
@@ -63,40 +23,13 @@ extension Goal {
     var subGoalCount: Int {
         steps.goals.count + steps.goals.reduce(0) { $0 + $1.subGoalCount }
     }
-}
 
-extension Goal {
-    
-    //    let id: UUID
-    //    let topGoal: Bool
-    //
-    //    weak var parent: Goal?
-    //    @Published var title: String
-    //    @Published var steps: [Goal]
-    //    @Published var daysEstimate: Int {
-    //        didSet {
-    //            updateProgress()
-    //            updateCompletionDate()
-    //        }
-    //    }
-    //    @Published var thisCompleted: Bool {
-    //        didSet {
-    //            updateProgress()
-    //            updateCompletionDate()
-    //        }
-    //    }
-    //    @Published private(set) var progress: Double
-    //    @Published private(set) var progressPercentage: String
-    //    @Published private(set) var estimatedCompletionDate: String
-
-
-
-     func add(sub goal: Goal) {
-         goal.parent = self
-         steps = steps?.addElement(goal) ?? []
-         updateProgress()
-         updateCompletionDate()
-     }
+    func add(sub goal: Goal) {
+        goal.parent = self
+        steps = steps?.addElement(goal) ?? []
+        updateProgress()
+        updateCompletionDate()
+    }
 
     static func new(title: String, daysEstimate: Int64 = 1) -> Goal {
         let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
@@ -142,11 +75,11 @@ extension Goal {
         }
     }
 
-    fileprivate var totalDays: Int64 {
+    var totalDays: Int64 {
         steps.goals.isEmpty ? daysEstimate : steps.goals.totalDays
     }
 
-    fileprivate var daysLeft: Int64 {
+    var daysLeft: Int64 {
         steps.goals.isEmpty ? (thisCompleted ? 0 : daysEstimate) : steps.goals.daysLeft
     }
 
@@ -210,14 +143,6 @@ extension Goal {
             up = next
             up.updateCompletionDateProperties()
         }
-    }
-}
-
-
-extension Optional<NSOrderedSet> {
-    var goals: [Goal] {
-        guard let self else { return [] }
-        return self.array as? [Goal] ?? []
     }
 }
 

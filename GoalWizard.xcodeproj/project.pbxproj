@@ -16,7 +16,6 @@
 		75C0B12029D7EEAA00D886CA /* GoalWizardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B11F29D7EEAA00D886CA /* GoalWizardUITestsLaunchTests.swift */; };
 		75C0B12D29D7F2CF00D886CA /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B12C29D7F2CF00D886CA /* Goal.swift */; };
 		75C0B12F29D7F79900D886CA /* GoalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B12E29D7F79900D886CA /* GoalTests.swift */; };
-		75C0B13129D8B16E00D886CA /* Array.Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13029D8B16E00D886CA /* Array.Goal.swift */; };
 		75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13329D8BACD00D886CA /* AddGoalView.swift */; };
 		75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13529D8BC1400D886CA /* SkeuomorphicButtonStyle.swift */; };
 		75C0B13829D8BC4200D886CA /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13729D8BC4200D886CA /* RadioButton.swift */; };
@@ -27,6 +26,9 @@
 		75C0B1ED29DA197400D886CA /* EditGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B1EC29DA197400D886CA /* EditGoalView.swift */; };
 		75C0B1F129DB947600D886CA /* Goal.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B1EF29DB947600D886CA /* Goal.xcdatamodeld */; };
 		75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7DF29DBABC200493D9C /* NSPersistenceContainer.swift */; };
+		75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7EA29DCF8A200493D9C /* Optional.swift */; };
+		75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */; };
+		75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -60,7 +62,6 @@
 		75C0B11F29D7EEAA00D886CA /* GoalWizardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		75C0B12C29D7F2CF00D886CA /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		75C0B12E29D7F79900D886CA /* GoalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalTests.swift; sourceTree = "<group>"; };
-		75C0B13029D8B16E00D886CA /* Array.Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.Goal.swift; sourceTree = "<group>"; };
 		75C0B13329D8BACD00D886CA /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		75C0B13529D8BC1400D886CA /* SkeuomorphicButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeuomorphicButtonStyle.swift; sourceTree = "<group>"; };
 		75C0B13729D8BC4200D886CA /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
@@ -71,6 +72,9 @@
 		75C0B1EC29DA197400D886CA /* EditGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGoalView.swift; sourceTree = "<group>"; };
 		75C0B1F029DB947600D886CA /* Goal.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Goal.xcdatamodel; sourceTree = "<group>"; };
 		75C8B7DF29DBABC200493D9C /* NSPersistenceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSPersistenceContainer.swift; sourceTree = "<group>"; };
+		75C8B7EA29DCF8A200493D9C /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
+		75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOrderedSet.swift; sourceTree = "<group>"; };
+		75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContext.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -164,7 +168,6 @@
 			isa = PBXGroup;
 			children = (
 				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
-				75C0B13029D8B16E00D886CA /* Array.Goal.swift */,
 			);
 			path = Goal;
 			sourceTree = "<group>";
@@ -177,6 +180,9 @@
 				75C0B13929D8BEE200D886CA /* Color.swift */,
 				75C0B1EA29DA08E000D886CA /* DateFormatter.swift */,
 				75C8B7DF29DBABC200493D9C /* NSPersistenceContainer.swift */,
+				75C8B7EA29DCF8A200493D9C /* Optional.swift */,
+				75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */,
+				75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -334,20 +340,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */,
 				75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */,
 				75C0B13C29D8C39C00D886CA /* NumberKeyboardModifier.swift in Sources */,
 				75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */,
 				75C0B1ED29DA197400D886CA /* EditGoalView.swift in Sources */,
 				75C0B13829D8BC4200D886CA /* RadioButton.swift in Sources */,
 				75C0B1F129DB947600D886CA /* Goal.xcdatamodeld in Sources */,
+				75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */,
 				75C0B12D29D7F2CF00D886CA /* Goal.swift in Sources */,
 				75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */,
 				75C0B1EB29DA08E000D886CA /* DateFormatter.swift in Sources */,
 				75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */,
 				75C0B13A29D8BEE200D886CA /* Color.swift in Sources */,
+				75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */,
 				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
-				75C0B13129D8B16E00D886CA /* Array.Goal.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
