@@ -42,7 +42,13 @@ struct AddGoalView: View {
                     .modifier(NumberKeyboardModifier())
 
                 Button(action: {
-                    parentGoal.add(sub: Goal(title: title, daysEstimate: Int(daysEstimate) ?? 1))
+                    parentGoal.add(
+                        sub: Goal.new(title: title, daysEstimate: Int64(daysEstimate) ?? 1)
+//                            Goal(
+//                            title: title,
+//                            daysEstimate: Int(daysEstimate) ?? 1
+//                        )
+                    )
                     presentationMode
                         .wrappedValue.dismiss()
                 }) {
@@ -70,6 +76,6 @@ struct AddGoalView: View {
 
 struct AddGoalView_Previews: PreviewProvider {
     static var previews: some View {
-        AddGoalView(parentGoal: Goal(title: "Main Goal"))
+        AddGoalView(parentGoal: Goal.start)
     }
 }

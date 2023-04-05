@@ -6,6 +6,7 @@
 //
 
 import SwiftUI
+import CoreData
 
 enum ModifyState: Int, Identifiable {
     case edit, add
@@ -22,10 +23,11 @@ struct GoalView: View {
 
     var filteredSteps: [Goal] {
         if searchText.isEmpty {
-            return goal.steps
+            return goal.steps.goals
         } else {
-            return goal.steps.filter { $0.title.lowercased().contains(searchText.lowercased())
-            }
+            return goal.steps.goals.filter { goal in
+                goal.title?.lowercased().contains(searchText.lowercased()) == true
+            }.compactMap { $0 }
         }
     }
 
@@ -79,14 +81,14 @@ struct GoalView: View {
                 .padding(.horizontal)
 
                 if goal.topGoal {
-                    Text(goal.title)
+                    Text(goal.notOptionalTitle)
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding(.top)
 
                 } else if goal.steps.isEmpty {
                     HStack(alignment: .center) {
-                        Text(goal.title)
+                        Text(goal.notOptionalTitle)
                             .font(.largeTitle)
                             .fontWeight(.bold)
                             .padding(.top)
@@ -114,7 +116,7 @@ struct GoalView: View {
                         HStack {
                             Spacer()
                                 .frame(width: 20)
-                            Text(goal.title)
+                            Text(goal.notOptionalTitle)
                                 .font(.largeTitle)
                                 .fontWeight(.bold)
                                 .padding(.top)
@@ -135,7 +137,7 @@ struct GoalView: View {
                                 .frame(height: 20)
                                 .padding(.leading, 20)
                                 .padding(.trailing, 10)
-                            Text(goal.progressPercentage)
+                            Text(goal.progressPercentage ?? "")
                                 .padding(.trailing, 10)
                         }
                     }
@@ -153,17 +155,17 @@ struct GoalView: View {
                             VStack {
                                 HStack {
                                     if searchText.isEmpty {
-                                        Text("\(goal.steps.firstIndex(of: step)! + 1).")
+                                        Text("\(goal.steps.goals.firstIndex(of: step)! + 1).")
                                             .font(.title2)
                                     }
                                     ProgressBar(value: step.progress)
                                         .frame(height: 10)
                                         .padding(.leading, 20)
                                         .padding(.trailing, 10)
-                                    Text(step.progressPercentage)
+                                    Text(step.progressPercentage ?? "")
                                 }
                                 HStack {
-                                    Text("\(step.title)")
+                                    Text("\(step.notOptionalTitle)")
                                         .font(.title2)
                                     Spacer()
                                 }
@@ -171,7 +173,7 @@ struct GoalView: View {
                                 Spacer()
                                     .frame(height: 10)
                                 HStack(alignment: .top) {
-                                    Text("\(step.steps.count) sub-goals")
+                                    Text("\(step.subGoalCount) sub-goals")
                                         .font(.caption2)
                                         .foregroundColor(Color(UIColor.systemTeal))
                                     Spacer()
@@ -182,7 +184,7 @@ struct GoalView: View {
                                             .frame(width: 10, height: 10)
                                             .foregroundColor(.green)
                                     } else {
-                                        Text("Est: " + step.estimatedCompletionDate)
+                                        Text("Est: " + (step.estimatedCompletionDate ?? ""))
                                             .font(.caption2)
                                             .foregroundColor(Color(UIColor.systemTeal))
                                     }
@@ -207,6 +209,12 @@ struct GoalView: View {
                 .padding(.top)
                 Spacer()
             }
+//            .refreshable {
+//                let topGoal = await NSPersistentContainer.goalTable.viewContext.topGoal
+//                guard let topGoal else { return }
+//                self.goal = topGoal
+//            }
+         
 #if os(iOS)
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(goal.topGoal)
@@ -231,6 +239,6 @@ struct GoalView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
-        GoalView(goal: Goal(title: "All Goals"))
+        GoalView(goal: Goal.start)
     }
 }

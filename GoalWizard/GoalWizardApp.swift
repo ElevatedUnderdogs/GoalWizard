@@ -11,7 +11,7 @@ import SwiftUI
 struct GoalWizardApp: App {
     var body: some Scene {
         WindowGroup {
-            GoalView(goal: Goal.topGoal)
+            GoalView(goal: .start)
         }
     }
 }

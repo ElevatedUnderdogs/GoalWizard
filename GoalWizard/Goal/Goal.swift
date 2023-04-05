@@ -7,67 +7,147 @@
 
 import Foundation
 import Combine
+import CoreData
 
-class Goal: Identifiable, ObservableObject {
+enum TopGoalError: Error {
+    case multipleTopGoals
+}
 
-    let id: UUID
-    let topGoal: Bool
+extension NSManagedObjectContext {
+    var topGoal: Goal? {
+        let fetchRequest: NSFetchRequest<Goal> = Goal.fetchRequest()
+        fetchRequest.predicate = NSPredicate(format: "topGoal == %@", NSNumber(value: true))
 
-    private weak var parent: Goal?
-    @Published var title: String
-    @Published var steps: [Goal]
-    @Published var daysEstimate: Int {
-        didSet {
+        do {
+            let goals = try fetch(fetchRequest)
+            if goals.count > 1 {
+                print(TopGoalError.multipleTopGoals.localizedDescription)
+                return nil
+            }
+            return goals.first
+        } catch {
+            print("Failed to fetch top goal: \(error)")
+            return nil
+        }
+    }
+}
+
+extension NSOrderedSet {
+
+    func addElement(_ element: Any) -> NSOrderedSet {
+        let mutableSet = mutableCopy() as! NSMutableOrderedSet
+        mutableSet.add(element)
+        return mutableSet.copy() as! NSOrderedSet
+    }
+
+    func removeElement(at index: Int) -> NSOrderedSet {
+        let mutableSet = mutableCopy() as! NSMutableOrderedSet
+        mutableSet.removeObject(at: index)
+        return mutableSet.copy() as! NSOrderedSet
+    }
+
+}
+
+extension Goal {
+    // @NSManaged public var nonOptionalTitle: String
+
+    public var notOptionalTitle: String {
+        get {
+            return title ?? ""
+        }
+        set {
+            title = newValue
+        }
+    }
+
+    var subGoalCount: Int {
+        steps.goals.count + steps.goals.reduce(0) { $0 + $1.subGoalCount }
+    }
+}
+
+extension Goal {
+    
+    //    let id: UUID
+    //    let topGoal: Bool
+    //
+    //    weak var parent: Goal?
+    //    @Published var title: String
+    //    @Published var steps: [Goal]
+    //    @Published var daysEstimate: Int {
+    //        didSet {
+    //            updateProgress()
+    //            updateCompletionDate()
+    //        }
+    //    }
+    //    @Published var thisCompleted: Bool {
+    //        didSet {
+    //            updateProgress()
+    //            updateCompletionDate()
+    //        }
+    //    }
+    //    @Published private(set) var progress: Double
+    //    @Published private(set) var progressPercentage: String
+    //    @Published private(set) var estimatedCompletionDate: String
+
+
+
+     func add(sub goal: Goal) {
+         goal.parent = self
+         steps = steps?.addElement(goal) ?? []
+         updateProgress()
+         updateCompletionDate()
+     }
+
+    static func new(title: String, daysEstimate: Int64 = 1) -> Goal {
+        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        goal.estimatedCompletionDate = ""
+        goal.id = UUID()
+        goal.title = title
+        goal.daysEstimate = daysEstimate
+        goal.thisCompleted = false
+        goal.progress = 0
+        goal.progressPercentage = ""
+        goal.steps = []
+        goal.topGoal = true
+        goal.updateProgressProperties()
+        goal.updateCompletionDate()
+        return goal
+    }
+
+    private static var origin: Goal {
+        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        goal.estimatedCompletionDate = ""
+        goal.id = UUID()
+        goal.title = "All Goals"
+        goal.daysEstimate = 1
+        goal.thisCompleted = false
+        goal.progress = 0
+        goal.progressPercentage = ""
+        goal.steps = []
+        goal.topGoal = true
+        goal.updateProgressProperties()
+        goal.updateCompletionDate()
+        return goal
+    }
+
+    static var start: Goal {
+        NSPersistentContainer.goalTable.viewContext.topGoal ?? .origin
+    }
+    
+    public override func didChangeValue(forKey key: String) {
+        super.didChangeValue(forKey: key)
+        if key == "daysEstimate" || key == "thisCompleted" {
             updateProgress()
             updateCompletionDate()
         }
     }
-    @Published var thisCompleted: Bool {
-        didSet {
-            updateProgress()
-            updateCompletionDate()
-        }
-    }
-    @Published private(set) var progress: Double
-    @Published private(set) var progressPercentage: String
-    @Published private(set) var estimatedCompletionDate: String
 
-    static var topGoal: Goal {
-        Goal(title: "All Goals", topGoal: true)
+    fileprivate var totalDays: Int64 {
+        steps.goals.isEmpty ? daysEstimate : steps.goals.totalDays
     }
 
-    private init(title: String, daysEstimate: Int = 0, topGoal: Bool) {
-        self.estimatedCompletionDate = ""
-        self.id = UUID()
-        self.title = title
-        self.daysEstimate = daysEstimate
-        self.thisCompleted = false
-        self.progress = 0
-        self.progressPercentage = "0%"
-        self.steps = []
-        self.topGoal = topGoal
-    }
-
-    init(title: String, daysEstimate: Int = 1) {
-        self.estimatedCompletionDate = ""
-        self.id = UUID()
-        self.title = title
-        self.daysEstimate = daysEstimate
-        self.thisCompleted = false
-        self.progress = 0
-        self.progressPercentage = "0%"
-        self.steps = []
-        self.topGoal = false
-        self.updateProgressProperties()
-        self.updateCompletionDate()
-    }
-
-    fileprivate var totalDays: Int {
-        steps.isEmpty ? daysEstimate : steps.totalDays
-    }
-
-    fileprivate var daysLeft: Int {
-        steps.isEmpty ? (thisCompleted ? 0 : daysEstimate) : steps.daysLeft
+    fileprivate var daysLeft: Int64 {
+        steps.goals.isEmpty ? (thisCompleted ? 0 : daysEstimate) : steps.goals.daysLeft
     }
 
     var isCompleted: Bool {
@@ -75,26 +155,29 @@ class Goal: Identifiable, ObservableObject {
     }
 
     func move(fromOffsets source: IndexSet, toOffset destination: Int) {
-        steps.move(fromOffsets: source, toOffset: destination)
+        guard let mutableSteps = steps?.mutableCopy() as? NSMutableOrderedSet else {
+            return
+        }
+        mutableSteps.moveObjects(at: source, to: destination)
+        steps = mutableSteps.copy() as? NSOrderedSet
         updateProgress()
         updateCompletionDate()
     }
 
     func delete(at offsets: IndexSet) {
-        offsets.forEach { steps.remove(at: $0) }
-        updateProgress()
-        updateCompletionDate()
-    }
-
-    func add(sub goal: Goal) {
-        goal.parent = self
-        steps.append(goal)
+        guard let mutableSteps = steps?.mutableCopy() as? NSMutableOrderedSet else {
+            return
+        }
+        for index in offsets.sorted(by: >) {
+            mutableSteps.removeObject(at: index)
+        }
+        steps = mutableSteps.copy() as? NSOrderedSet
         updateProgress()
         updateCompletionDate()
     }
 
     func updateProgressProperties() {
-        progress = steps.isEmpty ? (thisCompleted ? 1 : 0) : steps.progress
+        progress = steps.goals.isEmpty ? (thisCompleted ? 1 : 0) : steps.goals.progress
         progressPercentage = "\(Int((progress / 1) * 100))%"
     }
 
@@ -110,7 +193,7 @@ class Goal: Identifiable, ObservableObject {
     func updateCompletionDateProperties() {
         let today = Date()
         let calendar = Calendar.current
-        let date = calendar.date(byAdding: .day, value: daysLeft, to: today)!
+        let date = calendar.date(byAdding: .day, value: Int(daysLeft), to: today)!
         if daysLeft < 7 {
             estimatedCompletionDate = DateFormatter.dayOfWeekString(from: date)
         } else if calendar.component(.year, from: date) == calendar.component(.year, from: today) {
@@ -128,64 +211,24 @@ class Goal: Identifiable, ObservableObject {
             up.updateCompletionDateProperties()
         }
     }
-
-    // Required must be declared directly in class not extension.
-    required init(from decoder: Decoder) throws {
-        let container = try decoder.container(keyedBy: CodingKeys.self)
-        id = try container.decode(UUID.self, forKey: .id)
-        title = try container.decode(String.self, forKey: .title)
-        steps = try container.decode([Goal].self, forKey: .steps)
-        daysEstimate = try container.decode(Int.self, forKey: .daysEstimate)
-        thisCompleted = try container.decode(Bool.self, forKey: .completed)
-        topGoal = try container.decode(Bool.self, forKey: .topGoal)
-        progress = try container.decode(Double.self, forKey: .progress)
-        progressPercentage = try container.decode(String.self, forKey: .progressPercentage)
-        estimatedCompletionDate = try container.decode(String.self, forKey: .estimatedCompletionDate)
-    }
 }
 
-extension Goal: Codable {
 
-    enum CodingKeys: CodingKey {
-        case id, title, steps, daysEstimate, completed, topGoal, progress, progressPercentage, estimatedCompletionDate
-    }
-
-    func encode(to encoder: Encoder) throws {
-        var container = encoder.container(keyedBy: CodingKeys.self)
-        try container.encode(id, forKey: .id)
-        try container.encode(title, forKey: .title)
-        try container.encode(steps, forKey: .steps)
-        try container.encode(daysEstimate, forKey: .daysEstimate)
-        try container.encode(thisCompleted, forKey: .completed)
-        try container.encode(topGoal, forKey: .topGoal)
-        try container.encode(progress, forKey: .progress)
-        try container.encode(progressPercentage, forKey: .progressPercentage)
-        try container.encode(estimatedCompletionDate, forKey: .estimatedCompletionDate)
-    }
-}
-
-extension Goal: Equatable {
-
-    static func == (lhs: Goal, rhs: Goal) -> Bool {
-        lhs.id == rhs.id
-    }
-}
-
-extension Goal: Hashable {
-
-    func hash(into hasher: inout Hasher) {
-        hasher.combine(id)
+extension Optional<NSOrderedSet> {
+    var goals: [Goal] {
+        guard let self else { return [] }
+        return self.array as? [Goal] ?? []
     }
 }
 
 // Provided in this file because of fileprivate computed properties.
 extension [Goal] {
 
-    var totalDays: Int {
+    var totalDays: Int64 {
         reduce(0) { $0 + $1.totalDays }
     }
 
-    var daysLeft: Int {
+    var daysLeft: Int64 {
         reduce(0) { $0 + $1.daysLeft }
     }
 

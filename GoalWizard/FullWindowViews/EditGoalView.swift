@@ -17,7 +17,7 @@ struct EditGoalView: View {
                 String(goal.daysEstimate)
             },
             set: {
-                if let intValue = Int($0) {
+                if let intValue = Int64($0) {
                     goal.daysEstimate = intValue
                 }
             }
@@ -38,7 +38,7 @@ struct EditGoalView: View {
                     .padding(.trailing)
                 }
             #endif
-                TextEditor(text: $goal.title)
+                TextEditor(text: $goal.notOptionalTitle)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .lineLimit(nil)
@@ -76,6 +76,27 @@ struct EditGoalView: View {
 
 struct EditGoalView_Previews: PreviewProvider {
     static var previews: some View {
-        EditGoalView(goal: Goal(title: "Main Goal"))
+        EditGoalView(goal: Goal.edit)
+    }
+}
+
+import CoreData
+
+fileprivate extension Goal {
+
+    static var edit: Goal {
+        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        goal.estimatedCompletionDate = ""
+        goal.id = UUID()
+        goal.title = "Edit me!"
+        goal.daysEstimate = 1
+        goal.thisCompleted = false
+        goal.progress = 0
+        goal.progressPercentage = ""
+        goal.steps = []
+        goal.topGoal = true
+        goal.updateProgressProperties()
+        goal.updateCompletionDate()
+        return goal
     }
 }
