@@ -33,7 +33,6 @@ struct GoalView: View {
 
     func move(from source: IndexSet, to destination: Int) {
         goal.move(fromOffsets: source, toOffset: destination)
-
         // Remove from persistence if needed
     }
 

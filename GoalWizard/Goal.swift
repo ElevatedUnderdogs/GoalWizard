@@ -109,7 +109,7 @@ extension Goal {
 //            .updateGoal(goal: self, steps: steps)
 //    }
 
-    func updateProgressProperties() {
+    private func updateProgressProperties() {
         progress = steps.goals.isEmpty ? (thisCompleted ? 1 : 0) : steps.goals.progress
         progressPercentage = "\(Int((progress / 1) * 100))%"
     }
@@ -123,7 +123,7 @@ extension Goal {
         }
     }
 
-    func updateCompletionDateProperties() {
+    private func updateCompletionDateProperties() {
         let today = Date()
         let calendar = Calendar.current
         let date = calendar.date(byAdding: .day, value: Int(daysLeft), to: today)!

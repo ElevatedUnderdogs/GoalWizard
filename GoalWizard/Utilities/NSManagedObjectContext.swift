@@ -72,7 +72,7 @@ extension NSManagedObjectContext {
         newGoal.parent = parent
         parent?.steps = parent?.steps?.addElement(newGoal)
 
-        newGoal.updateProgressProperties()
+        newGoal.updateProgress()
         newGoal.updateCompletionDate()
         saveState()
         return newGoal
@@ -109,7 +109,7 @@ extension NSManagedObjectContext {
         // Modify the properties of the goal object
         goal.title = title
         goal.daysEstimate = estimatedTime
-        goal.updateProgressProperties()
+        goal.updateProgress()
         goal.updateCompletionDate()
         saveState()
     }

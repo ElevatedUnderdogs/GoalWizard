@@ -124,7 +124,7 @@ fileprivate extension Goal {
         goal.progressPercentage = ""
         goal.steps = []
         goal.topGoal = true
-        goal.updateProgressProperties()
+        goal.updateProgress()
         goal.updateCompletionDate()
         return goal
     }
