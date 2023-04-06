@@ -39,6 +39,14 @@ struct EditGoalView: View {
             set: {
                 if let intValue = Int64($0) {
                     goal.daysEstimate = intValue
+                    NSPersistentContainer
+                        .goalTable
+                        .viewContext
+                        .updateGoal(
+                          goal: goal,
+                          title: goal.title ?? "",
+                          estimatedTime: goal.daysEstimate
+                        )
                 }
             }
         )
