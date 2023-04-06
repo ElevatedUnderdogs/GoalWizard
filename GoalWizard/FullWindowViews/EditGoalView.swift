@@ -7,12 +7,6 @@
 
 import SwiftUI
 
-#if os(iOS)
-import UIKit
-#elseif os(macOS)
-import AppKit
-#endif
-
 struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal

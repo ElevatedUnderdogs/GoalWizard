@@ -38,7 +38,8 @@ struct GoalView: View {
     }
 
     func delete(at offsets: IndexSet) {
-        goal.delete(at: offsets)
+        NSPersistentContainer.goalTable.viewContext.deleteGoal(atOffsets: offsets, goal: goal)
+       // goal.delete(at: offsets)
         // Save the changes to persistence if needed
     }
 

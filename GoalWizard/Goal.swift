@@ -47,22 +47,6 @@ extension Goal {
         return goal
     }
 
-//    private static var origin: Goal {
-//        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
-//        goal.estimatedCompletionDate = ""
-//        goal.id = UUID()
-//        goal.title = "All Goals"
-//        goal.daysEstimate = 1
-//        goal.thisCompleted = false
-//        goal.progress = 0
-//        goal.progressPercentage = ""
-//        goal.steps = []
-//        goal.topGoal = true
-//        goal.updateProgressProperties()
-//        goal.updateCompletionDate()
-//        return goal
-//    }
-
     static var start: Goal {
         if let topGoal = NSPersistentContainer.goalTable.viewContext.topGoal {
             return topGoal
@@ -109,23 +93,21 @@ extension Goal {
             )
     }
 
-    func delete(at offsets: IndexSet) {
-        guard let mutableSteps = steps?.mutableCopy() as? NSMutableOrderedSet else {
-            return
-        }
-        for index in offsets.sorted(by: >) {
-            mutableSteps.removeObject(at: index)
-        }
-        steps = mutableSteps.copy() as? NSOrderedSet
-        NSPersistentContainer
-            .goalTable
-            .viewContext
-            .updateGoal(
-                goal: self,
-                title: self.notOptionalTitle,
-                estimatedTime: self.daysEstimate
-            )
-    }
+//    func delete(at offsets: IndexSet) {
+//        print(offsets)
+//        guard let mutableSteps = steps?.mutableCopy() as? NSMutableOrderedSet else {
+//            return
+//        }
+//        for index in offsets.sorted(by: >) {
+//            delete(at: mutableSteps.object(at: index)
+//            mutableSteps.removeObject(at: index)
+//        }
+//        steps = mutableSteps.copy() as? NSOrderedSet
+//        NSPersistentContainer
+//            .goalTable
+//            .viewContext
+//            .updateGoal(goal: self, steps: steps)
+//    }
 
     func updateProgressProperties() {
         progress = steps.goals.isEmpty ? (thisCompleted ? 1 : 0) : steps.goals.progress

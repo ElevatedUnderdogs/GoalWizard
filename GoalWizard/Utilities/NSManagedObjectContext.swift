@@ -26,12 +26,10 @@ extension NSManagedObjectContext {
         }
     }
 
-    var goals: [Goal] { elements() }
+    var goals: [Goal] { elements(entityName: "Goal") }
 
-    func elements<T: NSFetchRequestResult>() -> [T] {
-        let request: NSFetchRequest<T> = NSFetchRequest<T>(
-            entityName: String(describing: type(of: T.self))
-        )
+    func elements<T: NSFetchRequestResult>(entityName: String) -> [T] {
+        let request: NSFetchRequest<T> = NSFetchRequest<T>(entityName: entityName)
         do {
             return try fetch(request)
         } catch {
@@ -42,7 +40,6 @@ extension NSManagedObjectContext {
 
     /// If there are changes, it saves the current NSManagedOBjects to CoreData storage. 
     func saveState() {
-
        // if hasChanges {
             do {
                 try save()
@@ -81,6 +78,29 @@ extension NSManagedObjectContext {
         return newGoal
     }
 
+    func deleteGoal(atOffsets offsets: IndexSet, goal: Goal) {
+        let mutableSteps = goal.steps?.mutableCopy() as? NSMutableOrderedSet ?? NSMutableOrderedSet()
+
+        for index in offsets.sorted(by: >) {
+            guard let subGoal = mutableSteps.object(at: index) as? Goal else { continue }
+            deleteGoal(goal: subGoal)
+            mutableSteps.removeObject(at: index)
+        }
+
+        goal.steps = mutableSteps.copy() as? NSOrderedSet
+        // still need to call save state.
+        saveState()
+    }
+
+    private func deleteGoal(goal: Goal) {
+        goal.steps?.forEach { step in
+            guard let subGoal = step as? Goal else { return }
+            deleteGoal(goal: subGoal)
+        }
+        // still need to call save state
+        delete(goal)
+    }
+
     func updateGoal(
         goal: Goal,
         title: String,
@@ -93,13 +113,4 @@ extension NSManagedObjectContext {
         goal.updateCompletionDate()
         saveState()
     }
-
-    /// Lets user save a new question that they created.
-    /// - Parameters:
-    ///   - text: Lets user save text to new question that they created.
-    ///   - isTrueFalse: Lets user save true or false answer to new question that they created.
-    ///   - subject: Lets you save a new question from a one to many relationship with that specidic subject.
-//    func save(goal: Goal) {
-//        saveState()
-//    }
 }
