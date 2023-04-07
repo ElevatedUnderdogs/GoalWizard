@@ -11,27 +11,27 @@ struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal
 
-    #if os(macOS)
+#if os(macOS)
     private let keyPublisher = NotificationCenter.default.publisher(for: NSEvent.keyDownNotification)
-    #endif
+#endif
 
     var body: some View {
         let titleBinder = Binding<String> (
-              get: {
-                  goal.notOptionalTitle
-              },
-              set: {
-                  goal.title = $0
-                  NSPersistentContainer
-                      .goalTable
-                      .viewContext
-                      .updateGoal(
+            get: {
+                goal.notOptionalTitle
+            },
+            set: {
+                goal.title = $0
+                NSPersistentContainer
+                    .goalTable
+                    .viewContext
+                    .updateGoal(
                         goal: goal,
                         title: $0,
                         estimatedTime: goal.daysEstimate
-                      )
-              }
-            )
+                    )
+            }
+        )
         let daysEstimateBinding: Binding<String> = Binding<String>(
             get: {
                 String(goal.daysEstimate)
@@ -43,18 +43,18 @@ struct EditGoalView: View {
                         .goalTable
                         .viewContext
                         .updateGoal(
-                          goal: goal,
-                          title: goal.title ?? "",
-                          estimatedTime: goal.daysEstimate
+                            goal: goal,
+                            title: goal.title ?? "",
+                            estimatedTime: goal.daysEstimate
                         )
                 }
             }
         )
         NavigationView {
             VStack {
-            #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
                 EmptyView()
-            #else
+#else
                 HStack {
                     Text("Edit Goal")
                         .font(.headline)
@@ -65,7 +65,7 @@ struct EditGoalView: View {
                     }
                     .padding(.trailing)
                 }
-            #endif
+#endif
                 TextEditor(text: titleBinder)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
@@ -92,12 +92,12 @@ struct EditGoalView: View {
                 Spacer()
             }
             .padding(.horizontal)
-        #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
             .navigationBarTitle("Edit goal", displayMode: .inline)
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
             })
-        #endif
+#endif
 
         }
     }

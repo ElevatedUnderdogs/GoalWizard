@@ -7,11 +7,22 @@
 
 import SwiftUI
 import CoreData
+import Callable
+import CommonExtensions
 
 enum ModifyState: Int, Identifiable {
     case edit, add
     var id: Int { rawValue }
 }
+
+// MARK: - Goal
+struct GoalStruct: Codable {
+    let title: String
+    let daysEstimate: Int
+    let steps: [GoalStruct]
+}
+
+
 
 struct GoalView: View {
     
@@ -217,6 +228,34 @@ struct GoalView: View {
                 }
                 .padding(.top)
                 Spacer()
+            }
+            .onAppear {
+//                URLRequest.models.callJSON { json in
+//                    print(json)
+//                    print(json)
+//                    print(json)
+//                }
+                URLRequest.gpt35TurboChatRequest(
+                    messages: .buildUserMessage(
+                        content: .goalTreeFrom(goal: "Make a business called Map Mates")
+                    )
+                ).callJSON { json in
+                    let choices = json["choices"] as? [[String: Any]]
+                    let choices1 = json["choices"] as? [String: Any]
+
+                    print(choices, choices1)
+                    print(choices?.first?["message"] as Any)
+                    guard let valueJSON: [String: Any] = choices?.first?["message"] as? [String: Any] else {
+                        return
+                    }
+
+                    guard let anyObject = valueJSON["content"] as? AnyObject else {
+                        return
+                    }
+
+                   
+                    
+                }
             }
 //            .refreshable {
 //                let topGoal = await NSPersistentContainer.goalTable.viewContext.topGoal

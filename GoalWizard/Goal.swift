@@ -93,22 +93,6 @@ extension Goal {
             )
     }
 
-//    func delete(at offsets: IndexSet) {
-//        print(offsets)
-//        guard let mutableSteps = steps?.mutableCopy() as? NSMutableOrderedSet else {
-//            return
-//        }
-//        for index in offsets.sorted(by: >) {
-//            delete(at: mutableSteps.object(at: index)
-//            mutableSteps.removeObject(at: index)
-//        }
-//        steps = mutableSteps.copy() as? NSOrderedSet
-//        NSPersistentContainer
-//            .goalTable
-//            .viewContext
-//            .updateGoal(goal: self, steps: steps)
-//    }
-
     private func updateProgressProperties() {
         progress = steps.goals.isEmpty ? (thisCompleted ? 1 : 0) : steps.goals.progress
         progressPercentage = "\(Int((progress / 1) * 100))%"
@@ -143,6 +127,71 @@ extension Goal {
             up = next
             up.updateCompletionDateProperties()
         }
+    }
+
+    static func fromJson(json: [String: Any]) -> Goal? {
+        guard let title = json["title"] as? String else {
+            return nil
+        }
+
+        let daysEstimate = json["daysEstimate"] as? Int64 ?? 0
+
+        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        goal.title = title
+        goal.daysEstimate = daysEstimate
+
+        if let stepsJson = json["steps"] as? [[String: Any]] {
+            var steps: [Goal] = []
+
+            for stepJson in stepsJson {
+                guard let step = Goal.fromJson(json: stepJson) else {
+                    continue
+                }
+
+                steps.append(step)
+            }
+
+            goal.steps = NSOrderedSet(array: steps)
+        }
+
+        return goal
+    }
+
+    static func fromJsonIterative(json: [String: Any]) -> Goal? {
+        guard let title = json["title"] as? String else {
+            return nil
+        }
+
+        let daysEstimate = json["daysEstimate"] as? Int64 ?? 0
+
+        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        goal.title = title
+        goal.daysEstimate = daysEstimate
+
+        if let stepsJson = json["steps"] as? [[String: Any]] {
+            var steps: [Goal] = []
+            var queue = stepsJson
+
+            while !queue.isEmpty {
+                let stepJson = queue.removeFirst()
+
+                guard let step = Goal.fromJson(json: stepJson) else {
+                    continue
+                }
+
+                steps.append(step)
+
+                if let subStepsJson = stepJson["steps"] as? [[String: Any]] {
+                    for subStepJson in subStepsJson {
+                        queue.append(subStepJson)
+                    }
+                }
+            }
+
+            goal.steps = NSOrderedSet(array: steps)
+        }
+
+        return goal
     }
 }
 

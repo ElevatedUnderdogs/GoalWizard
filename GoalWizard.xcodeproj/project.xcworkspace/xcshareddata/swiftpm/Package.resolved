@@ -1,0 +1,23 @@
+{
+  "pins" : [
+    {
+      "identity" : "callable",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ElevatedUnderdogs/Callable.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "92ee233f6a65f2e96fddf7e894577c28e00ddda5"
+      }
+    },
+    {
+      "identity" : "commonextensions",
+      "kind" : "remoteSourceControl",
+      "location" : "https://github.com/ElevatedUnderdogs/CommonExtensions.git",
+      "state" : {
+        "branch" : "main",
+        "revision" : "ab9907b74a6b0748dcd8934397b0da1b23456c08"
+      }
+    }
+  ],
+  "version" : 2
+}

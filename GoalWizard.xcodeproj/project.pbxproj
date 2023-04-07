@@ -29,6 +29,11 @@
 		75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7EA29DCF8A200493D9C /* Optional.swift */; };
 		75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */; };
 		75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */; };
+		75C8B7F329DE91CF00493D9C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F229DE91CF00493D9C /* Secrets.swift */; };
+		75C8B7F529DE932B00493D9C /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F429DE932B00493D9C /* URLRequest.swift */; };
+		75C8B7F829DE942700493D9C /* Callable in Frameworks */ = {isa = PBXBuildFile; productRef = 75C8B7F729DE942700493D9C /* Callable */; };
+		75C8B7FA29DEA54500493D9C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F929DEA54500493D9C /* String.swift */; };
+		75C8B7FD29DF974400493D9C /* CommonExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 75C8B7FC29DF974400493D9C /* CommonExtensions */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -75,6 +80,9 @@
 		75C8B7EA29DCF8A200493D9C /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
 		75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOrderedSet.swift; sourceTree = "<group>"; };
 		75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContext.swift; sourceTree = "<group>"; };
+		75C8B7F229DE91CF00493D9C /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		75C8B7F429DE932B00493D9C /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
+		75C8B7F929DEA54500493D9C /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -82,6 +90,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75C8B7F829DE942700493D9C /* Callable in Frameworks */,
+				75C8B7FD29DF974400493D9C /* CommonExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -175,6 +185,9 @@
 				75C8B7EA29DCF8A200493D9C /* Optional.swift */,
 				75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */,
 				75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */,
+				75C8B7F229DE91CF00493D9C /* Secrets.swift */,
+				75C8B7F429DE932B00493D9C /* URLRequest.swift */,
+				75C8B7F929DEA54500493D9C /* String.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -215,6 +228,8 @@
 			);
 			name = GoalWizard;
 			packageProductDependencies = (
+				75C8B7F729DE942700493D9C /* Callable */,
+				75C8B7FC29DF974400493D9C /* CommonExtensions */,
 			);
 			productName = GoalWizard;
 			productReference = 75C0B0FE29D7EEA900D886CA /* GoalWizard.app */;
@@ -289,6 +304,8 @@
 			);
 			mainGroup = 75C0B0F529D7EEA900D886CA;
 			packageReferences = (
+				75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */,
+				75C8B7FB29DF974400493D9C /* XCRemoteSwiftPackageReference "CommonExtensions" */,
 			);
 			productRefGroup = 75C0B0FF29D7EEA900D886CA /* Products */;
 			projectDirPath = "";
@@ -332,11 +349,13 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75C8B7FA29DEA54500493D9C /* String.swift in Sources */,
 				75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */,
 				75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */,
 				75C0B13C29D8C39C00D886CA /* NumberKeyboardModifier.swift in Sources */,
 				75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */,
 				75C0B1ED29DA197400D886CA /* EditGoalView.swift in Sources */,
+				75C8B7F329DE91CF00493D9C /* Secrets.swift in Sources */,
 				75C0B13829D8BC4200D886CA /* RadioButton.swift in Sources */,
 				75C0B1F129DB947600D886CA /* Goal.xcdatamodeld in Sources */,
 				75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */,
@@ -346,6 +365,7 @@
 				75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */,
 				75C0B13A29D8BEE200D886CA /* Color.swift in Sources */,
 				75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */,
+				75C8B7F529DE932B00493D9C /* URLRequest.swift in Sources */,
 				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
 			);
@@ -700,6 +720,38 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ElevatedUnderdogs/Callable.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		75C8B7FB29DF974400493D9C /* XCRemoteSwiftPackageReference "CommonExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ElevatedUnderdogs/CommonExtensions.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		75C8B7F729DE942700493D9C /* Callable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */;
+			productName = Callable;
+		};
+		75C8B7FC29DF974400493D9C /* CommonExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75C8B7FB29DF974400493D9C /* XCRemoteSwiftPackageReference "CommonExtensions" */;
+			productName = CommonExtensions;
+		};
+/* End XCSwiftPackageProductDependency section */
 
 /* Begin XCVersionGroup section */
 		75C0B1EF29DB947600D886CA /* Goal.xcdatamodeld */ = {

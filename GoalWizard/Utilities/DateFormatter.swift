@@ -47,5 +47,4 @@ extension DateFormatter {
         dateFormatter.dateFormat = "M/d/yy"
         return dateFormatter
     }()
-    
 }
