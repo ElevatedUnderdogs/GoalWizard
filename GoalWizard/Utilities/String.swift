@@ -14,29 +14,44 @@ extension String {
         Example prompt:
         Return all the necessary sub tasks for the following goal: “become a lawyer in Ireland.” For each of this sub tasks return a list of sub tasks.  Keep on going, until a task tree is created, where each leaf is an easy task.  Return the task tree exclusively as a logically structured json object.  Omit anything else.
 
+        Make sure it will be convertible to the following structs (if it will take less than a day, set daysEstimate to 1):
+
+        // MARK: - Choices
+        struct Choices: Codable {
+            let thisSteps: [ThisStep]
+        }
+
+        // MARK: - ThisStep
+        struct ThisStep: Codable {
+            let title: String
+            let daysEstimate: Int
+            let steps: [Step]
+        }
+
+        // MARK: - Step
+        struct Step: Codable {
+            let subtitle: String
+            let subdaysEstimate: Int
+        }
+
         Example response:
         {
-          "title": "Become a Lawyer in Ireland",
-          "daysEstimate": 180,
-          "steps": [
+          "thisSteps": [
             {
               "title": "Research law schools in Ireland",
               "daysEstimate": 3,
               "steps": [
                 {
-                  "title": "Look up law schools in Ireland online",
-                  "daysEstimate": 1,
-                  "steps": []
+                  "subtitle": "Look up law schools in Ireland online",
+                  "subdaysEstimate": 1
                 },
                 {
-                  "title": "Research admission requirements for each school",
-                  "daysEstimate": 2,
-                  "steps": []
+                  "subtitle": "Research admission requirements for each school",
+                  "subdaysEstimate": 2
                 },
                 {
-                  "title": "Make a list of top law schools in Ireland",
-                  "daysEstimate": 1,
-                  "steps": []
+                  "subtitle": "Make a list of top law schools in Ireland",
+                  "subdaysEstimate": 1
                 }
               ]
             },
@@ -45,19 +60,16 @@ extension String {
               "daysEstimate": 30,
               "steps": [
                 {
-                  "title": "Purchase LSAT study materials",
-                  "daysEstimate": 2,
-                  "steps": []
+                  "subtitle": "Purchase LSAT study materials",
+                  "subdaysEstimate": 2
                 },
                 {
-                  "title": "Create study plan for LSAT",
-                  "daysEstimate": 3,
-                  "steps": []
+                  "subtitle": "Create study plan for LSAT",
+                  "subdaysEstimate": 3
                 },
                 {
-                  "title": "Study for LSAT",
-                  "daysEstimate": 25,
-                  "steps": []
+                  "subtitle": "Study for LSAT",
+                  "subdaysEstimate": 25
                 }
               ]
             },
@@ -66,14 +78,12 @@ extension String {
               "daysEstimate": 120,
               "steps": [
                 {
-                  "title": "Gather necessary application materials",
-                  "daysEstimate": 5,
-                  "steps": []
+                  "subtitle": "Gather necessary application materials",
+                  "subdaysEstimate": 5
                 },
                 {
-                  "title": "Fill out and submit applications",
-                  "daysEstimate": 115,
-                  "steps": []
+                  "subtitle": "Fill out and submit applications",
+                  "subdaysEstimate": 115
                 }
               ]
             },
@@ -82,61 +92,80 @@ extension String {
               "daysEstimate": 27,
               "steps": [
                 {
-                  "title": "Research living arrangements in Ireland",
-                  "daysEstimate": 2,
-                  "steps": []
+                  "subtitle": "Research living arrangements in Ireland",
+                  "subdaysEstimate": 2
                 },
                 {
-                  "title": "Apply for necessary visas",
-                  "daysEstimate": 15,
-                  "steps": []
+                  "subtitle": "Apply for necessary visas",
+                  "subdaysEstimate": 15
                 },
                 {
-                  "title": "Pack and prepare for move",
-                  "daysEstimate": 10,
-                  "steps": []
+                  "subtitle": "Pack and prepare for move",
+                  "subdaysEstimate": 10
                 }
               ]
             }
           ]
         }
 
+
+
         Current prompt:
         Return all the necessary sub tasks for the following goal: “\(goal)” For each of the sub tasks return a list of sub tasks.  Keep on going, until a task tree is created, where each leaf is an easy task.  Return the task tree exclusively as a logically structured json object.  Omit anything else, JSON ONLY!.
+
+        Make sure it will be convertible to the following structs (if it will take less than a day, set daysEstimate to 1):
+
+        // MARK: - Choices
+        struct Choices: Codable {
+            let thisSteps: [ThisStep]
+        }
+
+        // MARK: - ThisStep
+        struct ThisStep: Codable {
+            let title: String
+            let daysEstimate: Int
+            let steps: [Step]
+        }
+
+        // MARK: - Step
+        struct Step: Codable {
+            let subtitle: String
+            let subdaysEstimate: Int
+        }
         """
     }
 }
-
-
-class MyDecoder {
-    var parsedObjects: [String: Any] = [:]
-
-    func decode(json: Data) throws -> Any? {
-        let jsonObject = try JSONSerialization.jsonObject(with: json, options: [])
-
-        return try decodeValue(jsonObject)
-    }
-
-    private func decodeValue(_ value: Any) throws -> Any? {
-        switch value {
-        case let dict as [String: Any]:
-            if let refId = dict["__ref"] as? String {
-                return parsedObjects[refId]
-            }
-            let newObject = MyObject()
-            parsedObjects[ObjectIdentifier(newObject).debugDescription] = newObject
-
-            for (key, subValue) in dict {
-                newObject[key] = try decodeValue(subValue)
-            }
-            return newObject
-        case let array as [Any]:
-            return try array.map { try decodeValue($0) }
-        default:
-            return value
-        }
-    }
-}
+//
+//
+//class MyDecoder {
+//    var parsedObjects: [String: Any] = [:]
+//
+//    func decode(json: Data) throws -> Any? {
+//        let jsonObject = try JSONSerialization.jsonObject(with: json, options: [])
+//
+//        return try decodeValue(jsonObject)
+//    }
+//
+//    private func decodeValue(_ value: Any) throws -> Any? {
+//        switch value {
+//        case let dict as [String: Any]:
+//            if let refId = dict["__ref"] as? String {
+//                return parsedObjects[refId]
+//            }
+//            let newObject = MyObject()
+//            parsedObjects[ObjectIdentifier(newObject).debugDescription] = newObject
+//
+//            for (key, subValue) in dict {
+//                newObject[key] = try decodeValue(subValue)
+//            }
+//            return newObject
+//        case let array as [Any]:
+//            return try array.map { try decodeValue($0) }
+//        default:
+//            return value
+//        }
+//    }
+//}
 
 /*
  let options = PropertyListSerialization.WriteOptions(0)

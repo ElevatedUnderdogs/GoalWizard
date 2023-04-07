@@ -31,6 +31,15 @@ extension Goal {
         updateCompletionDate()
     }
 
+    func add(subGoals: [Goal]) {
+        subGoals.forEach {
+            $0.parent = self
+        }
+        steps = steps?.addElements(subGoals)
+        updateProgress()
+        updateCompletionDate()
+    }
+
     static func new(title: String, daysEstimate: Int64 = 1) -> Goal {
         let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
         goal.estimatedCompletionDate = ""

@@ -24,4 +24,10 @@ extension NSOrderedSet {
         mutableSet.removeObject(at: index)
         return mutableSet.copy() as! NSOrderedSet
     }
+
+    func addElements(_ elements: [Any]) -> NSOrderedSet {
+        let mutableSet = NSMutableOrderedSet(orderedSet: self)
+        mutableSet.addObjects(from: elements)
+        return NSOrderedSet(orderedSet: mutableSet)
+    }
 }

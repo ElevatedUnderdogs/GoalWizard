@@ -9,6 +9,8 @@ import SwiftUI
 import CoreData
 import Callable
 import CommonExtensions
+import Foundation
+import Dispatch
 
 enum ModifyState: Int, Identifiable {
     case edit, add
@@ -23,6 +25,102 @@ struct GoalStruct: Codable {
 }
 
 
+struct OpenAIResponse<T: Codable>: Codable {
+    let choices: [Choice<T>]
+    let id: String
+    let model: String
+    let usage: Usage
+    let object: String
+    let created: TimeInterval
+}
+
+struct Choice<T: Codable>: Codable {
+    let message: Message<T>
+    let finishReason: String?
+    let index: Int
+}
+
+struct Message<T: Codable>: Codable {
+    let content: String
+    let role: String
+
+    func decodedContent() throws -> T {
+        guard let data = content.data(using: .utf8) else {
+            throw OpenAIError.invalidResponse
+        }
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+}
+
+struct Usage: Codable {
+    let totalTokens: Int
+    let completionTokens: Int
+    let promptTokens: Int
+
+    private enum CodingKeys: String, CodingKey {
+        case totalTokens = "total_tokens"
+        case completionTokens = "completion_tokens"
+        case promptTokens = "prompt_tokens"
+    }
+}
+
+enum OpenAIError: Error {
+    case invalidResponse
+}
+
+// MARK: - Choices
+struct Choices: Codable {
+    let thisSteps: [ThisStep]
+}
+
+extension Choices {
+    var goals: [Goal] {
+        var result = [Goal]()
+        for thisStep in thisSteps {
+            let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+            goal.title = thisStep.title
+            goal.daysEstimate = Int64(thisStep.daysEstimate)
+            goal.progress = 0.0
+            goal.topGoal = false
+            goal.parent = nil
+
+            var subGoals = [Goal]()
+            for step in thisStep.steps {
+                let subGoal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+                subGoal.title = step.subtitle
+                subGoal.daysEstimate = Int64(step.subdaysEstimate)
+                subGoal.progress = 0.0
+                subGoal.topGoal = false
+                subGoal.parent = goal
+                subGoals.append(subGoal)
+            }
+            goal.steps = NSOrderedSet(array: subGoals)
+            result.append(goal)
+        }
+        return result
+    }
+}
+
+// MARK: - ThisStep
+struct ThisStep: Codable {
+    let title: String
+    let daysEstimate: Int
+    let steps: [Step]
+}
+
+// MARK: - Step
+struct Step: Codable {
+    let subtitle: String
+    let subdaysEstimate: Int
+}
+
+
+enum ButtonState {
+    case normal
+    case loading
+    case hidden
+}
+
 
 struct GoalView: View {
     
@@ -31,6 +129,7 @@ struct GoalView: View {
     @State var searchText: String = ""
     @State private var modifyState: ModifyState? = nil
     @State private var isEditMode: Bool = false
+    @State var buttonState: ButtonState = .normal
 
     var filteredSteps: [Goal] {
         if searchText.isEmpty {
@@ -129,6 +228,36 @@ struct GoalView: View {
                                 .resizable()
                                 .frame(width: 24, height: 24)
                                 .aspectRatio(contentMode: .fit)
+                        }
+                        if buttonState == .normal {
+                            Button(action: {
+                                buttonState = .loading
+                                print(goal.notOptionalTitle)
+                                URLRequest.gpt35TurboChatRequest(
+                                    messages: .buildUserMessage(
+                                        content: .goalTreeFrom(goal: goal.notOptionalTitle)
+                                    )
+                                ).callCodable { (response: OpenAIResponse<Choices>?) in
+                                    print("Callback returned")
+                                    DispatchQueue.main.async {
+                                        do {
+                                            let newGoals = try response?.choices.first?.message.decodedContent().goals ?? []
+                                            self.goal.add(subGoals: newGoals)
+                                        } catch {
+                                            print(error.localizedDescription)
+                                        }
+                                        buttonState = .hidden
+                                    }
+                                }
+                            }) {
+                                Image(systemName: "bolt.circle")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundColor(.green)
+                            }
+                        } else if buttonState == .loading {
+                            ProgressView()
                         }
                     }
                 } else {
@@ -229,34 +358,7 @@ struct GoalView: View {
                 .padding(.top)
                 Spacer()
             }
-            .onAppear {
-//                URLRequest.models.callJSON { json in
-//                    print(json)
-//                    print(json)
-//                    print(json)
-//                }
-                URLRequest.gpt35TurboChatRequest(
-                    messages: .buildUserMessage(
-                        content: .goalTreeFrom(goal: "Make a business called Map Mates")
-                    )
-                ).callJSON { json in
-                    let choices = json["choices"] as? [[String: Any]]
-                    let choices1 = json["choices"] as? [String: Any]
 
-                    print(choices, choices1)
-                    print(choices?.first?["message"] as Any)
-                    guard let valueJSON: [String: Any] = choices?.first?["message"] as? [String: Any] else {
-                        return
-                    }
-
-                    guard let anyObject = valueJSON["content"] as? AnyObject else {
-                        return
-                    }
-
-                   
-                    
-                }
-            }
 //            .refreshable {
 //                let topGoal = await NSPersistentContainer.goalTable.viewContext.topGoal
 //                guard let topGoal else { return }
