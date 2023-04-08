@@ -232,13 +232,11 @@ struct GoalView: View {
                         if buttonState == .normal {
                             Button(action: {
                                 buttonState = .loading
-                                print(goal.notOptionalTitle)
                                 URLRequest.gpt35TurboChatRequest(
                                     messages: .buildUserMessage(
                                         content: .goalTreeFrom(goal: goal.notOptionalTitle)
                                     )
                                 ).callCodable { (response: OpenAIResponse<Choices>?) in
-                                    print("Callback returned")
                                     DispatchQueue.main.async {
                                         do {
                                             let newGoals = try response?.choices.first?.message.decodedContent().goals ?? []
@@ -298,8 +296,7 @@ struct GoalView: View {
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                 }
                 List {
-                    ForEach(filteredSteps.indices, id: \.self) { index in
-                        let step = filteredSteps[index]
+                    ForEach(filteredSteps) { step in
                         HStack {
                             VStack {
                                 HStack {
@@ -345,12 +342,13 @@ struct GoalView: View {
                                 destination: GoalView(goal: step)) {}
                                 .frame(maxWidth: 20)
                         }
-                        .gesture(
-                            LongPressGesture(minimumDuration: 0.5)
-                                .onEnded { _ in
-                                    isEditMode.toggle()
-                                }
-                        )
+                        // This disables the default tap behavior for subviews...Wierd f
+//                        .gesture(
+//                            LongPressGesture(minimumDuration: 0.5)
+//                                .onEnded { _ in
+//                                    isEditMode.toggle()
+//                                }
+//                        )
                     }
                     .onMove(perform: isEditMode ? move : nil)
                     .onDelete(perform: delete)
