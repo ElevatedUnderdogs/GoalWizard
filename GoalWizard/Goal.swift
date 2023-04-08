@@ -53,6 +53,7 @@ extension Goal {
         goal.updateProgressProperties()
         goal.updateCompletionDate()
         return goal
+        Goal.context.saveState()
     }
 
     static var start: Goal {
