@@ -58,22 +58,16 @@ extension NSManagedObjectContext {
         parent: Goal? = nil
     ) -> Goal {
         // Create a new Goal object in the context
-        let newGoal = Goal(context: self)
-        newGoal.timeStamp = Date()
-        newGoal.estimatedCompletionDate = ""
-        newGoal.id = UUID()
-        newGoal.title = title
-        newGoal.daysEstimate = estimatedTime
-        newGoal.thisCompleted = false
-        newGoal.progress = 0
-        newGoal.progressPercentage = ""
-        newGoal.steps = []
+        let newGoal = Goal.empty
+
         newGoal.topGoal = isTopGoal
         newGoal.parent = parent
         parent?.steps = parent?.steps?.addElement(newGoal)
+        newGoal.title = title
+        newGoal.daysEstimate = estimatedTime
 
-        newGoal.updateProgress()
-        newGoal.updateCompletionDate()
+        newGoal.updateProgressUpTheTree()
+        newGoal.updateCompletionDateUpTheTree()
         saveState()
         return newGoal
     }
@@ -109,8 +103,8 @@ extension NSManagedObjectContext {
         // Modify the properties of the goal object
         goal.title = title
         goal.daysEstimate = estimatedTime
-        goal.updateProgress()
-        goal.updateCompletionDate()
+        goal.updateProgressUpTheTree()
+        goal.updateCompletionDateUpTheTree()
         saveState()
     }
 }

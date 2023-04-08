@@ -21,55 +21,56 @@ extension Goal {
         }
     }
 
+    static var empty: Goal {
+        let newGoal = Goal(context: Goal.context)
+        newGoal.timeStamp = Date()
+        newGoal.estimatedCompletionDate = ""
+        newGoal.id = UUID()
+        newGoal.thisCompleted = false
+        newGoal.progress = 0
+        newGoal.progressPercentage = ""
+        newGoal.steps = []
+        newGoal.updateProgressUpTheTree()
+        newGoal.updateCompletionDateUpTheTree()
+        return newGoal
+    }
+
     var subGoalCount: Int {
         steps.goals.count + steps.goals.reduce(0) { $0 + $1.subGoalCount }
+    }
+
+    func addSuBGoal(title: String, estimatedTime: Int64) {
+        Goal.context.createAndSaveGoal(
+            title: title,
+            estimatedTime: estimatedTime,
+            parent: self
+        )
     }
 
     func add(sub goal: Goal) {
         goal.parent = self
         steps = steps?.addElement(goal) ?? []
-        updateProgress()
-        updateCompletionDate()
+        updateProgressUpTheTree()
+        updateCompletionDateUpTheTree()
     }
 
     func add(subGoals: [Goal]) {
         subGoals.forEach { $0.parent = self }
         steps = steps?.addElements(subGoals)
-        updateProgress()
-        updateCompletionDate()
-    }
-
-    static func new(title: String, daysEstimate: Int64 = 1) -> Goal {
-        let goal = Goal(context: Goal.context)
-        goal.estimatedCompletionDate = ""
-        goal.id = UUID()
-        goal.title = title
-        goal.daysEstimate = daysEstimate
-        goal.thisCompleted = false
-        goal.progress = 0
-        goal.progressPercentage = ""
-        goal.steps = []
-        goal.topGoal = true
-        goal.updateProgressProperties()
-        goal.updateCompletionDate()
-        return goal
+        updateProgressUpTheTree()
+        updateCompletionDateUpTheTree()
         Goal.context.saveState()
     }
 
     static var start: Goal {
-        if let topGoal = Goal.context.topGoal {
-            return topGoal
-        } else {
-            let origin = Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
-            return origin
-        }
+        Goal.context.topGoal ?? Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
     }
     
     public override func didChangeValue(forKey key: String) {
         super.didChangeValue(forKey: key)
         if key == "daysEstimate" || key == "thisCompleted" {
-            updateProgress()
-            updateCompletionDate()
+            updateProgressUpTheTree()
+            updateCompletionDateUpTheTree()
         }
     }
 
@@ -92,14 +93,11 @@ extension Goal {
         mutableSteps.moveObjects(at: source, to: destination)
         steps = mutableSteps.copy() as? NSOrderedSet
 
-        NSPersistentContainer
-            .goalTable
-            .viewContext
-            .updateGoal(
-                goal: self,
-                title: self.notOptionalTitle,
-                estimatedTime: self.daysEstimate
-            )
+        Goal.context.updateGoal(
+            goal: self,
+            title: self.notOptionalTitle,
+            estimatedTime: self.daysEstimate
+        )
     }
 
     private func updateProgressProperties() {
@@ -107,7 +105,7 @@ extension Goal {
         progressPercentage = "\(Int((progress / 1) * 100))%"
     }
 
-    func updateProgress() {
+    func updateProgressUpTheTree() {
         var up: Goal = self
         updateProgressProperties()
         while let next = up.parent {
@@ -129,7 +127,7 @@ extension Goal {
         }
     }
 
-    func updateCompletionDate() {
+    func updateCompletionDateUpTheTree() {
         var up: Goal = self
         updateCompletionDateProperties()
         while let next = up.parent {

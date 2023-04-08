@@ -43,11 +43,7 @@ struct AddGoalView: View {
                     .modifier(NumberKeyboardModifier())
 
                 Button(action: {
-                    Goal.context.createAndSaveGoal(
-                        title: title,
-                        estimatedTime: Int64(daysEstimate) ?? 1,
-                        parent: parentGoal
-                    )
+                    parentGoal.addSuBGoal(title: title, estimatedTime: Int64(daysEstimate) ?? 1)
                     presentationMode.wrappedValue.dismiss()
                 }) {
                     Text("Add Goal")
