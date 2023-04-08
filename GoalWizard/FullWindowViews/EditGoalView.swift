@@ -114,7 +114,7 @@ import CoreData
 fileprivate extension Goal {
 
     static var edit: Goal {
-        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        let goal = Goal(context: Goal.context)
         goal.estimatedCompletionDate = ""
         goal.id = UUID()
         goal.title = "Edit me!"

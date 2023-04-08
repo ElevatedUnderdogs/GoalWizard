@@ -43,7 +43,7 @@ struct AddGoalView: View {
                     .modifier(NumberKeyboardModifier())
 
                 Button(action: {
-                    NSPersistentContainer.goalTable.viewContext.createAndSaveGoal(
+                    Goal.context.createAndSaveGoal(
                         title: title,
                         estimatedTime: Int64(daysEstimate) ?? 1,
                         parent: parentGoal

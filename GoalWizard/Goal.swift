@@ -5,11 +5,12 @@
 //  Created by Scott Lydon on 3/31/23.
 //
 
-import Foundation
 import Combine
 import CoreData
 
 extension Goal {
+
+    static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
 
     public var notOptionalTitle: String {
         get {
@@ -32,16 +33,14 @@ extension Goal {
     }
 
     func add(subGoals: [Goal]) {
-        subGoals.forEach {
-            $0.parent = self
-        }
+        subGoals.forEach { $0.parent = self }
         steps = steps?.addElements(subGoals)
         updateProgress()
         updateCompletionDate()
     }
 
     static func new(title: String, daysEstimate: Int64 = 1) -> Goal {
-        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        let goal = Goal(context: Goal.context)
         goal.estimatedCompletionDate = ""
         goal.id = UUID()
         goal.title = title
@@ -57,10 +56,10 @@ extension Goal {
     }
 
     static var start: Goal {
-        if let topGoal = NSPersistentContainer.goalTable.viewContext.topGoal {
+        if let topGoal = Goal.context.topGoal {
             return topGoal
         } else {
-            let origin = NSPersistentContainer.goalTable.viewContext.createAndSaveGoal(title: "All Goals", isTopGoal: true)
+            let origin = Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
             return origin
         }
     }
@@ -145,7 +144,7 @@ extension Goal {
 
         let daysEstimate = json["daysEstimate"] as? Int64 ?? 0
 
-        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        let goal = Goal(context: Goal.context)
         goal.title = title
         goal.daysEstimate = daysEstimate
 
@@ -173,7 +172,7 @@ extension Goal {
 
         let daysEstimate = json["daysEstimate"] as? Int64 ?? 0
 
-        let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+        let goal = Goal(context: Goal.context)
         goal.title = title
         goal.daysEstimate = daysEstimate
 

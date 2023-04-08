@@ -77,7 +77,7 @@ extension Choices {
     var goals: [Goal] {
         var result = [Goal]()
         for thisStep in thisSteps {
-            let goal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+            let goal = Goal(context: Goal.context)
             goal.title = thisStep.title
             goal.daysEstimate = Int64(thisStep.daysEstimate)
             goal.progress = 0.0
@@ -86,7 +86,7 @@ extension Choices {
 
             var subGoals = [Goal]()
             for step in thisStep.steps {
-                let subGoal = Goal(context: NSPersistentContainer.goalTable.viewContext)
+                let subGoal = Goal(context: Goal.context)
                 subGoal.title = step.subtitle
                 subGoal.daysEstimate = Int64(step.subdaysEstimate)
                 subGoal.progress = 0.0
@@ -147,7 +147,7 @@ struct GoalView: View {
     }
 
     func delete(at offsets: IndexSet) {
-        NSPersistentContainer.goalTable.viewContext.deleteGoal(atOffsets: offsets, goal: goal)
+        Goal.context.deleteGoal(atOffsets: offsets, goal: goal)
        // goal.delete(at: offsets)
         // Save the changes to persistence if needed
     }
@@ -358,7 +358,7 @@ struct GoalView: View {
             }
 
 //            .refreshable {
-//                let topGoal = await NSPersistentContainer.goalTable.viewContext.topGoal
+//                let topGoal = await Goal.context.topGoal
 //                guard let topGoal else { return }
 //                self.goal = topGoal
 //            }
