@@ -26,7 +26,20 @@ extension Goal {
 
 final class GoalTests: XCTestCase {
 
-    func testGoals() {
-        
+    func testGoalParents() {
+        let goal: Goal = .empty
+        let text1 = "Become attorney"
+        goal.title = text1
+        let goal2: Goal = .empty
+        let text2 = "Go to law school"
+        goal2.title = text2
+        let goal3: Goal = .empty
+        let text3 = "Research law schools"
+        goal3.title = text3
+        goal.add(sub: goal2)
+        goal2.add(sub: goal3)
+        let aSubGoalOf = ", a subgoal of: "
+        XCTAssertEqual(goal3.goalForRequest, text3 + aSubGoalOf + text2 + aSubGoalOf + text1)
+
     }
 }

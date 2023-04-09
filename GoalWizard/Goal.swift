@@ -12,6 +12,16 @@ extension Goal {
 
     static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
 
+    var goalForRequest: String {
+        var result: String = notOptionalTitle
+        var parent = parent
+        while let strongParent = parent {
+            result += ", a subgoal of: \(strongParent.notOptionalTitle )"
+            parent = parent?.parent
+        }
+        return result
+    }
+
     public var notOptionalTitle: String {
         get {
             return title ?? ""
