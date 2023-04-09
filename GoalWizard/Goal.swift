@@ -10,6 +10,15 @@ import CoreData
 
 extension Goal {
 
+    var mutableSteps: NSMutableOrderedSet {
+        get {
+            mutableCopy() as! NSMutableOrderedSet
+        }
+        set {
+            steps = (newValue.copy() as! NSOrderedSet)
+        }
+    }
+
     static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
 
     var goalForRequest: String {
