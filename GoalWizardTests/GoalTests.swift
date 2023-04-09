@@ -26,6 +26,17 @@ extension Goal {
 
 final class GoalTests: XCTestCase {
 
+    override class func tearDown() {
+        super.tearDown()
+        var count = 0
+        Goal.context.goals.forEach {
+            count += 1
+            print("Count: \(count)")
+            $0.title = ""
+            $0.delete()
+        }
+    }
+
     func testGoalParents() {
         let goal: Goal = .empty
         let text1 = "Become attorney"
@@ -87,7 +98,7 @@ final class GoalTests: XCTestCase {
         let third = Goal.empty
         third.notOptionalTitle = buffer3
         first.add(subGoals: [second, third])
-        var titlesFromContext = Goal.context.goals.map(\.notOptionalTitle)
+        let titlesFromContext = Goal.context.goals.map(\.notOptionalTitle)
         [buffer2, buffer3].forEach { bufffer in
             XCTAssertTrue(titlesFromContext.contains(bufffer))
         }
@@ -97,6 +108,34 @@ final class GoalTests: XCTestCase {
         let bufferSet: Set<String> = [buffer2, buffer3]
         let subGoalTitles: Set<String> = Set(firstFromContext?.steps.goals.map(\.notOptionalTitle) ?? [])
         XCTAssertEqual(bufferSet, subGoalTitles)
+    }
+
+    
+    func testAddSubGoalTitle() {
+        let first = Goal.empty
+        let buffer1 = String(describing: UUID())
+        first.addSuBGoal(title: buffer1, estimatedTime: 3)
+        XCTAssertEqual(first.steps.goals.first?.title, buffer1)
+        XCTAssertEqual(first.steps.goals.first?.daysEstimate, 3)
+    }
+
+    func testNonOptionalGetter() {
+        let first = Goal.empty
+        first.title = nil
+        XCTAssertEqual(first.notOptionalTitle, "")
+    }
+
+    func testStartGoal() {
+        let first = Goal.start
+        XCTAssertEqual(first.title, "All Goals")
+        XCTAssertTrue(first.topGoal)
+        let idBuffer = first.id
+        let next = Goal.start
+        XCTAssertEqual(next.id, idBuffer)
+    }
+
+    func testUnitTestFunction() {
+        XCTAssertEqual(Goal.context.goals.count, 0)
     }
 
 }
