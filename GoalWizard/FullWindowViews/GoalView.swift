@@ -77,20 +77,16 @@ extension Choices {
     var goals: [Goal] {
         var result = [Goal]()
         for thisStep in thisSteps {
-            let goal = Goal(context: Goal.context)
+            let goal = Goal.empty
             goal.title = thisStep.title
             goal.daysEstimate = Int64(thisStep.daysEstimate)
-            goal.progress = 0.0
-            goal.topGoal = false
             goal.parent = nil
 
             var subGoals = [Goal]()
             for step in thisStep.steps {
-                let subGoal = Goal(context: Goal.context)
+                let subGoal = Goal.empty
                 subGoal.title = step.subtitle
                 subGoal.daysEstimate = Int64(step.subdaysEstimate)
-                subGoal.progress = 0.0
-                subGoal.topGoal = false
                 subGoal.parent = goal
                 subGoals.append(subGoal)
             }
