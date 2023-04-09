@@ -26,7 +26,7 @@ struct AddGoalView: View {
                         .font(.headline)
                         .padding(.leading)
                     Spacer()
-                    Button("Done") {
+                    Button("Cancel") {
                         presentationMode.wrappedValue.dismiss()
                     }
                     .padding(.trailing)
@@ -60,7 +60,7 @@ struct AddGoalView: View {
             .padding(.horizontal)
         #if os(iOS) || os(tvOS)
             .navigationBarTitle("Add Goal", displayMode: .inline)
-            .navigationBarItems(trailing: Button("Done") {
+            .navigationBarItems(trailing: Button("Cancel") {
                 presentationMode.wrappedValue.dismiss()
             })
         #endif
