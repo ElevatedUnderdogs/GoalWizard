@@ -153,6 +153,8 @@ struct GoalView: View {
             VStack {
                 HStack {
                     if !goal.topGoal {
+                    #if os(macOS)
+                    #else
                         Button(action: {
                           print("home")
                         }) {
@@ -162,6 +164,7 @@ struct GoalView: View {
                                 .aspectRatio(contentMode: .fit)
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
+                    #endif
                     }
                     Spacer()
 
