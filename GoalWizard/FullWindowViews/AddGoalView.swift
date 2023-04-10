@@ -32,17 +32,39 @@ struct AddGoalView: View {
                     .padding(.trailing)
                 }
             #endif
-                TextField("Add goal", text: $title)
+
+            #if os(macOS)
+                TextField("Type your goal", text: $title)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     // This isn't word wrapping still
                     .lineLimit(0)
-
+            #else
+                VStack(alignment: .leading) {
+                    Text("Type your goal:")
+                        .foregroundColor(Color.gray)
+                    TextEditor(text: $title)
+                        .padding()
+                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
+                        // This isn't word wrapping still
+                        .lineLimit(0)
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+                }
+                #endif
                 TextField("Days estimate (Default is 1 day)", text: $daysEstimate)
                     .padding()
+                    // Same as the background color. blends.
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .modifier(NumberKeyboardModifier())
-
+                #if os(iOS)
+                    .overlay(
+                        RoundedRectangle(cornerRadius: 10)
+                            .stroke(Color.gray, lineWidth: 1)
+                    )
+                #endif
                 Button(action: {
                     parentGoal.addSuBGoal(title: title, estimatedTime: Int64(daysEstimate) ?? 1)
                     presentationMode.wrappedValue.dismiss()
