@@ -67,10 +67,11 @@ struct EditGoalView: View {
                     .padding(.trailing)
                 }
 #endif
-                TextEditor(text: titleBinder)
+                TextField("Edit goal", text: titleBinder)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    .lineLimit(nil)
+                    // This isn't word wrapping still
+                    .lineLimit(0)
 
                 TextField("", text: daysEstimateBinding)
                     .padding()

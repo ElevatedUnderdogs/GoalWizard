@@ -32,10 +32,11 @@ struct AddGoalView: View {
                     .padding(.trailing)
                 }
             #endif
-                TextEditor(text: $title)
+                TextField("Add goal", text: $title)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    .lineLimit(nil)
+                    // This isn't word wrapping still
+                    .lineLimit(0)
 
                 TextField("Days estimate (Default is 1 day)", text: $daysEstimate)
                     .padding()
