@@ -1,0 +1,30 @@
+//
+//  OSNavigationStack.swift
+//  GoalWizard
+//
+//  Created by Scott Lydon on 4/9/23.
+//
+
+import SwiftUI
+
+struct VersionBasedNavigationStack<Content: View>: View {
+    var content: Content
+
+    init(@ViewBuilder content: () -> Content) {
+        self.content = content()
+    }
+
+    var body: some View {
+        Group {
+            if #available(iOS 16.0, macOS 13.0, *) {
+                NavigationStack {
+                    content
+                }
+            } else {
+                NavigationView {
+                    content
+                }
+            }
+        }
+    }
+}

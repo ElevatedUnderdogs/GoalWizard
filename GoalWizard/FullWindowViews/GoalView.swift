@@ -149,7 +149,7 @@ struct GoalView: View {
     }
 
     var body: some View {
-        NavigationStack {
+        VersionBasedNavigationStack {
             VStack {
                 HStack {
                     if !goal.topGoal {
@@ -317,7 +317,7 @@ struct GoalView: View {
                                 HStack(alignment: .top) {
                                     Text("\(step.subGoalCount) sub-goals")
                                         .font(.caption2)
-                                        .foregroundColor(Color(UIColor.systemTeal))
+                                        .foregroundColor(Color.systemCompatibleTeal)
                                     Spacer()
                                     if step.isCompleted {
                                         Image(systemName: "checkmark")
@@ -328,7 +328,7 @@ struct GoalView: View {
                                     } else {
                                         Text("Est: " + (step.estimatedCompletionDate ?? ""))
                                             .font(.caption2)
-                                            .foregroundColor(Color(UIColor.systemTeal))
+                                            .foregroundColor(Color.systemCompatibleTeal)
                                     }
                                 }
                             }

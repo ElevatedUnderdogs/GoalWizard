@@ -34,6 +34,7 @@
 		75C8B7F829DE942700493D9C /* Callable in Frameworks */ = {isa = PBXBuildFile; productRef = 75C8B7F729DE942700493D9C /* Callable */; };
 		75C8B7FA29DEA54500493D9C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F929DEA54500493D9C /* String.swift */; };
 		75C8B7FD29DF974400493D9C /* CommonExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 75C8B7FC29DF974400493D9C /* CommonExtensions */; };
+		75C8B87729E3889900493D9C /* VersionBasedNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -83,6 +84,7 @@
 		75C8B7F229DE91CF00493D9C /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
 		75C8B7F429DE932B00493D9C /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
 		75C8B7F929DEA54500493D9C /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionBasedNavigationStack.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -207,6 +209,7 @@
 			children = (
 				75C0B13729D8BC4200D886CA /* RadioButton.swift */,
 				75C0B13F29D9223400D886CA /* ProgressBar.swift */,
+				75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -363,6 +366,7 @@
 				75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */,
 				75C0B1EB29DA08E000D886CA /* DateFormatter.swift in Sources */,
 				75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */,
+				75C8B87729E3889900493D9C /* VersionBasedNavigationStack.swift in Sources */,
 				75C0B13A29D8BEE200D886CA /* Color.swift in Sources */,
 				75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */,
 				75C8B7F529DE932B00493D9C /* URLRequest.swift in Sources */,

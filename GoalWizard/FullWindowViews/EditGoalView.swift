@@ -11,9 +11,10 @@ struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal
 
-#if os(macOS)
-    private let keyPublisher = NotificationCenter.default.publisher(for: NSEvent.keyDownNotification)
-#endif
+//#if os(macOS)
+//    @available(macOS 10.12, *)
+//    private let keyPublisher = NotificationCenter.default.publisher(for: NSEvent.keyDownNotification)
+//#endif
 
     var body: some View {
         let titleBinder = Binding<String> (

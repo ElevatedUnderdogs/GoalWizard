@@ -7,9 +7,31 @@
 
 import SwiftUI
 
+#if os(macOS)
+import AppKit
+#else
+import UIKit
+#endif
+
 extension Color {
 
     static var systemGray6: Color {
         Color("systemGray6")
+    }
+
+    static var systemCompatibleTeal: Color {
+       #if os(macOS)
+       return Color(NSColor.systemTeal)
+       #else
+       return Color(UIColor.systemTeal)
+       #endif
+    }
+
+    static var systemCompatibleBlue: Color {
+        #if os(macOS)
+         return Color(NSColor.systemBlue)
+         #else
+         return Color(UIColor.systemBlue)
+         #endif
     }
 }

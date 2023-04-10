@@ -37,6 +37,16 @@ final class GoalTests: XCTestCase {
         }
     }
 
+    func testTearDown() {
+        var count = 0
+        Goal.context.goals.forEach {
+            count += 1
+            print("Count: \(count)")
+            $0.title = ""
+            $0.delete()
+        }
+    }
+
     func testGoalParents() {
         let goal: Goal = .empty
         let text1 = "Become attorney"
