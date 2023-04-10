@@ -25,12 +25,66 @@ extension Goal {
     }
 }
 
-final class GoalTests: XCTestCase {
+
+
+
+class GoalTestsGptapi: XCTestCase {
+    var goal: Goal!
+
+    override func setUp() {
+        super.setUp()
+        clearGoals()
+        goal = Goal.empty
+        goal.title = "Test Goal"
+        goal.daysEstimate = 10
+    }
 
     override func tearDown() {
+        goal = nil
+        clearGoals()
         super.tearDown()
-        self.clearGoals()
     }
+
+    func testGptAddSubGoalsSuccess() {
+        let initialGoalCount = Goal.context.goals.count
+        goal.gptAddSubGoals(request: { _ in SubGoalMock() }, hasAsync: RightNow()) { error in
+            XCTAssertNil(error)
+            XCTAssertTrue(self.goal.steps.goals.count > 0)
+        }
+        let savedGoals = Goal.context.goals
+        // Check that the goal count has not changed
+        XCTAssertNotEqual(savedGoals.count, initialGoalCount)
+
+        // Check that none of the goals from the example JSON were saved
+        XCTAssertTrue(savedGoals.contains(where: { $0.title == "Step 1" }))
+        XCTAssertTrue(savedGoals.contains(where: { $0.title == "Step 2" }))
+        XCTAssertTrue(savedGoals.contains(where: { $0.title == "Substep 1.1" }))
+        XCTAssertTrue(savedGoals.contains(where: { $0.title == "Substep 1.2" }))
+        XCTAssertTrue(savedGoals.contains(where: { $0.title == "Substep 2.1" }))
+        XCTAssertTrue(savedGoals.contains(where: { $0.title == "Substep 2.2" }))
+    }
+
+    func testGptAddSubGoalsFailure() {
+        let initialGoalCount = Goal.context.goals.count
+        goal.gptAddSubGoals(request: { _ in ErrorSubGoalMock() }, hasAsync: RightNow()) { error in
+            XCTAssertEqual(self.goal.steps.goals.count, 0)
+        }
+        let savedGoals = Goal.context.goals
+
+        // Check that the goal count has not changed
+        XCTAssertEqual(savedGoals.count, initialGoalCount)
+
+        // Check that none of the goals from the example JSON were saved
+        XCTAssertFalse(savedGoals.contains(where: { $0.title == "Step 1" }))
+        XCTAssertFalse(savedGoals.contains(where: { $0.title == "Step 2" }))
+        XCTAssertFalse(savedGoals.contains(where: { $0.title == "Substep 1.1" }))
+        XCTAssertFalse(savedGoals.contains(where: { $0.title == "Substep 1.2" }))
+        XCTAssertFalse(savedGoals.contains(where: { $0.title == "Substep 2.1" }))
+        XCTAssertFalse(savedGoals.contains(where: { $0.title == "Substep 2.2" }))
+    }
+}
+
+extension XCTestCase {
 
     func clearGoals() {
         let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Goal")
@@ -44,6 +98,15 @@ final class GoalTests: XCTestCase {
             XCTFail()
         }
         XCTAssertEqual(0, Goal.context.goals.count, "ERROR MESSAGE: " + Goal.context.goals.first!.title! + "<")
+    }
+}
+
+
+final class GoalTests: XCTestCase {
+
+    override func tearDown() {
+        super.tearDown()
+        self.clearGoals()
     }
 
     func testThisFirst() {
@@ -165,5 +228,4 @@ final class GoalTests: XCTestCase {
         clearGoals()
         XCTAssertEqual(Goal.context.goals.count, 0)
     }
-
 }

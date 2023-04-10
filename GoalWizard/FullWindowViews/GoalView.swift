@@ -12,111 +12,6 @@ import CommonExtensions
 import Foundation
 import Dispatch
 
-enum ModifyState: Int, Identifiable {
-    case edit, add
-    var id: Int { rawValue }
-}
-
-// MARK: - Goal
-struct GoalStruct: Codable {
-    let title: String
-    let daysEstimate: Int
-    let steps: [GoalStruct]
-}
-
-
-struct OpenAIResponse<T: Codable>: Codable {
-    let choices: [Choice<T>]
-    let id: String
-    let model: String
-    let usage: Usage
-    let object: String
-    let created: TimeInterval
-}
-
-struct Choice<T: Codable>: Codable {
-    let message: Message<T>
-    let finishReason: String?
-    let index: Int
-}
-
-struct Message<T: Codable>: Codable {
-    let content: String
-    let role: String
-
-    func decodedContent() throws -> T {
-        guard let data = content.data(using: .utf8) else {
-            throw OpenAIError.invalidResponse
-        }
-        return try JSONDecoder().decode(T.self, from: data)
-    }
-}
-
-struct Usage: Codable {
-    let totalTokens: Int
-    let completionTokens: Int
-    let promptTokens: Int
-
-    private enum CodingKeys: String, CodingKey {
-        case totalTokens = "total_tokens"
-        case completionTokens = "completion_tokens"
-        case promptTokens = "prompt_tokens"
-    }
-}
-
-enum OpenAIError: Error {
-    case invalidResponse
-}
-
-// MARK: - Choices
-struct Choices: Codable {
-    let thisSteps: [ThisStep]
-}
-
-extension Choices {
-    var goals: [Goal] {
-        var result = [Goal]()
-        for thisStep in thisSteps {
-            let goal = Goal.empty
-            goal.title = thisStep.title
-            goal.daysEstimate = Int64(thisStep.daysEstimate)
-            goal.parent = nil
-
-            var subGoals = [Goal]()
-            for step in thisStep.steps {
-                let subGoal = Goal.empty
-                subGoal.title = step.subtitle
-                subGoal.daysEstimate = Int64(step.subdaysEstimate)
-                subGoal.parent = goal
-                subGoals.append(subGoal)
-            }
-            goal.steps = NSOrderedSet(array: subGoals)
-            result.append(goal)
-        }
-        return result
-    }
-}
-
-// MARK: - ThisStep
-struct ThisStep: Codable {
-    let title: String
-    let daysEstimate: Int
-    let steps: [Step]
-}
-
-// MARK: - Step
-struct Step: Codable {
-    let subtitle: String
-    let subdaysEstimate: Int
-}
-
-
-enum ButtonState {
-    case normal
-    case loading
-    case hidden
-}
-
 
 struct GoalView: View {
     
@@ -231,20 +126,8 @@ struct GoalView: View {
                         if buttonState == .normal {
                             Button(action: {
                                 buttonState = .loading
-                                URLRequest.gpt35TurboChatRequest(
-                                    messages: .buildUserMessage(
-                                        content: .goalTreeFrom(goal: goal.notOptionalTitle)
-                                    )
-                                ).callCodable { (response: OpenAIResponse<Choices>?) in
-                                    DispatchQueue.main.async {
-                                        do {
-                                            let newGoals = try response?.choices.first?.message.decodedContent().goals ?? []
-                                            self.goal.add(subGoals: newGoals)
-                                        } catch {
-                                            print(error.localizedDescription)
-                                        }
-                                        buttonState = .hidden
-                                    }
+                                goal.gptAddSubGoals { error in
+                                    buttonState = .hidden
                                 }
                             }) {
                                 Image(systemName: "bolt.circle")
@@ -288,7 +171,6 @@ struct GoalView: View {
                         }
                     }
                 }
-
                 if showSearchView {
                     TextField("Search", text: $searchText)
                         .padding()

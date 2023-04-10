@@ -155,6 +155,36 @@ extension Goal {
             up.updateCompletionDateProperties()
         }
     }
+
+    /// testable method
+    /// - Parameters:
+    ///   - request: <#request description#>
+    ///   - hasAsync: <#hasAsync description#>
+    ///   - completion: <#completion description#>
+    func gptAddSubGoals(
+        request: (_ text: String) -> HasCallCodable = { goalTitle in
+            URLRequest.gpt35TurboChatRequest(
+                messages: .buildUserMessage(
+                    content: .goalTreeFrom(goal: goalTitle)
+                )
+            )
+        },
+        hasAsync: HasAsync = DispatchQueue.main,
+        completion: @escaping ErrorAction
+    ) {
+        request(notOptionalTitle).callCodable(expressive: false) { (response: OpenAIResponse<Choices>?) in
+            hasAsync.async { [weak self] in
+                do {
+                    let newGoals = try response?.choices.first?.message.decodedContent().goals ?? []
+                    self?.add(subGoals: newGoals)
+                } catch {
+                    print(error.localizedDescription)
+                    completion(error)
+                }
+                completion(nil)
+            }
+        }
+    }
 }
 
 // Provided in this file because of fileprivate computed properties.

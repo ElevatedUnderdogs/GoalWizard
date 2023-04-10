@@ -35,6 +35,11 @@
 		75C8B7FA29DEA54500493D9C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F929DEA54500493D9C /* String.swift */; };
 		75C8B7FD29DF974400493D9C /* CommonExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 75C8B7FC29DF974400493D9C /* CommonExtensions */; };
 		75C8B87729E3889900493D9C /* VersionBasedNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */; };
+		75C8B87929E3D65E00493D9C /* TestSwiftuiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */; };
+		75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87C29E3F00300493D9C /* GoalView.Models.swift */; };
+		75C8B87F29E3FBA900493D9C /* SubGoalMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */; };
+		75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88029E3FBF400493D9C /* TestableHelpers.swift */; };
+		75C8B88329E3FC0700493D9C /* Rightnow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88229E3FC0700493D9C /* Rightnow.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -85,6 +90,11 @@
 		75C8B7F429DE932B00493D9C /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
 		75C8B7F929DEA54500493D9C /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
 		75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionBasedNavigationStack.swift; sourceTree = "<group>"; };
+		75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwiftuiViewController.swift; sourceTree = "<group>"; };
+		75C8B87C29E3F00300493D9C /* GoalView.Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.Models.swift; sourceTree = "<group>"; };
+		75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGoalMock.swift; sourceTree = "<group>"; };
+		75C8B88029E3FBF400493D9C /* TestableHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableHelpers.swift; sourceTree = "<group>"; };
+		75C8B88229E3FC0700493D9C /* Rightnow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rightnow.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -163,6 +173,9 @@
 			children = (
 				75C0B11329D7EEAA00D886CA /* GoalWizardTests.swift */,
 				75C0B12E29D7F79900D886CA /* GoalTests.swift */,
+				75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */,
+				75C8B88229E3FC0700493D9C /* Rightnow.swift */,
+				75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */,
 			);
 			path = GoalWizardTests;
 			sourceTree = "<group>";
@@ -179,6 +192,7 @@
 		75C0B13D29D8C46500D886CA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				75C8B87C29E3F00300493D9C /* GoalView.Models.swift */,
 				75C0B13529D8BC1400D886CA /* SkeuomorphicButtonStyle.swift */,
 				75C0B13B29D8C39C00D886CA /* NumberKeyboardModifier.swift */,
 				75C0B13929D8BEE200D886CA /* Color.swift */,
@@ -188,6 +202,7 @@
 				75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */,
 				75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */,
 				75C8B7F229DE91CF00493D9C /* Secrets.swift */,
+				75C8B88029E3FBF400493D9C /* TestableHelpers.swift */,
 				75C8B7F429DE932B00493D9C /* URLRequest.swift */,
 				75C8B7F929DEA54500493D9C /* String.swift */,
 			);
@@ -359,6 +374,7 @@
 				75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */,
 				75C0B1ED29DA197400D886CA /* EditGoalView.swift in Sources */,
 				75C8B7F329DE91CF00493D9C /* Secrets.swift in Sources */,
+				75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */,
 				75C0B13829D8BC4200D886CA /* RadioButton.swift in Sources */,
 				75C0B1F129DB947600D886CA /* Goal.xcdatamodeld in Sources */,
 				75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */,
@@ -372,6 +388,7 @@
 				75C8B7F529DE932B00493D9C /* URLRequest.swift in Sources */,
 				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
+				75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -379,8 +396,11 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75C8B88329E3FC0700493D9C /* Rightnow.swift in Sources */,
+				75C8B87929E3D65E00493D9C /* TestSwiftuiViewController.swift in Sources */,
 				75C0B12F29D7F79900D886CA /* GoalTests.swift in Sources */,
 				75C0B11429D7EEAA00D886CA /* GoalWizardTests.swift in Sources */,
+				75C8B87F29E3FBA900493D9C /* SubGoalMock.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
