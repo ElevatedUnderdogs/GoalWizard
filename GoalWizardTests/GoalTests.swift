@@ -7,6 +7,7 @@
 
 import XCTest
 @testable import GoalWizard
+import CoreData
 
 extension Goal {
 
@@ -26,25 +27,27 @@ extension Goal {
 
 final class GoalTests: XCTestCase {
 
-    override class func tearDown() {
+    override func tearDown() {
         super.tearDown()
-        var count = 0
-        Goal.context.goals.forEach {
-            count += 1
-            print("Count: \(count)")
-            $0.title = ""
-            $0.delete()
-        }
+        self.clearGoals()
     }
 
-    func testTearDown() {
-        var count = 0
-        Goal.context.goals.forEach {
-            count += 1
-            print("Count: \(count)")
-            $0.title = ""
-            $0.delete()
+    func clearGoals() {
+        let fetchRequest: NSFetchRequest<NSFetchRequestResult> = NSFetchRequest(entityName: "Goal")
+        let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
+        Goal.context.goals.forEach { Goal.context.delete($0) }
+        do {
+            try NSPersistentContainer.goalTable.viewContext.execute(deleteRequest)
+            try NSPersistentContainer.goalTable.viewContext.save()
+        } catch {
+            print("Error deleting all goals: \(error.localizedDescription)")
+            XCTFail()
         }
+        XCTAssertEqual(0, Goal.context.goals.count, "ERROR MESSAGE: " + Goal.context.goals.first!.title! + "<")
+    }
+
+    func testThisFirst() {
+        clearGoals()
     }
 
     func testGoalParents() {
@@ -61,11 +64,13 @@ final class GoalTests: XCTestCase {
         goal2.add(sub: goal3)
         let aSubGoalOf = ", a subgoal of: "
         XCTAssertEqual(goal3.goalForRequest, text3 + aSubGoalOf + text2 + aSubGoalOf + text1)
+        clearGoals()
     }
 
     func testAddGoalViewHasCancel() {
         let first = Goal.start
-        let goalView = AddGoalView(parentGoal: first)
+        _ = AddGoalView(parentGoal: first)
+        clearGoals()
     }
 
     func testSetTitle() {
@@ -74,6 +79,7 @@ final class GoalTests: XCTestCase {
         XCTAssertEqual(first.title, "Cows")
         first.notOptionalTitle = "Not"
         XCTAssertEqual(first.title, "Not")
+        clearGoals()
     }
 
     func testAddSubGoal() {
@@ -85,6 +91,7 @@ final class GoalTests: XCTestCase {
         second.notOptionalTitle = buffer2
         first.add(sub: second)
         XCTAssertEqual(first.steps.goals.first?.title, buffer2)
+        clearGoals()
     }
 
     func testAddToNilSteps() {
@@ -95,6 +102,7 @@ final class GoalTests: XCTestCase {
         second.title = buffer
         first.add(sub: second)
         XCTAssertEqual(first.steps.goals.first?.title, second.title)
+        clearGoals()
     }
 
     func testAddSubGoals() {
@@ -118,6 +126,7 @@ final class GoalTests: XCTestCase {
         let bufferSet: Set<String> = [buffer2, buffer3]
         let subGoalTitles: Set<String> = Set(firstFromContext?.steps.goals.map(\.notOptionalTitle) ?? [])
         XCTAssertEqual(bufferSet, subGoalTitles)
+        clearGoals()
     }
 
     
@@ -127,12 +136,15 @@ final class GoalTests: XCTestCase {
         first.addSuBGoal(title: buffer1, estimatedTime: 3)
         XCTAssertEqual(first.steps.goals.first?.title, buffer1)
         XCTAssertEqual(first.steps.goals.first?.daysEstimate, 3)
+        clearGoals()
     }
 
     func testNonOptionalGetter() {
         let first = Goal.empty
         first.title = nil
         XCTAssertEqual(first.notOptionalTitle, "")
+        first.title = ""
+        clearGoals()
     }
 
     func testStartGoal() {
@@ -142,9 +154,15 @@ final class GoalTests: XCTestCase {
         let idBuffer = first.id
         let next = Goal.start
         XCTAssertEqual(next.id, idBuffer)
+        clearGoals()
     }
 
     func testUnitTestFunction() {
+        // on app start there is 1 goal inserted, so this will always be 1 or
+        // so I thought, turns out there was a goal that was not deleted by batch
+        // delete, and specifically deleting was the only way.
+        // XCTAssertEqual(Goal.context.goals.count, 1)
+        clearGoals()
         XCTAssertEqual(Goal.context.goals.count, 0)
     }
 

@@ -86,7 +86,7 @@ extension NSManagedObjectContext {
         saveState()
     }
 
-    private func deleteGoal(goal: Goal) {
+    func deleteGoal(goal: Goal) {
         goal.steps?.forEach { step in
             guard let subGoal = step as? Goal else { return }
             deleteGoal(goal: subGoal)
