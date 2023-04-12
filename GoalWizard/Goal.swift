@@ -10,15 +10,6 @@ import CoreData
 
 extension Goal {
 
-    var mutableSteps: NSMutableOrderedSet {
-        get {
-            mutableCopy() as! NSMutableOrderedSet
-        }
-        set {
-            steps = (newValue.copy() as! NSOrderedSet)
-        }
-    }
-
     static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
 
     var goalForRequest: String {
@@ -89,15 +80,6 @@ extension Goal {
     static var start: Goal {
         Goal.context.topGoal ?? Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
     }
-
-    func moveSubgoals(from source: Set<Goal>, to destination: Set<Goal>) {
-        let allSteps = steps?.array as? [Goal] ?? []
-
-        let updatedSteps = allSteps.filter { !source.contains($0) } + destination
-
-        steps = NSOrderedSet(array: updatedSteps)
-        NSPersistentContainer.goalTable.viewContext.saveState()
-    }
     
     public override func didChangeValue(forKey key: String) {
         super.didChangeValue(forKey: key)
@@ -117,20 +99,6 @@ extension Goal {
 
     var isCompleted: Bool {
         steps.isEmpty ? thisCompleted : daysLeft == 0
-    }
-
-    func move(fromOffsets source: IndexSet, toOffset destination: Int) {
-        guard let mutableSteps = steps?.mutableCopy() as? NSMutableOrderedSet else {
-            return
-        }
-        mutableSteps.moveObjects(at: source, to: destination)
-        steps = mutableSteps.copy() as? NSOrderedSet
-
-        Goal.context.updateGoal(
-            goal: self,
-            title: self.notOptionalTitle,
-            estimatedTime: self.daysEstimate
-        )
     }
 
     private func updateProgressProperties() {
@@ -175,13 +143,7 @@ extension Goal {
     ///   - hasAsync: <#hasAsync description#>
     ///   - completion: <#completion description#>
     func gptAddSubGoals(
-        request: (_ text: String) -> HasCallCodable = { goalTitle in
-            URLRequest.gpt35TurboChatRequest(
-                messages: .buildUserMessage(
-                    content: .goalTreeFrom(goal: goalTitle)
-                )
-            )
-        },
+        request: (_ text: String) -> HasCallCodable = gptBuilder,
         hasAsync: HasAsync = DispatchQueue.main,
         completion: @escaping ErrorAction
     ) {
@@ -198,6 +160,14 @@ extension Goal {
             }
         }
     }
+}
+
+fileprivate(set) var gptBuilder: (_ text: String) -> HasCallCodable = { goalTitle in
+    URLRequest.gpt35TurboChatRequest(
+        messages: .buildUserMessage(
+            content: .goalTreeFrom(goal: goalTitle)
+        )
+    )
 }
 
 // Provided in this file because of fileprivate computed properties.

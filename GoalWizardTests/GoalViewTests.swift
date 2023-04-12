@@ -15,14 +15,14 @@ final class GoalViewTests: XCTestCase {
     override class func setUp() {
         super.setUp()
 #if !targetEnvironment(simulator)
-fatalError("These tests should only run on a simulator, not on a physical device.")
+        fatalError("These tests should only run on a simulator, not on a physical device.")
 #endif
     }
 
-        override func tearDown() {
-            super.tearDown()
-            self.clearGoals()
-        }
+    override func tearDown() {
+        super.tearDown()
+        self.clearGoals()
+    }
     
     func testDeleteGoalInView() {
         let goal: Goal = .start
