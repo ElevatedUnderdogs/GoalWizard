@@ -9,12 +9,6 @@ import CoreData
 
 extension NSManagedObjectContext {
 
-//    func deleteGoals(_ goals: [Goal]) {
-//        print(goals.map(\.title))
-  //        goals.forEach { deleteGoal(goal: $0) }
-//        saveState()
-//    }
-
     var topGoal: Goal? {
         let fetchRequest: NSFetchRequest<Goal> = Goal.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "topGoal == %@", NSNumber(value: true))
@@ -32,7 +26,9 @@ extension NSManagedObjectContext {
         }
     }
 
-    var goals: [Goal] { elements(entityName: "Goal") }
+    var goals: [Goal] {
+        elements(entityName: "Goal").filter { !$0.isUserMarkedForDeletion }
+    }
 
     func elements<T: NSFetchRequestResult>(entityName: String) -> [T] {
         let request: NSFetchRequest<T> = NSFetchRequest<T>(entityName: entityName)
@@ -101,7 +97,8 @@ extension NSManagedObjectContext {
             deleteGoal(goal: subGoal)
         }
         // still need to call save state
-        delete(goal)
+        // delete(goal)
+        goal.isUserMarkedForDeletion = true
     }
 
     func updateGoal(

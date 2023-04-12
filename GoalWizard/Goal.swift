@@ -33,6 +33,7 @@ extension Goal {
 
     static var empty: Goal {
         let newGoal = Goal(context: Goal.context)
+        newGoal.isUserMarkedForDeletion = false
         newGoal.timeStamp = Date()
         newGoal.estimatedCompletionDate = ""
         newGoal.id = UUID()

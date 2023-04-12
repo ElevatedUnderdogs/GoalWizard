@@ -44,31 +44,22 @@ struct GoalView: View {
         return (incomplete: incompleteGoals, completed: completedGoals)
     }
 
-    func delete(impcomplete offsets: IndexSet) {
-        let goalMatch: Goal? = offsets.map { filteredSteps.incomplete[$0] }.first
-        print("goal match: ", goalMatch?.title, ", offsets: ", offsets)
-        let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
-        // IndexSet(goal.steps.goals.filter { $0 == goalMatch }.indices )
-        print("indices to delete: ", stepIndicesTodelete)
-        for index in stepIndicesTodelete {
-            print("goal at the delete index: ", index, "element ", (goal.steps?.object(at: index) as? Goal)?.title as Any)
-            assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
-        }
-        Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
-    }
+    func deleteGoals(offsets: IndexSet, filteredGoals: [Goal]) {
+         let goalMatch: Goal? = offsets.map { filteredGoals[$0] }.first
+         let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
+         for index in stepIndicesTodelete {
+             assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
+         }
+         Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
+     }
 
-    func delete(complete offsets: IndexSet) {
-        let goalMatch: Goal? = offsets.map { filteredSteps.completed[$0] }.first
-        print("goal match: ", goalMatch?.title, ", offsets: ", offsets)
-        let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
-        // IndexSet(goal.steps.goals.filter { $0 == goalMatch }.indices )
-        print("indices to delete: ", stepIndicesTodelete)
-        for index in stepIndicesTodelete {
-            print("goal at the delete index: ", index, "element ", (goal.steps?.object(at: index) as? Goal)?.title as Any)
-            assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
-        }
-        Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
-    }
+     func delete(impcomplete offsets: IndexSet) {
+         deleteGoals(offsets: offsets, filteredGoals: filteredSteps.incomplete)
+     }
+
+     func delete(complete offsets: IndexSet) {
+         deleteGoals(offsets: offsets, filteredGoals: filteredSteps.completed)
+     }
 
     var body: some View {
         VersionBasedNavigationStack {

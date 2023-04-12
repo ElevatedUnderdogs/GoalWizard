@@ -31,7 +31,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let expectation = expectation(for: NSPredicate(format: "exists == true"), evaluatedWith: element, handler: nil)
 
         // Wait for the element to appear
-        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        let _ = XCTWaiter().wait(for: [expectation], timeout: timeout)
         //XCTAssertEqual(result, .completed, "App did not finish launching within the given timeout")
         // Replace "elementIdentifier" with the accessibility identifier of the view you expect to appear
 

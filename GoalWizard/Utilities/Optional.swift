@@ -12,7 +12,7 @@ import CoreData
 extension Optional<NSOrderedSet> {
     var goals: [Goal] {
         guard let self else { return [] }
-        return self.array as? [Goal] ?? []
+        return (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion} ?? []
     }
 }
 

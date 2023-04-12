@@ -81,7 +81,6 @@ final class GoalViewTests: XCTestCase {
 
     func testUpParentsAfterDelete() {
         let goal: Goal = .start
-        let text1 = goal.notOptionalTitle
         let goalView = GoalView(goal: goal)
 
         let goal2: Goal = .empty
