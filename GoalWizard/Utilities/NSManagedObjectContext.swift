@@ -11,7 +11,7 @@ extension NSManagedObjectContext {
 
 //    func deleteGoals(_ goals: [Goal]) {
 //        print(goals.map(\.title))
-//        goals.forEach { deleteGoal(goal: $0) }
+  //        goals.forEach { deleteGoal(goal: $0) }
 //        saveState()
 //    }
 

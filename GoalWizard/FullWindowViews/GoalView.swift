@@ -13,19 +13,9 @@ import Foundation
 import Dispatch
 
 
-/// This can be useful to extract values
-@propertyWrapper
-struct Filterable<Value> {
-    var wrappedValue: Value
-
-    init(wrappedValue: Value) {
-        self.wrappedValue = wrappedValue
-    }
-}
-
 struct GoalView: View {
     
-    @Filterable @ObservedObject var goal: Goal
+    @ObservedObject var goal: Goal
     @State var showSearchView = false
     @State var searchText: String = ""
     @State private var modifyState: ModifyState? = nil
