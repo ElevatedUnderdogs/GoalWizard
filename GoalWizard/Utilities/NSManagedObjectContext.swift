@@ -91,6 +91,8 @@ extension NSManagedObjectContext {
         goal.steps = mutableSteps.copy() as? NSOrderedSet
         // still need to call save state.
         saveState()
+        goal.updateProgressUpTheTree()
+        goal.updateCompletionDateUpTheTree()
     }
 
     func deleteGoal(goal: Goal) {

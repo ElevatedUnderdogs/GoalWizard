@@ -33,10 +33,14 @@ class GoalTestsGptapi: XCTestCase {
 
     override func setUp() {
         super.setUp()
+#if !targetEnvironment(simulator)
+fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
         clearGoals()
         goal = Goal.empty
         goal.title = "Test Goal"
         goal.daysEstimate = 10
+
     }
 
     override func tearDown() {
@@ -102,6 +106,13 @@ extension XCTestCase {
 
 
 final class GoalTests: XCTestCase {
+
+    override class func setUp() {
+        super.setUp()
+#if !targetEnvironment(simulator)
+fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
+    }
 
     override func tearDown() {
         super.tearDown()

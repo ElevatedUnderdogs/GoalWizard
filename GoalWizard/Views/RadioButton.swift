@@ -29,13 +29,14 @@ struct GreenGlowingText: View {
     var body: some View {
         ZStack {
             Text(text)
-                .foregroundColor(.green)
+            // #BFEEDE
+                .foregroundColor(.goalGreen)
                 .font(.body)
                 .blur(radius: 5)
                 .opacity(0.7)
 
             Text(text)
-                .foregroundColor(.green)
+                .foregroundColor(.goalGreen)
                 .font(.body)
         }
     }

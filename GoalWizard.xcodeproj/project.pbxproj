@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
 		75C0B10629D7EEAA00D886CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75C0B10529D7EEAA00D886CA /* Assets.xcassets */; };
@@ -61,6 +62,7 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardApp.swift; sourceTree = "<group>"; };
 		75C0B10329D7EEA900D886CA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
@@ -175,6 +177,7 @@
 			children = (
 				75C0B11329D7EEAA00D886CA /* GoalWizardTests.swift */,
 				75C0B12E29D7F79900D886CA /* GoalTests.swift */,
+				7596AC5129E64FF0003A68AA /* GoalViewTests.swift */,
 				75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */,
 				75C8B88229E3FC0700493D9C /* Rightnow.swift */,
 				75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */,
@@ -405,6 +408,7 @@
 				75C0B12F29D7F79900D886CA /* GoalTests.swift in Sources */,
 				75C0B11429D7EEAA00D886CA /* GoalWizardTests.swift in Sources */,
 				75C8B87F29E3FBA900493D9C /* SubGoalMock.swift in Sources */,
+				7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

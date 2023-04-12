@@ -9,11 +9,31 @@ import XCTest
 
 final class GoalWizardUITests: XCTestCase {
 
+    var app: XCUIApplication!
+
     override func setUpWithError() throws {
+
+#if !targetEnvironment(simulator)
+fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
         // In UI tests it is usually best to stop immediately when a failure occurs.
         continueAfterFailure = false
+
+        app = XCUIApplication()
+        app.launch()
+
+        let element = app.otherElements["Add"]
+
+        // Set a timeout (in seconds) for how long the test should wait for the element to appear
+        let timeout: TimeInterval = 1
+        let expectation = expectation(for: NSPredicate(format: "exists == true"), evaluatedWith: element, handler: nil)
+
+        // Wait for the element to appear
+        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        //XCTAssertEqual(result, .completed, "App did not finish launching within the given timeout")
+        // Replace "elementIdentifier" with the accessibility identifier of the view you expect to appear
 
         // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
     }
@@ -22,39 +42,8 @@ final class GoalWizardUITests: XCTestCase {
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
-    func testExample() throws {
-        // UI tests must launch the application that they test.
-        let app = XCUIApplication()
-        app.launch()
-
-        // Use XCTAssert and related functions to verify your tests produce the correct results.
-    }
-
     func testCancelButton() {
-        let app = XCUIApplication()
-        app.launch()
-
-        // Replace "elementIdentifier" with the accessibility identifier of the view you expect to appear
-        let element = app.otherElements["Add"]
-        let existsPredicate = NSPredicate(format: "exists == true")
-
-        // Set a timeout (in seconds) for how long the test should wait for the element to appear
-        let timeout: TimeInterval = 1
-        let expectation = expectation(for: existsPredicate, evaluatedWith: element, handler: nil)
-
-        // Wait for the element to appear
-        let result = XCTWaiter().wait(for: [expectation], timeout: timeout)
-        //XCTAssertEqual(result, .completed, "App did not finish launching within the given timeout")
         app.buttons["Add"].tap()
         app.navigationBars["Add Goal"].buttons["Cancel"].tap()
     }
-
-    //    func testLaunchPerformance() throws {
-    //        if #available(macOS 10.15, iOS 13.0, tvOS 13.0, watchOS 7.0, *) {
-//            // This measures how long it takes to launch your application.
-//            measure(metrics: [XCTApplicationLaunchMetric()]) {
-//                XCUIApplication().launch()
-//            }
-//        }
-//    }
 }

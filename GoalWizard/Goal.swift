@@ -50,6 +50,7 @@ extension Goal {
         newGoal.progressPercentage = ""
         newGoal.steps = []
         newGoal.topGoal = false
+        newGoal.daysEstimate = 1
         newGoal.updateProgressUpTheTree()
         newGoal.updateCompletionDateUpTheTree()
         return newGoal

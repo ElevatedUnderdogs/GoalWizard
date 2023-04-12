@@ -12,7 +12,6 @@ import CommonExtensions
 import Foundation
 import Dispatch
 
-
 struct GoalView: View {
     
     @ObservedObject var goal: Goal
