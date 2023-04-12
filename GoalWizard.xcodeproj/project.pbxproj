@@ -8,6 +8,7 @@
 
 /* Begin PBXBuildFile section */
 		7546B0CA29E67E4600524F3C /* StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0C929E67E4600524F3C /* StringTest.swift */; };
+		7546B0D729E7389600524F3C /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 7546B0D629E7389600524F3C /* SnapshotTesting */; };
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
@@ -117,6 +118,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7546B0D729E7389600524F3C /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -276,6 +278,9 @@
 				75C0B11129D7EEAA00D886CA /* PBXTargetDependency */,
 			);
 			name = GoalWizardTests;
+			packageProductDependencies = (
+				7546B0D629E7389600524F3C /* SnapshotTesting */,
+			);
 			productName = GoalWizardTests;
 			productReference = 75C0B10F29D7EEAA00D886CA /* GoalWizardTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -333,6 +338,7 @@
 			packageReferences = (
 				75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */,
 				75C8B7FB29DF974400493D9C /* XCRemoteSwiftPackageReference "CommonExtensions" */,
+				7546B0D529E7389600524F3C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
 			);
 			productRefGroup = 75C0B0FF29D7EEA900D886CA /* Products */;
 			projectDirPath = "";
@@ -758,6 +764,14 @@
 /* End XCConfigurationList section */
 
 /* Begin XCRemoteSwiftPackageReference section */
+		7546B0D529E7389600524F3C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
 		75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */ = {
 			isa = XCRemoteSwiftPackageReference;
 			repositoryURL = "https://github.com/ElevatedUnderdogs/Callable.git";
@@ -777,6 +791,11 @@
 /* End XCRemoteSwiftPackageReference section */
 
 /* Begin XCSwiftPackageProductDependency section */
+		7546B0D629E7389600524F3C /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7546B0D529E7389600524F3C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
 		75C8B7F729DE942700493D9C /* Callable */ = {
 			isa = XCSwiftPackageProductDependency;
 			package = 75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */;
