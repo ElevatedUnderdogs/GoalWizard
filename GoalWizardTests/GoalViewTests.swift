@@ -12,8 +12,9 @@ import CoreData
 
 final class GoalViewTests: XCTestCase {
 
-    override class func setUp() {
+    override func setUp() {
         super.setUp()
+        self.clearGoals()
 #if !targetEnvironment(simulator)
         fatalError("These tests should only run on a simulator, not on a physical device.")
 #endif
