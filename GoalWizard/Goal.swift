@@ -68,6 +68,9 @@ extension Goal {
     }
 
     func add(sub goal: Goal) {
+        guard goal.title != nil && goal.title != "" else {
+            return 
+        }
         goal.parent = self
         steps = steps?.addElement(goal) ?? []
         updateProgressUpTheTree()
@@ -84,6 +87,15 @@ extension Goal {
 
     static var start: Goal {
         Goal.context.topGoal ?? Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
+    }
+
+    func moveSubgoals(from source: Set<Goal>, to destination: Set<Goal>) {
+        let allSteps = steps?.array as? [Goal] ?? []
+
+        let updatedSteps = allSteps.filter { !source.contains($0) } + destination
+
+        steps = NSOrderedSet(array: updatedSteps)
+        NSPersistentContainer.goalTable.viewContext.saveState()
     }
     
     public override func didChangeValue(forKey key: String) {

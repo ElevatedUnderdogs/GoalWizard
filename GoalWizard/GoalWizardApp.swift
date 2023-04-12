@@ -13,5 +13,6 @@ struct GoalWizardApp: App {
         WindowGroup {
             GoalView(goal: .start)
         }
+
     }
 }

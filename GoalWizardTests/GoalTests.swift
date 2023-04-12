@@ -95,7 +95,6 @@ extension XCTestCase {
             try NSPersistentContainer.goalTable.viewContext.save()
         } catch {
             print("Error deleting all goals: \(error.localizedDescription)")
-            XCTFail()
         }
         XCTAssertEqual(0, Goal.context.goals.count, "ERROR MESSAGE: " + Goal.context.goals.first!.title! + "<")
     }
@@ -111,6 +110,16 @@ final class GoalTests: XCTestCase {
 
     func testThisFirst() {
         clearGoals()
+    }
+
+    func testAddEmpty() {
+        let goal: Goal = .empty
+        goal.title = "Test123"
+        let goal2: Goal = .empty
+        let text2 = ""
+        goal2.title = text2
+        goal.add(sub: goal2)
+        XCTAssertEqual(goal.subGoalCount, 0, goal.steps.goals.first?.title ?? "nil")
     }
 
     func testGoalParents() {

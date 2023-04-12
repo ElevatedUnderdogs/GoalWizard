@@ -40,6 +40,7 @@
 		75C8B87F29E3FBA900493D9C /* SubGoalMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */; };
 		75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88029E3FBF400493D9C /* TestableHelpers.swift */; };
 		75C8B88329E3FC0700493D9C /* Rightnow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88229E3FC0700493D9C /* Rightnow.swift */; };
+		75C8B88529E4F18900493D9C /* GoalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88429E4F18900493D9C /* GoalCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -95,6 +96,7 @@
 		75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGoalMock.swift; sourceTree = "<group>"; };
 		75C8B88029E3FBF400493D9C /* TestableHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableHelpers.swift; sourceTree = "<group>"; };
 		75C8B88229E3FC0700493D9C /* Rightnow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rightnow.swift; sourceTree = "<group>"; };
+		75C8B88429E4F18900493D9C /* GoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -213,6 +215,7 @@
 			isa = PBXGroup;
 			children = (
 				75C0B10329D7EEA900D886CA /* GoalView.swift */,
+				75C8B88429E4F18900493D9C /* GoalCell.swift */,
 				75C0B13329D8BACD00D886CA /* AddGoalView.swift */,
 				75C0B1EC29DA197400D886CA /* EditGoalView.swift */,
 			);
@@ -372,6 +375,7 @@
 				75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */,
 				75C0B13C29D8C39C00D886CA /* NumberKeyboardModifier.swift in Sources */,
 				75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */,
+				75C8B88529E4F18900493D9C /* GoalCell.swift in Sources */,
 				75C0B1ED29DA197400D886CA /* EditGoalView.swift in Sources */,
 				75C8B7F329DE91CF00493D9C /* Secrets.swift in Sources */,
 				75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */,

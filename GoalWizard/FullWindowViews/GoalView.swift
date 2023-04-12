@@ -13,34 +13,72 @@ import Foundation
 import Dispatch
 
 
+/// This can be useful to extract values
+@propertyWrapper
+struct Filterable<Value> {
+    var wrappedValue: Value
+
+    init(wrappedValue: Value) {
+        self.wrappedValue = wrappedValue
+    }
+}
+
 struct GoalView: View {
     
-    @ObservedObject var goal: Goal
+    @Filterable @ObservedObject var goal: Goal
     @State var showSearchView = false
     @State var searchText: String = ""
     @State private var modifyState: ModifyState? = nil
-    @State private var isEditMode: Bool = false
     @State var buttonState: ButtonState = .normal
 
-    var filteredSteps: [Goal] {
+    var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
+        let filteredGoals: [Goal]
+
         if searchText.isEmpty {
-            return goal.steps.goals
+            filteredGoals = goal.steps.goals
         } else {
-            return goal.steps.goals.filter { goal in
+            filteredGoals = goal.steps.goals.filter { goal in
                 goal.title?.lowercased().contains(searchText.lowercased()) == true
             }.compactMap { $0 }
         }
+
+        let incompleteGoals = filteredGoals
+            .filter { $0.progress < 1 }
+            .sorted { lhs, rhs -> Bool in
+                if lhs.progress == rhs.progress {
+                    return lhs.daysLeft < rhs.daysLeft
+                }
+                return lhs.progress > rhs.progress
+            }
+
+        let completedGoals = filteredGoals.filter { $0.progress == 1 }
+        return (incomplete: incompleteGoals, completed: completedGoals)
     }
 
-    func move(from source: IndexSet, to destination: Int) {
-        goal.move(fromOffsets: source, toOffset: destination)
-        // Remove from persistence if needed
+    func delete(impcomplete offsets: IndexSet) {
+        let goalMatch: Goal? = offsets.map { filteredSteps.incomplete[$0] }.first
+        print("goal match: ", goalMatch?.title, ", offsets: ", offsets)
+        let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
+        // IndexSet(goal.steps.goals.filter { $0 == goalMatch }.indices )
+        print("indices to delete: ", stepIndicesTodelete)
+        for index in stepIndicesTodelete {
+            print("goal at the delete index: ", index, "element ", (goal.steps?.object(at: index) as? Goal)?.title as Any)
+            assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
+        }
+        Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
     }
 
-    func delete(at offsets: IndexSet) {
-        Goal.context.deleteGoal(atOffsets: offsets, goal: goal)
-       // goal.delete(at: offsets)
-        // Save the changes to persistence if needed
+    func delete(complete offsets: IndexSet) {
+        let goalMatch: Goal? = offsets.map { filteredSteps.completed[$0] }.first
+        print("goal match: ", goalMatch?.title, ", offsets: ", offsets)
+        let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
+        // IndexSet(goal.steps.goals.filter { $0 == goalMatch }.indices )
+        print("indices to delete: ", stepIndicesTodelete)
+        for index in stepIndicesTodelete {
+            print("goal at the delete index: ", index, "element ", (goal.steps?.object(at: index) as? Goal)?.title as Any)
+            assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
+        }
+        Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
     }
 
     var body: some View {
@@ -177,73 +215,37 @@ struct GoalView: View {
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                 }
                 List {
-                    ForEach(filteredSteps) { step in
-                        HStack {
-                            VStack {
-                                HStack {
-                                    if searchText.isEmpty {
-                                        Text("\(goal.steps.goals.firstIndex(of: step)! + 1).")
-                                            .font(.title2)
-                                    }
-                                    ProgressBar(value: step.progress)
-                                        .frame(height: 10)
-                                        .padding(.leading, 20)
-                                        .padding(.trailing, 10)
-                                    Text(step.progressPercentage ?? "")
-                                }
-                                HStack {
-                                    Text("\(step.notOptionalTitle)")
-                                        .font(.title2)
-                                    Spacer()
-                                }
-
-                                Spacer()
-                                    .frame(height: 10)
-                                HStack(alignment: .top) {
-                                    Text("\(step.subGoalCount) sub-goals")
-                                        .font(.caption2)
-                                        .foregroundColor(Color.systemCompatibleTeal)
-                                    Spacer()
-                                    if step.isCompleted {
-                                        Image(systemName: "checkmark")
-                                            .resizable()
-                                            .scaledToFit()
-                                            .frame(width: 10, height: 10)
-                                            .foregroundColor(.green)
-                                    } else {
-                                        Text("Est: " + (step.estimatedCompletionDate ?? ""))
-                                            .font(.caption2)
-                                            .foregroundColor(Color.systemCompatibleTeal)
-                                    }
-                                }
+                    if !filteredSteps.incomplete.isEmpty {
+                        Section(header: Text("Incomplete")) {
+                            ForEach(Array(
+                                filteredSteps.incomplete.enumerated()),
+                                    id: \.1.id
+                            ) { index, step in
+                                GoalCell(step: step, searchText: searchText, index: index)
                             }
-                            Spacer()
-                                .frame(width: 10)
-                            NavigationLink(
-                                destination: GoalView(goal: step)) {}
-                                .frame(maxWidth: 20)
+                            .onDelete { indexSet in
+                                delete(impcomplete: indexSet)
+                            }
                         }
-                        // This disables the default tap behavior for subviews...Wierd f
-//                        .gesture(
-//                            LongPressGesture(minimumDuration: 0.5)
-//                                .onEnded { _ in
-//                                    isEditMode.toggle()
-//                                }
-//                        )
                     }
-                    .onMove(perform: isEditMode ? move : nil)
-                    .onDelete(perform: delete)
+
+                    if !filteredSteps.completed.isEmpty {
+                        Section(header: GreenGlowingText(text: "Completed")) {
+                            ForEach(Array(
+                                filteredSteps.completed.enumerated()),
+                                    id: \.1.id
+                            ) { index, step in
+                                GoalCell(step: step, searchText: searchText, index: index)
+                            }
+                            .onDelete { indexSet in
+                                delete(complete: indexSet)
+                            }
+                        }
+                    }
                 }
                 .padding(.top)
                 Spacer()
             }
-
-//            .refreshable {
-//                let topGoal = await Goal.context.topGoal
-//                guard let topGoal else { return }
-//                self.goal = topGoal
-//            }
-         
 #if os(iOS)
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(goal.topGoal)
@@ -261,8 +263,9 @@ struct GoalView: View {
                     AddGoalView(parentGoal: goal)
                 }
             }
-
-
+#if os(macOS)
+        .frame(minWidth: 200, maxWidth: 250)
+#endif
         }
     }
 }

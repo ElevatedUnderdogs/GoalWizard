@@ -9,6 +9,12 @@ import CoreData
 
 extension NSManagedObjectContext {
 
+//    func deleteGoals(_ goals: [Goal]) {
+//        print(goals.map(\.title))
+//        goals.forEach { deleteGoal(goal: $0) }
+//        saveState()
+//    }
+
     var topGoal: Goal? {
         let fetchRequest: NSFetchRequest<Goal> = Goal.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "topGoal == %@", NSNumber(value: true))
@@ -77,6 +83,7 @@ extension NSManagedObjectContext {
 
         for index in offsets.sorted(by: >) {
             guard let subGoal = mutableSteps.object(at: index) as? Goal else { continue }
+            print(subGoal.title as Any)
             deleteGoal(goal: subGoal)
             mutableSteps.removeObject(at: index)
         }

@@ -10,7 +10,7 @@
         <attribute name="timeStamp" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="topGoal" attributeType="Boolean" usesScalarValueType="YES"/>
-        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal"/>
-        <relationship name="steps" toMany="YES" deletionRule="No Action" ordered="YES" destinationEntity="Goal"/>
+        <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="steps" inverseEntity="Goal"/>
+        <relationship name="steps" toMany="YES" deletionRule="No Action" ordered="YES" destinationEntity="Goal" inverseName="parent" inverseEntity="Goal"/>
     </entity>
 </model>
