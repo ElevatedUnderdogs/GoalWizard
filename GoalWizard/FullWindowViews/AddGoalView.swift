@@ -52,6 +52,7 @@ struct AddGoalView: View {
                             RoundedRectangle(cornerRadius: 10)
                                 .stroke(Color.gray, lineWidth: 1)
                         )
+                        .accessibilityIdentifier("TitleTextEditor")
                 }
                 #endif
                 TextField("Days estimate (Default is 1 day)", text: $daysEstimate)

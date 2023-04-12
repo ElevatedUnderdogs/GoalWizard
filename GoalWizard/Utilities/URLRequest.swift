@@ -27,25 +27,10 @@ extension URLRequest {
         // Set your API key here
         // file not tracked by git, saved also in keychain.
         let apiKey = Secrets.openAIKey
-
-        // Configure the API request
-
         var request = URLRequest(url: .models)
         request.httpMethod = "GET"
         request.setValue("Bearer \(apiKey)", forHTTPHeaderField: "Authorization")
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
-
-//        // Set the parameters for the API call
-//        let parameters: [String: Any] = [
-//            "prompt": prompt, // The text prompt to send to the API
-//            "max_tokens": 50,  // The maximum number of tokens (words or word pieces) to generate
-//            "n": 1,            // The number of generated responses to return
-//            "stop": ["\n"]     // The sequence(s) where the API should stop generating tokens
-//        ]
-
-        // Encode the parameters as JSON
-       // request.httpBody = try? JSONSerialization.data(withJSONObject: parameters)
-
         return request
     }
 

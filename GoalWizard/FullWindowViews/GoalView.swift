@@ -202,6 +202,8 @@ struct GoalView: View {
                                     id: \.1.id
                             ) { index, step in
                                 GoalCell(step: step, searchText: searchText, index: index)
+                                    .accessibilityIdentifier(step.notOptionalTitle + " goal cell")
+
                             }
                             .onDelete { indexSet in
                                 delete(impcomplete: indexSet)
@@ -216,6 +218,7 @@ struct GoalView: View {
                                     id: \.1.id
                             ) { index, step in
                                 GoalCell(step: step, searchText: searchText, index: index)
+                                    .accessibilityIdentifier(step.notOptionalTitle + " goal cell")
                             }
                             .onDelete { indexSet in
                                 delete(complete: indexSet)
