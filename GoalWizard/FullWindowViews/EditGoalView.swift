@@ -11,40 +11,37 @@ struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal
 
+    func dismiss() {
+        presentationMode.wrappedValue.dismiss()
+    }
+
+    func setGoal(title: String) {
+        goal.title = title
+        Goal.context.updateGoal(
+            goal: goal,
+            title: title,
+            estimatedTime: goal.daysEstimate
+        )
+    }
+
+    func set(dayEstimate: String) {
+        guard let intValue = Int64(dayEstimate) else { return }
+        goal.daysEstimate = intValue
+        Goal.context.updateGoal(
+            goal: goal,
+            title: goal.title ?? "",
+            estimatedTime: goal.daysEstimate
+        )
+    }
+
     var body: some View {
         let titleBinder = Binding<String> (
-            get: {
-                goal.notOptionalTitle
-            },
-            set: {
-                goal.title = $0
-                NSPersistentContainer
-                    .goalTable
-                    .viewContext
-                    .updateGoal(
-                        goal: goal,
-                        title: $0,
-                        estimatedTime: goal.daysEstimate
-                    )
-            }
+            get: { goal.notOptionalTitle },
+            set: { setGoal(title: $0) }
         )
         let daysEstimateBinding: Binding<String> = Binding<String>(
-            get: {
-                String(goal.daysEstimate)
-            },
-            set: {
-                if let intValue = Int64($0) {
-                    goal.daysEstimate = intValue
-                    NSPersistentContainer
-                        .goalTable
-                        .viewContext
-                        .updateGoal(
-                            goal: goal,
-                            title: goal.title ?? "",
-                            estimatedTime: goal.daysEstimate
-                        )
-                }
-            }
+            get: { String(goal.daysEstimate) },
+            set: { set(dayEstimate: $0) }
         )
         NavigationView {
             VStack {
@@ -57,7 +54,7 @@ struct EditGoalView: View {
                         .padding(.leading)
                     Spacer()
                     Button("Done") {
-                        presentationMode.wrappedValue.dismiss()
+                        dismiss()
                     }
                     .padding(.trailing)
                 }
@@ -73,8 +70,7 @@ struct EditGoalView: View {
                     .modifier(NumberKeyboardModifier())
                     .accessibilityIdentifier("DaysEstimateTextField")
                 Button(action: {
-                    presentationMode
-                        .wrappedValue.dismiss()
+                    dismiss()
                 }) {
                     Text("Close (Saved)")
                         .font(.headline)
@@ -92,7 +88,7 @@ struct EditGoalView: View {
 #if os(iOS) || os(tvOS)
             .navigationBarTitle("Edit goal", displayMode: .inline)
             .navigationBarItems(trailing: Button("Done") {
-                presentationMode.wrappedValue.dismiss()
+                dismiss()
             }.accessibilityIdentifier("DoneButton"))
 #endif
         }

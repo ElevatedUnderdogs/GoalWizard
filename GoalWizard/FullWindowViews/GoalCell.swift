@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct GoalCell: View {
-    let step: Goal
+    @Binding var step: Goal
     let searchText: String
     let index: Int
 
@@ -71,6 +71,6 @@ struct GoalCell: View {
 
 struct GoalCell_Previews: PreviewProvider {
     static var previews: some View {
-        GoalCell(step: Goal.start, searchText: "", index: 2)
+        GoalCell(step: .constant(.start), searchText: "", index: 2)
     }
 }

@@ -47,11 +47,6 @@ fatalError("These tests should only run on a simulator, not on a physical device
         app.navigationBars["Add Goal"].buttons["Cancel"].tap()
     }
 
-    fileprivate func type(_ rand4: [String]) {
-        for str in rand4 {
-            app.keys[str].tap()
-        }
-    }
     let alphabet: String = "abcdefghijklmnopqrstuvwxys"
     var random4Char: [String] {
         [
@@ -68,7 +63,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let rand4: [String] = random4Char
         checkKeyBoardShowing()
         setToLowerCaseKeyboard()
-        type(rand4)
+        app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(rand4.joined())
         app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
         app.collectionViews["Goal List"].staticTexts[rand4.joined()].tap()
         app.buttons["Edit"].tap()
@@ -79,14 +74,13 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let rand2: [String] = random4Char
         checkKeyBoardShowing()
         setToLowerCaseKeyboard()
-        type(rand2)
+        app/*@START_MENU_TOKEN@*/.textFields["EditGoalTextField"]/*[[".otherElements[\"Edit Goal View\"]",".textFields[\"Edit goal\"]",".textFields[\"EditGoalTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.typeText(rand2.joined())
         app/*@START_MENU_TOKEN@*/.buttons["CloseSavedButton"]/*[[".otherElements[\"Edit Goal View\"]",".buttons[\"Close (Saved)\"]",".buttons[\"CloseSavedButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
         app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
-
         let bigger: String = [rand4[0], rand4[1], rand4[2]].joined() + rand2.joined()
         XCTAssertTrue(
             app.collectionViews["Goal List"].staticTexts[bigger].exists ||
-            app.collectionViews["Goal List"].staticTexts[rand2.joined()].exists
+            app.collectionViews["Goal List"].staticTexts[rand2.joined()].exists, "expected \(bigger), or \(rand2)"
         )
         XCTAssertFalse(app.collectionViews["Goal List"].staticTexts[rand4.joined()].exists)
 

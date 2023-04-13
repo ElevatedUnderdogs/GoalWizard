@@ -125,14 +125,11 @@ struct GoalView: View {
                             .frame(width: 24, height: 24)
                             .onTapGesture {
                                 goal.thisCompleted.toggle()
-                                NSPersistentContainer
-                                    .goalTable
-                                    .viewContext
-                                    .updateGoal(
-                                        goal: goal,
-                                        title: goal.notOptionalTitle,
-                                        estimatedTime: goal.daysEstimate
-                                    )
+                                Goal.context.updateGoal(
+                                    goal: goal,
+                                    title: goal.notOptionalTitle,
+                                    estimatedTime: goal.daysEstimate
+                                )
                             }
                         Spacer()
                             .frame(width: 20)
@@ -205,9 +202,8 @@ struct GoalView: View {
                                 filteredSteps.incomplete.enumerated()),
                                     id: \.1.id
                             ) { index, step in
-                                GoalCell(step: step, searchText: searchText, index: index)
+                                GoalCell(step: .constant(step), searchText: searchText, index: index)
                                     .accessibilityIdentifier(step.notOptionalTitle + " goal cell")
-
                             }
                             .onDelete { indexSet in
                                 delete(impcomplete: indexSet)
@@ -221,7 +217,7 @@ struct GoalView: View {
                                 filteredSteps.completed.enumerated()),
                                     id: \.1.id
                             ) { index, step in
-                                GoalCell(step: step, searchText: searchText, index: index)
+                                GoalCell(step: .constant(step), searchText: searchText, index: index)
                                     .accessibilityIdentifier(step.notOptionalTitle + " goal cell")
                             }
                             .onDelete { indexSet in
