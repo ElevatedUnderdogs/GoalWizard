@@ -47,25 +47,60 @@ fatalError("These tests should only run on a simulator, not on a physical device
         app.navigationBars["Add Goal"].buttons["Cancel"].tap()
     }
 
-    func testAddEditGoal() {
-        app.buttons["Add"].tap()
-        app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-
-        let alphabet: String = "abcdefghijklmnopqrstuvwxys"
-        let rand4: [String] = [
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!)
-        ]
-        setToLowerCaseKeyboard()
+    fileprivate func type(_ rand4: [String]) {
         for str in rand4 {
             app.keys[str].tap()
         }
+    }
+    let alphabet: String = "abcdefghijklmnopqrstuvwxys"
+    var random4Char: [String] {
+        [
+        String(alphabet.randomElement()!),
+        String(alphabet.randomElement()!),
+        String(alphabet.randomElement()!),
+        String(alphabet.randomElement()!)
+        ]
+    }
+
+    func testAddEditGoal() {
+        app.buttons["Add"].tap()
+        app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        let rand4: [String] = random4Char
+        checkKeyBoardShowing()
+        setToLowerCaseKeyboard()
+        type(rand4)
         app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
         app.collectionViews["Goal List"].staticTexts[rand4.joined()].tap()
         app.buttons["Edit"].tap()
+        app/*@START_MENU_TOKEN@*/.textFields["EditGoalTextField"]/*[[".otherElements[\"Edit Goal View\"]",".textFields[\"Edit goal\"]",".textFields[\"EditGoalTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        checkKeyBoardShowing()
+        setToLowerCaseKeyboard()
+        app/*@START_MENU_TOKEN@*/.keys["delete"]/*[[".keyboards.keys[\"delete\"]",".keys[\"delete\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        let rand2: [String] = random4Char
+        checkKeyBoardShowing()
+        setToLowerCaseKeyboard()
+        type(rand2)
+        app/*@START_MENU_TOKEN@*/.buttons["CloseSavedButton"]/*[[".otherElements[\"Edit Goal View\"]",".buttons[\"Close (Saved)\"]",".buttons[\"CloseSavedButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
 
+        let bigger: String = [rand4[0], rand4[1], rand4[2]].joined() + rand2.joined()
+        XCTAssertTrue(
+            app.collectionViews["Goal List"].staticTexts[bigger].exists ||
+            app.collectionViews["Goal List"].staticTexts[rand2.joined()].exists
+        )
+        XCTAssertFalse(app.collectionViews["Goal List"].staticTexts[rand4.joined()].exists)
+
+    }
+
+    /**
+     Check if hardware keyboard is connected: In the iOS Simulator, go to I/O > Keyboard and make sure "Connect Hardware Keyboard" is unchecked. If a hardware keyboard is connected, the software keyboard might not show up in the simulator.
+     Reset the simulator: If none of the above steps work, try resetting the simulator by going to Device > Erase All Content and Settings. This will reset the simulator to its default state, which might resolve any issues with the keyboard not appearing.
+     Update Xcode and the simulator: Make sure you are using the latest version of Xcode and the iOS simulator. Updates may contain bug fixes that can resolve issues with the keyboard not appearing in UI tests.
+     */
+    func checkKeyBoardShowing() {
+        while !app/*@START_MENU_TOKEN@*/.keyboards.buttons["shift"]/*[[".keyboards.buttons[\"shift\"]",".buttons[\"shift\"]"],[[[-1,1],[-1,0]]],[1]]@END_MENU_TOKEN@*/.exists {
+            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        }
     }
 
     func setToLowerCaseKeyboard() {
