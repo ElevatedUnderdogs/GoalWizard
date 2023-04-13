@@ -9,6 +9,9 @@
 /* Begin PBXBuildFile section */
 		7546B0CA29E67E4600524F3C /* StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0C929E67E4600524F3C /* StringTest.swift */; };
 		7546B0D729E7389600524F3C /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 7546B0D629E7389600524F3C /* SnapshotTesting */; };
+		7546B0D929E7395500524F3C /* EditViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0D829E7395500524F3C /* EditViewTests.swift */; };
+		7546B0DB29E7401A00524F3C /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DA29E7401A00524F3C /* URLTests.swift */; };
+		7546B0DD29E7421900524F3C /* RadioButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DC29E7421900524F3C /* RadioButtonTests.swift */; };
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
@@ -44,6 +47,9 @@
 		75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88029E3FBF400493D9C /* TestableHelpers.swift */; };
 		75C8B88329E3FC0700493D9C /* Rightnow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88229E3FC0700493D9C /* Rightnow.swift */; };
 		75C8B88529E4F18900493D9C /* GoalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88429E4F18900493D9C /* GoalCell.swift */; };
+		75DE909029E7DE470089E35A /* ColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE908F29E7DE470089E35A /* ColorTests.swift */; };
+		75DE909229E7E1AC0089E35A /* DateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */; };
+		75DE909829E7E6230089E35A /* OptionalNSOrderedSetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -65,6 +71,9 @@
 
 /* Begin PBXFileReference section */
 		7546B0C929E67E4600524F3C /* StringTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringTest.swift; sourceTree = "<group>"; };
+		7546B0D829E7395500524F3C /* EditViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewTests.swift; sourceTree = "<group>"; };
+		7546B0DA29E7401A00524F3C /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
+		7546B0DC29E7421900524F3C /* RadioButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonTests.swift; sourceTree = "<group>"; };
 		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardApp.swift; sourceTree = "<group>"; };
@@ -102,6 +111,9 @@
 		75C8B88029E3FBF400493D9C /* TestableHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableHelpers.swift; sourceTree = "<group>"; };
 		75C8B88229E3FC0700493D9C /* Rightnow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rightnow.swift; sourceTree = "<group>"; };
 		75C8B88429E4F18900493D9C /* GoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCell.swift; sourceTree = "<group>"; };
+		75DE908F29E7DE470089E35A /* ColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTests.swift; sourceTree = "<group>"; };
+		75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterTests.swift; sourceTree = "<group>"; };
+		75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalNSOrderedSetTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -186,6 +198,12 @@
 				75C8B88229E3FC0700493D9C /* Rightnow.swift */,
 				75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */,
 				7546B0C929E67E4600524F3C /* StringTest.swift */,
+				7546B0D829E7395500524F3C /* EditViewTests.swift */,
+				7546B0DA29E7401A00524F3C /* URLTests.swift */,
+				7546B0DC29E7421900524F3C /* RadioButtonTests.swift */,
+				75DE908F29E7DE470089E35A /* ColorTests.swift */,
+				75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */,
+				75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */,
 			);
 			path = GoalWizardTests;
 			sourceTree = "<group>";
@@ -412,12 +430,18 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75DE909029E7DE470089E35A /* ColorTests.swift in Sources */,
 				75C8B88329E3FC0700493D9C /* Rightnow.swift in Sources */,
 				75C8B87929E3D65E00493D9C /* TestSwiftuiViewController.swift in Sources */,
+				7546B0D929E7395500524F3C /* EditViewTests.swift in Sources */,
+				75DE909229E7E1AC0089E35A /* DateFormatterTests.swift in Sources */,
+				75DE909829E7E6230089E35A /* OptionalNSOrderedSetTests.swift in Sources */,
 				75C0B12F29D7F79900D886CA /* GoalTests.swift in Sources */,
 				7546B0CA29E67E4600524F3C /* StringTest.swift in Sources */,
+				7546B0DD29E7421900524F3C /* RadioButtonTests.swift in Sources */,
 				75C0B11429D7EEAA00D886CA /* GoalWizardTests.swift in Sources */,
 				75C8B87F29E3FBA900493D9C /* SubGoalMock.swift in Sources */,
+				7546B0DB29E7401A00524F3C /* URLTests.swift in Sources */,
 				7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

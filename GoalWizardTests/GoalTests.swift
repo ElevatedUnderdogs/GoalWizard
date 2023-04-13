@@ -248,4 +248,100 @@ fatalError("These tests should only run on a simulator, not on a physical device
         clearGoals()
         XCTAssertEqual(Goal.context.goals.count, 0)
     }
+
+    class MockHasCallCodable: HasCallCodable {
+        var result: Result<Choices, Error>?
+
+        func callCodable<T: Codable>(
+            expressive: Bool,
+            _ action: @escaping (T?) -> Void
+        ) {
+            switch result {
+            case .success(let choices):
+                action(choices as? T)
+            case .failure(let error):
+                action(nil)
+                print(error.localizedDescription)
+            case .none:
+                action(nil)
+            }
+        }
+    }
+
+    class MockHasAsync: HasAsync {
+        func async(execute work: @escaping @convention(block) () -> Void) {
+            work()
+        }
+    }
+
+    func testGptAddSubGoalsSuccess() {
+        let goal = Goal.empty
+        goal.title = "Sample Goal"
+
+        let mockCallCodable = MockHasCallCodable()
+        let choices = Choices(thisSteps: [])
+        mockCallCodable.result = .success(choices)
+
+        let expectation = XCTestExpectation(description: "Completion is called without error")
+
+        goal.gptAddSubGoals(
+            request: { _ in mockCallCodable },
+            hasAsync: MockHasAsync(),
+            completion: { error in
+                XCTAssertNil(error, "Error should be nil when the request is successful")
+                expectation.fulfill()
+            }
+        )
+
+        wait(for: [expectation], timeout: 1)
+    }
+
+    func testGptAddSubGoalsNoResponse() {
+        let goal = Goal.empty
+        goal.title = "Sample Goal"
+
+        let mockCallCodable = MockHasCallCodable()
+        mockCallCodable.result = nil
+
+        let expectation = XCTestExpectation(description: "Completion is called without error")
+
+        goal.gptAddSubGoals(
+            request: { _ in mockCallCodable },
+            hasAsync: MockHasAsync(),
+            completion: { error in
+                XCTAssertNil(error, "Error should be nil when there is no response")
+                expectation.fulfill()
+            }
+        )
+
+        wait(for: [expectation], timeout: 1)
+    }
+}
+
+class GptBuilderTests: XCTestCase {
+
+    func testGptBuilder() {
+        let goalTitle = "Sample Goal"
+        guard let request = gptBuilder(goalTitle) as? URLRequest else {
+            XCTFail("The builder is not returning a URLRequest.")
+            return
+        }
+
+        XCTAssertEqual(request.url, URL.gpt35Turbo)
+        XCTAssertEqual(request.httpMethod, "POST")
+        XCTAssertEqual(request.allHTTPHeaderFields?["Authorization"], "Bearer \(Secrets.openAIKey)")
+        XCTAssertEqual(request.allHTTPHeaderFields?["Content-Type"], "application/json")
+
+        let parameters = try? JSONSerialization.jsonObject(with: request.httpBody!, options: []) as? [String: Any]
+        XCTAssertNotNil(parameters)
+        XCTAssertEqual(parameters?["model"] as? String, "gpt-3.5-turbo")
+        XCTAssertEqual(parameters?["temperature"] as? Double, 0.7)
+
+        let messages = parameters?["messages"] as? [[String: String]]
+        XCTAssertNotNil(messages)
+        XCTAssertEqual(messages?.count, 1)
+
+        let message = messages?.first
+        XCTAssertNotNil(message)
+    }
 }

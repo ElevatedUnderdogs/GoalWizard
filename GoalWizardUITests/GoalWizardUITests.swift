@@ -46,4 +46,31 @@ fatalError("These tests should only run on a simulator, not on a physical device
         app.buttons["Add"].tap()
         app.navigationBars["Add Goal"].buttons["Cancel"].tap()
     }
+
+    func testAddEditGoal() {
+        app.buttons["Add"].tap()
+        app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+
+        let alphabet: String = "abcdefghijklmnopqrstuvwxys"
+        let rand4: [String] = [
+            String(alphabet.randomElement()!),
+            String(alphabet.randomElement()!),
+            String(alphabet.randomElement()!),
+            String(alphabet.randomElement()!)
+        ]
+        setToLowerCaseKeyboard()
+        for str in rand4 {
+            app.keys[str].tap()
+        }
+        app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+        app.collectionViews["Goal List"].staticTexts[rand4.joined()].tap()
+        app.buttons["Edit"].tap()
+
+    }
+
+    func setToLowerCaseKeyboard() {
+        while !app.keys["a"].exists {
+            app/*@START_MENU_TOKEN@*/.buttons["shift"]/*[[".keyboards.buttons[\"shift\"]",".buttons[\"shift\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+        }
+    }
 }
