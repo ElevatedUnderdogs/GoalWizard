@@ -39,6 +39,7 @@ struct AddGoalView: View {
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     // This isn't word wrapping still
                     .lineLimit(0)
+                    .accessibilityIdentifier("TitleTextField")
             #else
                 VStack(alignment: .leading) {
                     Text("Type your goal:")
@@ -60,6 +61,7 @@ struct AddGoalView: View {
                     // Same as the background color. blends.
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .modifier(NumberKeyboardModifier())
+                    .accessibilityIdentifier("DaysEstimateTextField")
                 #if os(iOS)
                     .overlay(
                         RoundedRectangle(cornerRadius: 10)
@@ -76,6 +78,7 @@ struct AddGoalView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
+                        .accessibilityIdentifier("AddGoalButton")
                 }
                 .padding(.top, 20)
 
@@ -86,7 +89,7 @@ struct AddGoalView: View {
             .navigationBarTitle("Add Goal", displayMode: .inline)
             .navigationBarItems(trailing: Button("Cancel") {
                 presentationMode.wrappedValue.dismiss()
-            })
+            }.accessibilityIdentifier("CancelButton"))
         #endif
         }
     }

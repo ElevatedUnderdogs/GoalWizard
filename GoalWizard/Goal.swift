@@ -150,13 +150,9 @@ extension Goal {
     ) {
         request(notOptionalTitle).callCodable(expressive: false) { (response: OpenAIResponse<Choices>?) in
             hasAsync.async { [weak self] in
-                do {
-                    let newGoals = try response?.choices.first?.message.decodedContent().goals ?? []
-                    self?.add(subGoals: newGoals)
-                } catch {
-                    print(error.localizedDescription)
-                    completion(error)
-                }
+                // The decodedContent always succeeds because it was converted from data and back to it. 
+                let newGoals = (try? response?.choices.first?.message.decodedContent().goals ?? []) ?? []
+                self?.add(subGoals: newGoals)
                 completion(nil)
             }
         }

@@ -75,6 +75,7 @@ struct GoalView: View {
                                 .resizable()
                                 .frame(width: 24, height: 24)
                                 .aspectRatio(contentMode: .fit)
+                                .accessibilityIdentifier("Home Button")
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
                     #endif
@@ -88,6 +89,7 @@ struct GoalView: View {
                             .resizable()
                             .frame(width: 24, height: 24)
                             .aspectRatio(contentMode: .fit)
+                            .accessibilityIdentifier("Search Button")
                     }
                     .buttonStyle(SkeuomorphicButtonStyle())
 
@@ -98,6 +100,7 @@ struct GoalView: View {
                             .resizable()
                             .frame(width: 24, height: 24)
                             .aspectRatio(contentMode: .fit)
+                            .accessibilityIdentifier("Add Button")
                     }
                     .buttonStyle(SkeuomorphicButtonStyle())
                 }
@@ -193,6 +196,7 @@ struct GoalView: View {
                     TextField("Search", text: $searchText)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
+                        .accessibilityIdentifier("Search TextField")
                 }
                 List {
                     if !filteredSteps.incomplete.isEmpty {
@@ -227,6 +231,7 @@ struct GoalView: View {
                     }
                 }
                 .padding(.top)
+                .accessibilityIdentifier("Goal List")
                 Spacer()
             }
 #if os(iOS)
@@ -242,8 +247,10 @@ struct GoalView: View {
                 switch state {
                 case .edit:
                     EditGoalView(goal: goal)
+                        .accessibilityIdentifier("Edit Goal View")
                 case .add:
                     AddGoalView(parentGoal: goal)
+                        .accessibilityIdentifier("Add Goal View")
                 }
             }
 #if os(macOS)

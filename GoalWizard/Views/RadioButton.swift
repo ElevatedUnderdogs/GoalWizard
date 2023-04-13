@@ -8,7 +8,7 @@
 import SwiftUI
 
 struct RadioButton: View {
-    @State var isChecked: Bool
+    @Binding var isChecked: Bool
 
     var body: some View {
         Button(action: {
@@ -21,6 +21,26 @@ struct RadioButton: View {
     }
 }
 
+
+struct RadioButton_Previews: PreviewProvider {
+    @State static private var isChecked = false
+    @State static private var isUnchecked = true
+
+    static var previews: some View {
+        Group {
+//            RadioButton(isChecked: $isChecked)
+//                .previewDisplayName("Unchecked")
+                // .previewDisplayName("Unchecked")
+            RadioButton(isChecked: $isUnchecked)
+                .previewDisplayName("Checked")
+                .onAppear { isChecked = false }
+        }
+        .padding()
+        .previewLayout(.sizeThatFits)
+    }
+}
+
+
 import SwiftUI
 
 struct GreenGlowingText: View {
@@ -29,7 +49,6 @@ struct GreenGlowingText: View {
     var body: some View {
         ZStack {
             Text(text)
-            // #BFEEDE
                 .foregroundColor(.goalGreen)
                 .font(.body)
                 .blur(radius: 5)
@@ -41,16 +60,3 @@ struct GreenGlowingText: View {
         }
     }
 }
-
-struct ContentView: View {
-    var body: some View {
-        GreenGlowingText(text: "Glowing Green Text")
-            .padding()
-    }
-}
-//
-//struct ContentView_Previews: PreviewProvider {
-//    static var previews: some View {
-//        ContentView()
-//    }
-//}

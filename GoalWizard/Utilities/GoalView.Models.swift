@@ -35,13 +35,6 @@ struct OpenAIResponse<T: Codable>: Codable {
     let created: TimeInterval
 }
 
-extension Optional where Wrapped == OpenAIResponse<Choices> {
-
-    var goals: [Goal] {
-        (try? self?.choices.first?.message.decodedContent().goals ?? []) ?? []
-    }
-}
-
 struct Choice<T: Codable>: Codable {
     let message: Message<T>
     let finishReason: String?

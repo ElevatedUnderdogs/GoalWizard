@@ -18,13 +18,6 @@ extension NSOrderedSet {
         return mutableSet.copy() as! NSOrderedSet
     }
 
-    /// Do not use: @discardableResult, because you need to reassign the set.  
-    func removeElement(at index: Int) -> NSOrderedSet {
-        let mutableSet = mutableCopy() as! NSMutableOrderedSet
-        mutableSet.removeObject(at: index)
-        return mutableSet.copy() as! NSOrderedSet
-    }
-
     func addElements(_ elements: [Any]) -> NSOrderedSet {
         let mutableSet = NSMutableOrderedSet(orderedSet: self)
         mutableSet.addObjects(from: elements)

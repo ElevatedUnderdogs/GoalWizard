@@ -11,11 +11,6 @@ struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal
 
-//#if os(macOS)
-//    @available(macOS 10.12, *)
-//    private let keyPublisher = NotificationCenter.default.publisher(for: NSEvent.keyDownNotification)
-//#endif
-
     var body: some View {
         let titleBinder = Binding<String> (
             get: {
@@ -70,14 +65,13 @@ struct EditGoalView: View {
                 TextField("Edit goal", text: titleBinder)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    // This isn't word wrapping still
                     .lineLimit(0)
-
+                    .accessibilityIdentifier("EditGoalTextField")
                 TextField("", text: daysEstimateBinding)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                     .modifier(NumberKeyboardModifier())
-
+                    .accessibilityIdentifier("DaysEstimateTextField")
                 Button(action: {
                     presentationMode
                         .wrappedValue.dismiss()
@@ -88,6 +82,7 @@ struct EditGoalView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
+                        .accessibilityIdentifier("CloseSavedButton")
                 }
                 .padding(.top, 20)
 
@@ -98,9 +93,8 @@ struct EditGoalView: View {
             .navigationBarTitle("Edit goal", displayMode: .inline)
             .navigationBarItems(trailing: Button("Done") {
                 presentationMode.wrappedValue.dismiss()
-            })
+            }.accessibilityIdentifier("DoneButton"))
 #endif
-
         }
     }
 }
