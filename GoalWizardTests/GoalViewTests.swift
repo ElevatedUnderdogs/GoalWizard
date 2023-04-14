@@ -119,4 +119,71 @@ final class GoalViewTests: XCTestCase {
         // Verify that the parent goal's progress has updated again
         XCTAssertEqual(goal.progress, 1.0 / 2.0, "Parent goal's progress should be 1/2 after deleting one of the completed subgoals")
     }
+
+
+    func testGoalViewWithNonTopGoal() {
+        // Set up a non-topGoal with one or more goals in its steps property
+        let nonTopGoal = Goal.empty
+
+        // Initialize the GoalView with the non-topGoal
+        let goalView = GoalView(goal: nonTopGoal)
+
+        // Test that the goal in the GoalView is the same as the nonTopGoal you created
+        XCTAssertEqual(goalView.goal, nonTopGoal)
+        let _ = goalView.body
+    }
+
+    // Why isn't the modify state being set in unit tests!?
+
+//    func testGoalViewStateEdit() {
+//        // Set up your view model, observed objects, or any other required data
+//        // Initialize the GoalView with the necessary data
+//        let goalView = GoalView(goal: .empty)
+//
+//
+//
+//        // Set the state to edit
+//        goalView.modifyState = .edit
+//
+//        // Test that the state is indeed edit
+//        XCTAssertEqual(goalView.modifyState, .edit)
+//        let _ = goalView.body
+//    }
+//
+//
+//    func testShowSearchView() {
+//        // Set up your view model, observed objects, or any other required data
+//        // Initialize the GoalView with the necessary data
+//        let goalView = GoalView(goal: .empty)
+//
+//        // Set the showSearchView state to true
+//        goalView.showSearchView.toggle()
+//
+//
+//        // Test that the showSearchView state is indeed true
+//        XCTAssertTrue(goalView.showSearchView)
+//        let _ = goalView.body
+//    }
+}
+
+import SwiftUI
+
+
+class PreviewProviderTests: XCTestCase {
+    
+    func testGoalCellPreview() {
+        let goalCellPreview = GoalCell_Previews.previews as? GoalCell
+        XCTAssertNotNil(goalCellPreview)
+
+        XCTAssertEqual(goalCellPreview?.$step.wrappedValue, .start)
+        XCTAssertEqual(goalCellPreview?.searchText, "")
+        XCTAssertEqual(goalCellPreview?.index, 2)
+    }
+
+    func testAddGoalViewPreview() {
+        let addGoalViewPreview = AddGoalView_Previews.previews as? AddGoalView
+        XCTAssertNotNil(addGoalViewPreview)
+
+        XCTAssertEqual(addGoalViewPreview?.parentGoal, Goal.start)
+    }
 }

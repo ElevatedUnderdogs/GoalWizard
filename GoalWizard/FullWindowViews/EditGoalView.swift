@@ -25,10 +25,12 @@ struct EditGoalView: View {
     }
 
     func set(dayEstimate: String) {
+        // I can target this with a unit test passing a word "hello world".
         guard let intValue = Int64(dayEstimate) else { return }
         goal.daysEstimate = intValue
         Goal.context.updateGoal(
             goal: goal,
+            // I can target this with a unit test setting the goal title to nil
             title: goal.title ?? "",
             estimatedTime: goal.daysEstimate
         )
@@ -41,6 +43,7 @@ struct EditGoalView: View {
         )
         let daysEstimateBinding: Binding<String> = Binding<String>(
             get: { String(goal.daysEstimate) },
+            // I can target this with an EditView ui test where I change the days estimate.
             set: { set(dayEstimate: $0) }
         )
         NavigationView {
@@ -88,6 +91,7 @@ struct EditGoalView: View {
 #if os(iOS) || os(tvOS)
             .navigationBarTitle("Edit goal", displayMode: .inline)
             .navigationBarItems(trailing: Button("Done") {
+                // I can make an editView ui test and tap the done button. 
                 dismiss()
             }.accessibilityIdentifier("DoneButton"))
 #endif
@@ -96,6 +100,7 @@ struct EditGoalView: View {
 }
 
 struct EditGoalView_Previews: PreviewProvider {
+    // I can initialize a preview and read the body.
     static var previews: some View {
         EditGoalView(goal: Goal.edit)
     }

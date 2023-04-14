@@ -47,6 +47,7 @@ struct Message<T: Codable>: Codable {
 
     func decodedContent() throws -> T {
         guard let data = content.data(using: .utf8) else {
+            // This is a difficult path to run, if there is an issue the whole struct should have failed to decode/initialize
             throw OpenAIError.invalidResponse
         }
         return try JSONDecoder().decode(T.self, from: data)

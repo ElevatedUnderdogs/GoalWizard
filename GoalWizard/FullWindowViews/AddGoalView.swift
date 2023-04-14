@@ -12,6 +12,7 @@ struct AddGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var parentGoal: Goal
 
+    // Simply read these two properties in a unit test.
     @State private var title: String = ""
     @State private var daysEstimate: String = ""
 

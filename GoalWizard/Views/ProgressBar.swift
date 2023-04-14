@@ -20,6 +20,9 @@ struct ProgressBar: View {
                 Rectangle().frame(width: min(CGFloat(self.value)*geometry.size.width, geometry.size.width), height: geometry.size.height)
                     .foregroundColor(Color.systemCompatibleBlue)
             }.cornerRadius(45.0)
+                .accessibilityElement(children: .ignore)
+                .accessibilityLabel("Progress Bar")
+                .accessibilityValue("\(Int(value * 100))%")
         }
     }
 }

@@ -12,6 +12,7 @@ struct RadioButton: View {
 
     var body: some View {
         Button(action: {
+            // Tap the check box 3 times.
             isChecked.toggle()
         }) {
             Image(systemName: isChecked ? "largecircle.fill.circle" : "circle")
@@ -23,15 +24,13 @@ struct RadioButton: View {
 
 
 struct RadioButton_Previews: PreviewProvider {
-    @State static private var isChecked = false
-    @State static private var isUnchecked = true
+    @State static var isChecked = false
+    @State static var isUnchecked = true
 
     static var previews: some View {
         Group {
-//            RadioButton(isChecked: $isChecked)
-//                .previewDisplayName("Unchecked")
-                // .previewDisplayName("Unchecked")
             RadioButton(isChecked: $isUnchecked)
+            // No point of testing this.
                 .previewDisplayName("Checked")
                 .onAppear { isChecked = false }
         }

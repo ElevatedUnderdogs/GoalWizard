@@ -21,6 +21,7 @@ struct VersionBasedNavigationStack<Content: View>: View {
                     content
                 }
             } else {
+                // Difficult path to unit test, not sure how to force a different operating system. 
                 NavigationView {
                     content
                 }

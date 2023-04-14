@@ -12,16 +12,19 @@ extension NSManagedObjectContext {
     var topGoal: Goal? {
         let fetchRequest: NSFetchRequest<Goal> = Goal.fetchRequest()
         fetchRequest.predicate = NSPredicate(format: "topGoal == %@", NSNumber(value: true))
-
+        // Can't extract this into an extension because objective c can't
+        // access associated generics in extensions.
         do {
             let goals = try fetch(fetchRequest)
             if goals.count > 1 {
+                // Clear the goals, and then read from topGoal. 
                 print("TopGoalError.multipleTopGoals.localizedDescription")
                 return nil
             }
             return goals.first
         } catch {
-            print("Failed to fetch top goal: \(error)")
+            // Difficult to trigger, app crashes instead of throwing an error when attempting, not worth it for tests.
+            print("Failed to fetch top goal: \(error.localizedDescription)")
             return nil
         }
     }
@@ -32,24 +35,15 @@ extension NSManagedObjectContext {
 
     func elements<T: NSFetchRequestResult>(entityName: String) -> [T] {
         let request: NSFetchRequest<T> = NSFetchRequest<T>(entityName: entityName)
+        // Can't extract this into an extension because objective c can't
+        // access associated generics in extensions.
         do {
             return try fetch(request)
         } catch {
+            // Difficult to trigger, app crashes instead of throwing an error when attempting, not worth it for tests.
             print("Could not load data: \(error.localizedDescription)")
             return []
         }
-    }
-
-    /// If there are changes, it saves the current NSManagedOBjects to CoreData storage. 
-    func saveState() {
-       // if hasChanges {
-            do {
-                try save()
-            } catch {
-                let nsError = error as NSError
-                fatalError("Unresolved error: \(error.localizedDescription), \(nsError.userInfo)")
-            }
-       // }
     }
 
     @discardableResult
@@ -70,11 +64,12 @@ extension NSManagedObjectContext {
 
         newGoal.updateProgressUpTheTree()
         newGoal.updateCompletionDateUpTheTree()
-        saveState()
+        try! save()
         return newGoal
     }
 
     func deleteGoal(atOffsets offsets: IndexSet, goal: Goal) {
+        // This always succeeds, difficult to test.
         let mutableSteps = goal.steps?.mutableCopy() as? NSMutableOrderedSet ?? NSMutableOrderedSet()
 
         for index in offsets.sorted(by: >) {
@@ -86,15 +81,14 @@ extension NSManagedObjectContext {
 
         goal.steps = mutableSteps.copy() as? NSOrderedSet
         // still need to call save state.
-        saveState()
+        try! save()
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()
     }
 
     func deleteGoal(goal: Goal) {
-        goal.steps?.forEach { step in
-            guard let subGoal = step as? Goal else { return }
-            deleteGoal(goal: subGoal)
+        goal.steps.goals.forEach { step in
+            deleteGoal(goal: step)
         }
         // still need to call save state
         // delete(goal)
@@ -111,6 +105,6 @@ extension NSManagedObjectContext {
         goal.daysEstimate = estimatedTime
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()
-        saveState()
+        try! save()
     }
 }

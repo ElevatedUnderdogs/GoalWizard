@@ -17,31 +17,11 @@ struct GoalView: View {
     @ObservedObject var goal: Goal
     @State var showSearchView = false
     @State var searchText: String = ""
-    @State private var modifyState: ModifyState? = nil
+    @State var modifyState: ModifyState? = nil
     @State var buttonState: ButtonState = .normal
 
     var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
-        let filteredGoals: [Goal]
-
-        if searchText.isEmpty {
-            filteredGoals = goal.steps.goals
-        } else {
-            filteredGoals = goal.steps.goals.filter { goal in
-                goal.title?.lowercased().contains(searchText.lowercased()) == true
-            }.compactMap { $0 }
-        }
-
-        let incompleteGoals = filteredGoals
-            .filter { $0.progress < 1 }
-            .sorted { lhs, rhs -> Bool in
-                if lhs.progress == rhs.progress {
-                    return lhs.daysLeft < rhs.daysLeft
-                }
-                return lhs.progress > rhs.progress
-            }
-
-        let completedGoals = filteredGoals.filter { $0.progress == 1 }
-        return (incomplete: incompleteGoals, completed: completedGoals)
+        goal.steps.goals.filteredSteps(with: searchText)
     }
 
     func deleteGoals(offsets: IndexSet, filteredGoals: [Goal]) {
@@ -69,6 +49,7 @@ struct GoalView: View {
                     #if os(macOS)
                     #else
                         Button(action: {
+                            // Tap home button.
                           print("home")
                         }) {
                             Image(systemName: "house.fill")
@@ -83,6 +64,7 @@ struct GoalView: View {
                     Spacer()
 
                     Button(action: {
+                        // Tap the search view button. 
                         showSearchView.toggle()
                     }) {
                         Image(systemName: "magnifyingglass")
@@ -142,6 +124,7 @@ struct GoalView: View {
                                 .aspectRatio(contentMode: .fit)
                         }
                         if buttonState == .normal {
+                            // Make a ui test for this and record the response!.
                             Button(action: {
                                 buttonState = .loading
                                 goal.gptAddSubGoals { error in
@@ -159,6 +142,7 @@ struct GoalView: View {
                         }
                     }
                 } else {
+                    // In a UI Test go to a step Goal View then add a step goal
                     VStack {
                         HStack {
                             Spacer()
@@ -190,6 +174,7 @@ struct GoalView: View {
                     }
                 }
                 if showSearchView {
+                    // We can reach this by tapping the search button.
                     TextField("Search", text: $searchText)
                         .padding()
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
@@ -202,10 +187,12 @@ struct GoalView: View {
                                 filteredSteps.incomplete.enumerated()),
                                     id: \.1.id
                             ) { index, step in
+                                // Tap a goal cell in the incompleted section (needs a completed)
                                 GoalCell(step: .constant(step), searchText: searchText, index: index)
-                                    .accessibilityIdentifier(step.notOptionalTitle + " goal cell")
+                                    .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
+                                // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
                                 delete(impcomplete: indexSet)
                             }
                         }
@@ -217,10 +204,12 @@ struct GoalView: View {
                                 filteredSteps.completed.enumerated()),
                                     id: \.1.id
                             ) { index, step in
+                                // tap a goal cell in the completed section.
                                 GoalCell(step: .constant(step), searchText: searchText, index: index)
-                                    .accessibilityIdentifier(step.notOptionalTitle + " goal cell")
+                                    .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
+                                // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
                                 delete(complete: indexSet)
                             }
                         }
@@ -229,6 +218,9 @@ struct GoalView: View {
                 .padding(.top)
                 .accessibilityIdentifier("Goal List")
                 Spacer()
+            }
+            .onAppear {
+                print("lkj lkj lkj lkj ")
             }
 #if os(iOS)
             .navigationBarTitle("", displayMode: .inline)
@@ -249,7 +241,9 @@ struct GoalView: View {
                         .accessibilityIdentifier("Add Goal View")
                 }
             }
+
 #if os(macOS)
+            // I would have to force the operating system.
         .frame(minWidth: 200, maxWidth: 250)
 #endif
         }
@@ -258,6 +252,7 @@ struct GoalView: View {
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
+        // I can reach this with a GoalView ui test.
         GoalView(goal: Goal.start)
     }
 }

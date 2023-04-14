@@ -65,6 +65,7 @@ extension Goal {
             return 
         }
         goal.parent = self
+        // We can force assign the steps to nil and then add a step. 
         steps = steps?.addElement(goal) ?? []
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
@@ -75,7 +76,7 @@ extension Goal {
         steps = steps?.addElements(subGoals)
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
-        Goal.context.saveState()
+        try! Goal.context.save()
     }
 
     static var start: Goal {
@@ -179,7 +180,32 @@ extension [Goal] {
     }
 
     var progress: Double {
+        // Set the total days to steps as 0, just 1 step with 0 estimatedDays force assign it, then read the progress from the list.
         guard totalDays > 0 else { return 0 }
         return Double(totalDays - daysLeft) / Double(totalDays)
+    }
+
+    func filteredSteps(with searchText: String) -> (incomplete: [Goal], completed: [Goal]) {
+        let filteredGoals: [Goal]
+
+        if searchText.isEmpty {
+            filteredGoals = Array(self)
+        } else {
+            filteredGoals = filter { goal in
+                goal.title?.lowercased().contains(searchText.lowercased()) == true
+            }
+        }
+
+        let incompleteGoals = filteredGoals
+            .filter { $0.progress < 1 }
+            .sorted { lhs, rhs -> Bool in
+                if lhs.progress == rhs.progress {
+                    return lhs.daysLeft < rhs.daysLeft
+                }
+                return lhs.progress > rhs.progress
+            }
+
+        let completedGoals = filteredGoals.filter { $0.progress == 1 }
+        return (incomplete: incompleteGoals, completed: completedGoals)
     }
 }

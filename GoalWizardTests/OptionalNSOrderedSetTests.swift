@@ -10,6 +10,16 @@ import CoreData
 
 class OptionalNSOrderedSetTests: XCTestCase {
 
+    override func setUp() {
+        super.setUp()
+        clearGoals()
+    }
+
+    override func tearDown() {
+        super.tearDown()
+        clearGoals()
+    }
+
     func testGoals_whenOptionalIsNil() {
         let orderedSet: NSOrderedSet? = nil
         let goals = orderedSet.goals

@@ -24,7 +24,8 @@ struct GoalCell: View {
                         .frame(height: 10)
                         .padding(.leading, 20)
                         .padding(.trailing, 10)
-                    Text(step.progressPercentage ?? "")
+                    // Difficult to test, should never reach.
+                    Text(step.progressPercentage ?? "-")
                 }
                 HStack {
                     Text("\(step.notOptionalTitle)")
@@ -46,6 +47,7 @@ struct GoalCell: View {
                             .frame(width: 10, height: 10)
                             .foregroundColor(.green)
                     } else {
+                        // This is difficult to test because ?? "" should never be reached. 
                         Text("Est: " + (step.estimatedCompletionDate ?? ""))
                             .font(.caption2)
                             .foregroundColor(Color.systemCompatibleTeal)
