@@ -64,7 +64,7 @@ struct GoalView: View {
                     Spacer()
 
                     Button(action: {
-                        // Tap the search view button. 
+                        // Tap the search view button.
                         showSearchView.toggle()
                     }) {
                         Image(systemName: "magnifyingglass")
@@ -131,12 +131,29 @@ struct GoalView: View {
                                     buttonState = .hidden
                                 }
                             }) {
+#if os(macOS)
                                 Image(systemName: "bolt.circle")
                                     .resizable()
+                                    .scaledToFit()
                                     .frame(width: 24, height: 24)
                                     .aspectRatio(contentMode: .fit)
                                     .foregroundColor(.green)
+                                    .padding()
+#else
+                               // Image(systemName: "bolt.circle")
+                                Image("goalWizardGenicon")
+                                    .resizable()
+                                    .cornerRadius(15)
+                                    .frame(width: 35, height: 30)
+                                    .aspectRatio(contentMode: .fit)
+                                    .foregroundColor(.green)
+#endif
                             }
+#if os(macOS)
+                            .background(Color.clear)
+                            .clipShape(Circle())
+                            .frame(width: 100, height: 100)
+#endif
                         } else if buttonState == .loading {
                             ProgressView()
                         }

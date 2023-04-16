@@ -73,6 +73,7 @@ struct AddGoalView: View {
                     parentGoal.addSuBGoal(title: title, estimatedTime: Int64(daysEstimate) ?? 1)
                     presentationMode.wrappedValue.dismiss()
                 }) {
+                #if os(iOS)
                     Text("Add Goal")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -80,6 +81,16 @@ struct AddGoalView: View {
                         .frame(maxWidth: .infinity)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
                         .accessibilityIdentifier("AddGoalButton")
+                #else
+                    Text("Add Goal")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                       // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
+                        .accessibilityIdentifier("AddGoalButton")
+                    #endif
+                    
                 }
                 .padding(.top, 20)
 

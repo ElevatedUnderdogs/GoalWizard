@@ -67,7 +67,9 @@ struct GoalCell: View {
 //                    isEditMode.toggle()
 //                }
 //        )
+        .accessibilityIdentifier("goal_cell_\(index)")
     }
+
 }
 
 

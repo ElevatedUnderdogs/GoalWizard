@@ -75,13 +75,23 @@ struct EditGoalView: View {
                 Button(action: {
                     dismiss()
                 }) {
+#if os(iOS)
                     Text("Close (Saved)")
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("CloseSavedButton")
+                        .accessibilityIdentifier("AddGoalButton")
+#else
+                    Text("Close (Saved)")
+                        .font(.headline)
+                        .foregroundColor(.white)
+                        .padding()
+                        .frame(maxWidth: .infinity)
+                    // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
+                        .accessibilityIdentifier("AddGoalButton")
+#endif
                 }
                 .padding(.top, 20)
 
