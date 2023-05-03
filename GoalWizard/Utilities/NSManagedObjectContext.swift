@@ -30,7 +30,15 @@ extension NSManagedObjectContext {
     }
 
     var goals: [Goal] {
-        elements(entityName: "Goal").filter { !$0.isUserMarkedForDeletion }
+        allGoals.filter { !$0.isUserMarkedForDeletion }
+    }
+
+    var allGoals: [Goal] {
+        elements(entityName: "Goal")
+    }
+
+    var deletedGoals: [Goal] {
+        allGoals.filter(\.isUserMarkedForDeletion)
     }
 
     func elements<T: NSFetchRequestResult>(entityName: String) -> [T] {

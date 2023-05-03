@@ -67,8 +67,8 @@ struct GoalView: View {
 
                     if let pasteGoal = pasteBoard.cutGoal {
                         Button(action: {
-                            goal.add(sub: pasteGoal)
                             pasteGoal.isUserMarkedForDeletion = false
+                            goal.add(sub: pasteGoal)
                             pasteBoard.cutGoal = nil
                         }) {
 
@@ -298,7 +298,6 @@ struct GoalView: View {
                         .accessibilityIdentifier("Add Goal View")
                 }
             }
-
 #if os(macOS)
             // I would have to force the operating system.
             .frame(minWidth: 200, maxWidth: 250)
