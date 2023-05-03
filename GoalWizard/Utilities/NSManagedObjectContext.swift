@@ -72,6 +72,7 @@ extension NSManagedObjectContext {
         // This always succeeds, difficult to test.
         let mutableSteps = goal.steps?.mutableCopy() as? NSMutableOrderedSet ?? NSMutableOrderedSet()
 
+        // it is better to delete from the back to front so that the indices don't shift while deleting.
         for index in offsets.sorted(by: >) {
             guard let subGoal = mutableSteps.object(at: index) as? Goal else { continue }
             print(subGoal.title as Any)

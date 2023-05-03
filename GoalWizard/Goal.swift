@@ -67,6 +67,7 @@ extension Goal {
         goal.parent = self
         // We can force assign the steps to nil and then add a step. 
         steps = steps?.addElement(goal) ?? []
+        try! Goal.context.save()
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
     }

@@ -7,12 +7,19 @@
 
 import SwiftUI
 
+class GoalPasteBoard: ObservableObject {
+    @Published var cutGoal: Goal? = nil
+}
+
 @main
 struct GoalWizardApp: App {
+
+   var pasteBoard = GoalPasteBoard()
+
     var body: some Scene {
         WindowGroup {
             GoalView(goal: .start)
+                .environmentObject(pasteBoard)
         }
-
     }
 }

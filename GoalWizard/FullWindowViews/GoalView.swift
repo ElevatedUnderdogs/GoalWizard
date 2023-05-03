@@ -19,38 +19,40 @@ struct GoalView: View {
     @State var searchText: String = ""
     @State var modifyState: ModifyState? = nil
     @State var buttonState: ButtonState = .normal
+    @EnvironmentObject var pasteBoard: GoalPasteBoard
+    @Environment(\.presentationMode) var presentationMode
 
     var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
         goal.steps.goals.filteredSteps(with: searchText)
     }
 
-    func deleteGoals(offsets: IndexSet, filteredGoals: [Goal]) {
-         let goalMatch: Goal? = offsets.map { filteredGoals[$0] }.first
-         let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
-         for index in stepIndicesTodelete {
-             assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
-         }
-         Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
-     }
+    func delete(impcomplete offsets: IndexSet) {
+        deleteGoals(offsets: offsets, filteredGoals: filteredSteps.incomplete)
+    }
 
-     func delete(impcomplete offsets: IndexSet) {
-         deleteGoals(offsets: offsets, filteredGoals: filteredSteps.incomplete)
-     }
+    func delete(complete offsets: IndexSet) {
+        deleteGoals(offsets: offsets, filteredGoals: filteredSteps.completed)
+    }
 
-     func delete(complete offsets: IndexSet) {
-         deleteGoals(offsets: offsets, filteredGoals: filteredSteps.completed)
-     }
+    private func deleteGoals(offsets: IndexSet, filteredGoals: [Goal]) {
+        let goalMatch: Goal? = offsets.map { filteredGoals[$0] }.first
+        let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
+        for index in stepIndicesTodelete {
+            assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
+        }
+        Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
+    }
 
     var body: some View {
         VersionBasedNavigationStack {
             VStack {
                 HStack {
                     if !goal.topGoal {
-                    #if os(macOS)
-                    #else
+#if os(macOS)
+#else
                         Button(action: {
                             // Tap home button.
-                          print("home")
+                            print("home")
                         }) {
                             Image(systemName: "house.fill")
                                 .resizable()
@@ -59,10 +61,52 @@ struct GoalView: View {
                                 .accessibilityIdentifier("Home Button")
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
-                    #endif
+#endif
                     }
                     Spacer()
 
+                    if let pasteGoal = pasteBoard.cutGoal {
+                        Button(action: {
+                            goal.add(sub: pasteGoal)
+                            pasteGoal.isUserMarkedForDeletion = false
+                            pasteBoard.cutGoal = nil
+                        }) {
+
+                            // paste mode.
+                            HStack {
+                                VStack {
+                                    Text("Paste").font(.footnote)
+                                    if let name = pasteBoard.cutGoal?.notOptionalTitle.components(separatedBy: " ").first {
+                                        Text(name + "...").font(.footnote)
+                                    }
+                                }
+                                Image(systemName: "doc.on.clipboard.fill")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .aspectRatio(contentMode: .fit)
+                                    .accessibilityIdentifier("Search Button")
+                            }
+                        }
+                        .buttonStyle(SkeuomorphicButtonStyle())
+                    } else if !goal.topGoal {
+
+                        // cutmode == true and goal is not topGoal.
+                        Button(action: {
+
+                            pasteBoard.cutGoal = goal
+                            goal.isUserMarkedForDeletion = true
+                            goal.parent = nil
+                            presentationMode.wrappedValue.dismiss()
+
+                        }) {
+                            Image(systemName: "scissors.circle.fill")
+                                .resizable()
+                                .frame(width: 24, height: 24)
+                                .aspectRatio(contentMode: .fit)
+                                .accessibilityIdentifier("Search Button")
+                        }
+                        .buttonStyle(SkeuomorphicButtonStyle())
+                    }
                     Button(action: {
                         // Tap the search view button.
                         showSearchView.toggle()
@@ -94,7 +138,7 @@ struct GoalView: View {
                         .fontWeight(.bold)
                         .padding(.top)
 
-                } else if goal.steps.isEmpty {
+                } else if goal.steps.goals.isEmpty {
                     HStack(alignment: .center) {
                         Text(goal.notOptionalTitle)
                             .font(.largeTitle)
@@ -140,7 +184,6 @@ struct GoalView: View {
                                     .foregroundColor(.green)
                                     .padding()
 #else
-                               // Image(systemName: "bolt.circle")
                                 Image("goalWizardGenicon")
                                     .resizable()
                                     .cornerRadius(15)
@@ -236,9 +279,6 @@ struct GoalView: View {
                 .accessibilityIdentifier("Goal List")
                 Spacer()
             }
-            .onAppear {
-                print("lkj lkj lkj lkj ")
-            }
 #if os(iOS)
             .navigationBarTitle("", displayMode: .inline)
             .navigationBarHidden(goal.topGoal)
@@ -261,7 +301,7 @@ struct GoalView: View {
 
 #if os(macOS)
             // I would have to force the operating system.
-        .frame(minWidth: 200, maxWidth: 250)
+            .frame(minWidth: 200, maxWidth: 250)
 #endif
         }
     }
