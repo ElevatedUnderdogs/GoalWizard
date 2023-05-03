@@ -117,6 +117,7 @@
 		75C8B88029E3FBF400493D9C /* TestableHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableHelpers.swift; sourceTree = "<group>"; };
 		75C8B88229E3FC0700493D9C /* Rightnow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rightnow.swift; sourceTree = "<group>"; };
 		75C8B88429E4F18900493D9C /* GoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCell.swift; sourceTree = "<group>"; };
+		75DBE5CE29EC8F5D00EEBB83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
 		75DE908F29E7DE470089E35A /* ColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTests.swift; sourceTree = "<group>"; };
 		75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterTests.swift; sourceTree = "<group>"; };
 		75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalNSOrderedSetTests.swift; sourceTree = "<group>"; };
@@ -174,6 +175,7 @@
 		75C0B10029D7EEA900D886CA /* GoalWizard */ = {
 			isa = PBXGroup;
 			children = (
+				75DBE5CE29EC8F5D00EEBB83 /* Info.plist */,
 				75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */,
 				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
 				75C0B13E29D8C46F00D886CA /* FullWindowViews */,
@@ -605,6 +607,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GoalWizard/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -643,6 +646,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GoalWizard/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;

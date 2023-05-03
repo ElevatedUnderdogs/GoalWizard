@@ -9,6 +9,14 @@ import Foundation
 
 extension String {
 
+    static var appIcon: String {
+        "AppIcon"
+    }
+
+    static var appIconBlk: String {
+        "AppIconBlk"
+    }
+
     static func goalTreeFrom(goal: String) -> String {
         """
         Example prompt:
