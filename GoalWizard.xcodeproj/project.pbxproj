@@ -7,6 +7,15 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		7513DE5629E8A9F300CB4468 /* RadioPreviewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513DE5529E8A9F300CB4468 /* RadioPreviewTests.swift */; };
+		7513DE5829E8BC2300CB4468 /* MiscTestsForEdgeCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */; };
+		75296A0229E8C45F00C0A06C /* CustomViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75296A0129E8C45F00C0A06C /* CustomViewTests.swift */; };
+		7546B0CA29E67E4600524F3C /* StringTest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0C929E67E4600524F3C /* StringTest.swift */; };
+		7546B0D729E7389600524F3C /* SnapshotTesting in Frameworks */ = {isa = PBXBuildFile; productRef = 7546B0D629E7389600524F3C /* SnapshotTesting */; };
+		7546B0D929E7395500524F3C /* EditViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0D829E7395500524F3C /* EditViewTests.swift */; };
+		7546B0DB29E7401A00524F3C /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DA29E7401A00524F3C /* URLTests.swift */; };
+		7546B0DD29E7421900524F3C /* RadioButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DC29E7421900524F3C /* RadioButtonTests.swift */; };
+		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
 		75C0B10629D7EEAA00D886CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75C0B10529D7EEAA00D886CA /* Assets.xcassets */; };
@@ -16,12 +25,34 @@
 		75C0B12029D7EEAA00D886CA /* GoalWizardUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B11F29D7EEAA00D886CA /* GoalWizardUITestsLaunchTests.swift */; };
 		75C0B12D29D7F2CF00D886CA /* Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B12C29D7F2CF00D886CA /* Goal.swift */; };
 		75C0B12F29D7F79900D886CA /* GoalTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B12E29D7F79900D886CA /* GoalTests.swift */; };
-		75C0B13129D8B16E00D886CA /* Array.Goal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13029D8B16E00D886CA /* Array.Goal.swift */; };
 		75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13329D8BACD00D886CA /* AddGoalView.swift */; };
 		75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13529D8BC1400D886CA /* SkeuomorphicButtonStyle.swift */; };
 		75C0B13829D8BC4200D886CA /* RadioButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13729D8BC4200D886CA /* RadioButton.swift */; };
 		75C0B13A29D8BEE200D886CA /* Color.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13929D8BEE200D886CA /* Color.swift */; };
 		75C0B13C29D8C39C00D886CA /* NumberKeyboardModifier.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13B29D8C39C00D886CA /* NumberKeyboardModifier.swift */; };
+		75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B13F29D9223400D886CA /* ProgressBar.swift */; };
+		75C0B1EB29DA08E000D886CA /* DateFormatter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B1EA29DA08E000D886CA /* DateFormatter.swift */; };
+		75C0B1ED29DA197400D886CA /* EditGoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B1EC29DA197400D886CA /* EditGoalView.swift */; };
+		75C0B1F129DB947600D886CA /* Goal.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B1EF29DB947600D886CA /* Goal.xcdatamodeld */; };
+		75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7DF29DBABC200493D9C /* NSPersistenceContainer.swift */; };
+		75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7EA29DCF8A200493D9C /* Optional.swift */; };
+		75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */; };
+		75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */; };
+		75C8B7F329DE91CF00493D9C /* Secrets.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F229DE91CF00493D9C /* Secrets.swift */; };
+		75C8B7F529DE932B00493D9C /* URLRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F429DE932B00493D9C /* URLRequest.swift */; };
+		75C8B7F829DE942700493D9C /* Callable in Frameworks */ = {isa = PBXBuildFile; productRef = 75C8B7F729DE942700493D9C /* Callable */; };
+		75C8B7FA29DEA54500493D9C /* String.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B7F929DEA54500493D9C /* String.swift */; };
+		75C8B7FD29DF974400493D9C /* CommonExtensions in Frameworks */ = {isa = PBXBuildFile; productRef = 75C8B7FC29DF974400493D9C /* CommonExtensions */; };
+		75C8B87729E3889900493D9C /* VersionBasedNavigationStack.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */; };
+		75C8B87929E3D65E00493D9C /* TestSwiftuiViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */; };
+		75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87C29E3F00300493D9C /* GoalView.Models.swift */; };
+		75C8B87F29E3FBA900493D9C /* SubGoalMock.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */; };
+		75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88029E3FBF400493D9C /* TestableHelpers.swift */; };
+		75C8B88329E3FC0700493D9C /* Rightnow.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88229E3FC0700493D9C /* Rightnow.swift */; };
+		75C8B88529E4F18900493D9C /* GoalCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C8B88429E4F18900493D9C /* GoalCell.swift */; };
+		75DE909029E7DE470089E35A /* ColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE908F29E7DE470089E35A /* ColorTests.swift */; };
+		75DE909229E7E1AC0089E35A /* DateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */; };
+		75DE909829E7E6230089E35A /* OptionalNSOrderedSetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +73,14 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		7513DE5529E8A9F300CB4468 /* RadioPreviewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioPreviewTests.swift; sourceTree = "<group>"; };
+		7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscTestsForEdgeCases.swift; sourceTree = "<group>"; };
+		75296A0129E8C45F00C0A06C /* CustomViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewTests.swift; sourceTree = "<group>"; };
+		7546B0C929E67E4600524F3C /* StringTest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StringTest.swift; sourceTree = "<group>"; };
+		7546B0D829E7395500524F3C /* EditViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewTests.swift; sourceTree = "<group>"; };
+		7546B0DA29E7401A00524F3C /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
+		7546B0DC29E7421900524F3C /* RadioButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonTests.swift; sourceTree = "<group>"; };
+		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardApp.swift; sourceTree = "<group>"; };
 		75C0B10329D7EEA900D886CA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
@@ -55,12 +94,33 @@
 		75C0B11F29D7EEAA00D886CA /* GoalWizardUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardUITestsLaunchTests.swift; sourceTree = "<group>"; };
 		75C0B12C29D7F2CF00D886CA /* Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Goal.swift; sourceTree = "<group>"; };
 		75C0B12E29D7F79900D886CA /* GoalTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalTests.swift; sourceTree = "<group>"; };
-		75C0B13029D8B16E00D886CA /* Array.Goal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Array.Goal.swift; sourceTree = "<group>"; };
 		75C0B13329D8BACD00D886CA /* AddGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddGoalView.swift; sourceTree = "<group>"; };
 		75C0B13529D8BC1400D886CA /* SkeuomorphicButtonStyle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SkeuomorphicButtonStyle.swift; sourceTree = "<group>"; };
 		75C0B13729D8BC4200D886CA /* RadioButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButton.swift; sourceTree = "<group>"; };
 		75C0B13929D8BEE200D886CA /* Color.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Color.swift; sourceTree = "<group>"; };
 		75C0B13B29D8C39C00D886CA /* NumberKeyboardModifier.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberKeyboardModifier.swift; sourceTree = "<group>"; };
+		75C0B13F29D9223400D886CA /* ProgressBar.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProgressBar.swift; sourceTree = "<group>"; };
+		75C0B1EA29DA08E000D886CA /* DateFormatter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatter.swift; sourceTree = "<group>"; };
+		75C0B1EC29DA197400D886CA /* EditGoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditGoalView.swift; sourceTree = "<group>"; };
+		75C0B1F029DB947600D886CA /* Goal.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = Goal.xcdatamodel; sourceTree = "<group>"; };
+		75C8B7DF29DBABC200493D9C /* NSPersistenceContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSPersistenceContainer.swift; sourceTree = "<group>"; };
+		75C8B7EA29DCF8A200493D9C /* Optional.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Optional.swift; sourceTree = "<group>"; };
+		75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSOrderedSet.swift; sourceTree = "<group>"; };
+		75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContext.swift; sourceTree = "<group>"; };
+		75C8B7F229DE91CF00493D9C /* Secrets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Secrets.swift; sourceTree = "<group>"; };
+		75C8B7F429DE932B00493D9C /* URLRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLRequest.swift; sourceTree = "<group>"; };
+		75C8B7F929DEA54500493D9C /* String.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = String.swift; sourceTree = "<group>"; };
+		75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = VersionBasedNavigationStack.swift; sourceTree = "<group>"; };
+		75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestSwiftuiViewController.swift; sourceTree = "<group>"; };
+		75C8B87C29E3F00300493D9C /* GoalView.Models.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.Models.swift; sourceTree = "<group>"; };
+		75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SubGoalMock.swift; sourceTree = "<group>"; };
+		75C8B88029E3FBF400493D9C /* TestableHelpers.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TestableHelpers.swift; sourceTree = "<group>"; };
+		75C8B88229E3FC0700493D9C /* Rightnow.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Rightnow.swift; sourceTree = "<group>"; };
+		75C8B88429E4F18900493D9C /* GoalCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalCell.swift; sourceTree = "<group>"; };
+		75DBE5CE29EC8F5D00EEBB83 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist; path = Info.plist; sourceTree = "<group>"; };
+		75DE908F29E7DE470089E35A /* ColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTests.swift; sourceTree = "<group>"; };
+		75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterTests.swift; sourceTree = "<group>"; };
+		75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalNSOrderedSetTests.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -68,6 +128,8 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75C8B7F829DE942700493D9C /* Callable in Frameworks */,
+				75C8B7FD29DF974400493D9C /* CommonExtensions in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -75,6 +137,7 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				7546B0D729E7389600524F3C /* SnapshotTesting in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -91,6 +154,7 @@
 		75C0B0F529D7EEA900D886CA = {
 			isa = PBXGroup;
 			children = (
+				75C0B1EF29DB947600D886CA /* Goal.xcdatamodeld */,
 				75C0B10029D7EEA900D886CA /* GoalWizard */,
 				75C0B11229D7EEAA00D886CA /* GoalWizardTests */,
 				75C0B11C29D7EEAA00D886CA /* GoalWizardUITests */,
@@ -111,10 +175,12 @@
 		75C0B10029D7EEA900D886CA /* GoalWizard */ = {
 			isa = PBXGroup;
 			children = (
+				75DBE5CE29EC8F5D00EEBB83 /* Info.plist */,
 				75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */,
-				75C0B13E29D8C46F00D886CA /* View */,
+				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
+				75C0B13E29D8C46F00D886CA /* FullWindowViews */,
+				75C0B1EE29DA3E0400D886CA /* Views */,
 				75C0B13D29D8C46500D886CA /* Utilities */,
-				75C0B13229D8B19F00D886CA /* Goal */,
 				75C0B10529D7EEAA00D886CA /* Assets.xcassets */,
 				75C0B10729D7EEAA00D886CA /* GoalWizard.entitlements */,
 				75C0B10829D7EEAA00D886CA /* Preview Content */,
@@ -134,7 +200,21 @@
 			isa = PBXGroup;
 			children = (
 				75C0B11329D7EEAA00D886CA /* GoalWizardTests.swift */,
+				75296A0129E8C45F00C0A06C /* CustomViewTests.swift */,
 				75C0B12E29D7F79900D886CA /* GoalTests.swift */,
+				7596AC5129E64FF0003A68AA /* GoalViewTests.swift */,
+				75C8B87E29E3FBA900493D9C /* SubGoalMock.swift */,
+				75C8B88229E3FC0700493D9C /* Rightnow.swift */,
+				75C8B87829E3D65E00493D9C /* TestSwiftuiViewController.swift */,
+				7546B0C929E67E4600524F3C /* StringTest.swift */,
+				7546B0D829E7395500524F3C /* EditViewTests.swift */,
+				7546B0DA29E7401A00524F3C /* URLTests.swift */,
+				7546B0DC29E7421900524F3C /* RadioButtonTests.swift */,
+				75DE908F29E7DE470089E35A /* ColorTests.swift */,
+				75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */,
+				75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */,
+				7513DE5529E8A9F300CB4468 /* RadioPreviewTests.swift */,
+				7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */,
 			);
 			path = GoalWizardTests;
 			sourceTree = "<group>";
@@ -148,33 +228,45 @@
 			path = GoalWizardUITests;
 			sourceTree = "<group>";
 		};
-		75C0B13229D8B19F00D886CA /* Goal */ = {
-			isa = PBXGroup;
-			children = (
-				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
-				75C0B13029D8B16E00D886CA /* Array.Goal.swift */,
-			);
-			path = Goal;
-			sourceTree = "<group>";
-		};
 		75C0B13D29D8C46500D886CA /* Utilities */ = {
 			isa = PBXGroup;
 			children = (
+				75C8B87C29E3F00300493D9C /* GoalView.Models.swift */,
 				75C0B13529D8BC1400D886CA /* SkeuomorphicButtonStyle.swift */,
 				75C0B13B29D8C39C00D886CA /* NumberKeyboardModifier.swift */,
 				75C0B13929D8BEE200D886CA /* Color.swift */,
+				75C0B1EA29DA08E000D886CA /* DateFormatter.swift */,
+				75C8B7DF29DBABC200493D9C /* NSPersistenceContainer.swift */,
+				75C8B7EA29DCF8A200493D9C /* Optional.swift */,
+				75C8B7EE29DCF8F700493D9C /* NSOrderedSet.swift */,
+				75C8B7F029DCF96400493D9C /* NSManagedObjectContext.swift */,
+				75C8B7F229DE91CF00493D9C /* Secrets.swift */,
+				75C8B88029E3FBF400493D9C /* TestableHelpers.swift */,
+				75C8B7F429DE932B00493D9C /* URLRequest.swift */,
+				75C8B7F929DEA54500493D9C /* String.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
 		};
-		75C0B13E29D8C46F00D886CA /* View */ = {
+		75C0B13E29D8C46F00D886CA /* FullWindowViews */ = {
 			isa = PBXGroup;
 			children = (
 				75C0B10329D7EEA900D886CA /* GoalView.swift */,
+				75C8B88429E4F18900493D9C /* GoalCell.swift */,
 				75C0B13329D8BACD00D886CA /* AddGoalView.swift */,
-				75C0B13729D8BC4200D886CA /* RadioButton.swift */,
+				75C0B1EC29DA197400D886CA /* EditGoalView.swift */,
 			);
-			path = View;
+			path = FullWindowViews;
+			sourceTree = "<group>";
+		};
+		75C0B1EE29DA3E0400D886CA /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				75C0B13729D8BC4200D886CA /* RadioButton.swift */,
+				75C0B13F29D9223400D886CA /* ProgressBar.swift */,
+				75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -193,6 +285,10 @@
 			dependencies = (
 			);
 			name = GoalWizard;
+			packageProductDependencies = (
+				75C8B7F729DE942700493D9C /* Callable */,
+				75C8B7FC29DF974400493D9C /* CommonExtensions */,
+			);
 			productName = GoalWizard;
 			productReference = 75C0B0FE29D7EEA900D886CA /* GoalWizard.app */;
 			productType = "com.apple.product-type.application";
@@ -211,6 +307,9 @@
 				75C0B11129D7EEAA00D886CA /* PBXTargetDependency */,
 			);
 			name = GoalWizardTests;
+			packageProductDependencies = (
+				7546B0D629E7389600524F3C /* SnapshotTesting */,
+			);
 			productName = GoalWizardTests;
 			productReference = 75C0B10F29D7EEAA00D886CA /* GoalWizardTests.xctest */;
 			productType = "com.apple.product-type.bundle.unit-test";
@@ -265,6 +364,11 @@
 				Base,
 			);
 			mainGroup = 75C0B0F529D7EEA900D886CA;
+			packageReferences = (
+				75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */,
+				75C8B7FB29DF974400493D9C /* XCRemoteSwiftPackageReference "CommonExtensions" */,
+				7546B0D529E7389600524F3C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */,
+			);
 			productRefGroup = 75C0B0FF29D7EEA900D886CA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
@@ -307,15 +411,29 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75C8B7FA29DEA54500493D9C /* String.swift in Sources */,
+				75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */,
 				75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */,
 				75C0B13C29D8C39C00D886CA /* NumberKeyboardModifier.swift in Sources */,
+				75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */,
+				75C8B88529E4F18900493D9C /* GoalCell.swift in Sources */,
+				75C0B1ED29DA197400D886CA /* EditGoalView.swift in Sources */,
+				75C8B7F329DE91CF00493D9C /* Secrets.swift in Sources */,
+				75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */,
 				75C0B13829D8BC4200D886CA /* RadioButton.swift in Sources */,
+				75C0B1F129DB947600D886CA /* Goal.xcdatamodeld in Sources */,
+				75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */,
 				75C0B12D29D7F2CF00D886CA /* Goal.swift in Sources */,
 				75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */,
+				75C0B1EB29DA08E000D886CA /* DateFormatter.swift in Sources */,
 				75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */,
+				75C8B87729E3889900493D9C /* VersionBasedNavigationStack.swift in Sources */,
 				75C0B13A29D8BEE200D886CA /* Color.swift in Sources */,
+				75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */,
+				75C8B7F529DE932B00493D9C /* URLRequest.swift in Sources */,
+				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
-				75C0B13129D8B16E00D886CA /* Array.Goal.swift in Sources */,
+				75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -323,8 +441,22 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75DE909029E7DE470089E35A /* ColorTests.swift in Sources */,
+				75C8B88329E3FC0700493D9C /* Rightnow.swift in Sources */,
+				75C8B87929E3D65E00493D9C /* TestSwiftuiViewController.swift in Sources */,
+				7546B0D929E7395500524F3C /* EditViewTests.swift in Sources */,
+				75DE909229E7E1AC0089E35A /* DateFormatterTests.swift in Sources */,
+				75DE909829E7E6230089E35A /* OptionalNSOrderedSetTests.swift in Sources */,
+				7513DE5629E8A9F300CB4468 /* RadioPreviewTests.swift in Sources */,
 				75C0B12F29D7F79900D886CA /* GoalTests.swift in Sources */,
+				7546B0CA29E67E4600524F3C /* StringTest.swift in Sources */,
+				75296A0229E8C45F00C0A06C /* CustomViewTests.swift in Sources */,
+				7546B0DD29E7421900524F3C /* RadioButtonTests.swift in Sources */,
 				75C0B11429D7EEAA00D886CA /* GoalWizardTests.swift in Sources */,
+				7513DE5829E8BC2300CB4468 /* MiscTestsForEdgeCases.swift in Sources */,
+				75C8B87F29E3FBA900493D9C /* SubGoalMock.swift in Sources */,
+				7546B0DB29E7401A00524F3C /* URLTests.swift in Sources */,
+				7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -475,6 +607,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GoalWizard/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -513,6 +646,7 @@
 				ENABLE_HARDENED_RUNTIME = YES;
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
+				INFOPLIST_FILE = GoalWizard/Info.plist;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphoneos*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSceneManifest_Generation[sdk=iphonesimulator*]" = YES;
 				"INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents[sdk=iphoneos*]" = YES;
@@ -668,6 +802,64 @@
 			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
+
+/* Begin XCRemoteSwiftPackageReference section */
+		7546B0D529E7389600524F3C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/pointfreeco/swift-snapshot-testing.git";
+			requirement = {
+				kind = upToNextMajorVersion;
+				minimumVersion = 1.0.0;
+			};
+		};
+		75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ElevatedUnderdogs/Callable.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+		75C8B7FB29DF974400493D9C /* XCRemoteSwiftPackageReference "CommonExtensions" */ = {
+			isa = XCRemoteSwiftPackageReference;
+			repositoryURL = "https://github.com/ElevatedUnderdogs/CommonExtensions.git";
+			requirement = {
+				branch = main;
+				kind = branch;
+			};
+		};
+/* End XCRemoteSwiftPackageReference section */
+
+/* Begin XCSwiftPackageProductDependency section */
+		7546B0D629E7389600524F3C /* SnapshotTesting */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 7546B0D529E7389600524F3C /* XCRemoteSwiftPackageReference "swift-snapshot-testing" */;
+			productName = SnapshotTesting;
+		};
+		75C8B7F729DE942700493D9C /* Callable */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75C8B7F629DE942700493D9C /* XCRemoteSwiftPackageReference "Callable" */;
+			productName = Callable;
+		};
+		75C8B7FC29DF974400493D9C /* CommonExtensions */ = {
+			isa = XCSwiftPackageProductDependency;
+			package = 75C8B7FB29DF974400493D9C /* XCRemoteSwiftPackageReference "CommonExtensions" */;
+			productName = CommonExtensions;
+		};
+/* End XCSwiftPackageProductDependency section */
+
+/* Begin XCVersionGroup section */
+		75C0B1EF29DB947600D886CA /* Goal.xcdatamodeld */ = {
+			isa = XCVersionGroup;
+			children = (
+				75C0B1F029DB947600D886CA /* Goal.xcdatamodel */,
+			);
+			currentVersion = 75C0B1F029DB947600D886CA /* Goal.xcdatamodel */;
+			path = Goal.xcdatamodeld;
+			sourceTree = "<group>";
+			versionGroupType = wrapper.xcdatamodel;
+		};
+/* End XCVersionGroup section */
 	};
 	rootObject = 75C0B0F629D7EEA900D886CA /* Project object */;
 }

@@ -14,6 +14,9 @@ final class GoalWizardUITestsLaunchTests: XCTestCase {
     }
 
     override func setUpWithError() throws {
+#if !targetEnvironment(simulator)
+fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
         continueAfterFailure = false
     }
 
