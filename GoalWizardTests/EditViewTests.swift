@@ -11,15 +11,20 @@ import Vision
 @testable import GoalWizard
 import SwiftUI
 
-func takeSnapshot<V: View>(of view: V, size: CGSize = UIScreen.main.bounds.size) -> UIImage {
-     let controller = UIHostingController(rootView: view)
-     controller.view.bounds.size = size
-     UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-     controller.view.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
-     let image = UIGraphicsGetImageFromCurrentImageContext()!
-     UIGraphicsEndImageContext()
-     return image
- }
+#if canImport(UIKit)
+func takeSnapshot<V: View>(
+    of view: V,
+    size: CGSize = UIScreen.main.bounds.size
+) -> UIImage {
+    let controller = UIHostingController(rootView: view)
+    controller.view.bounds.size = size
+    UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+    controller.view.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
+    let image = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    return image
+}
+#endif
 
 class EditGoalViewTests: XCTestCase {
 
@@ -33,6 +38,7 @@ class EditGoalViewTests: XCTestCase {
         clearGoals()
     }
 
+#if canImport(UIKit)
     // For some reason the test was intermittently incorrectly picking up a macos image. 
     func testEditGoalViewSnapshotUsingOCR() {
 
@@ -63,10 +69,11 @@ class EditGoalViewTests: XCTestCase {
             }
         }
     }
-
+#endif
 
 }
 
+#if canImport(UIKit)
 extension UIImage {
 
     func ocrText(completion: @escaping (String) -> Void) {
@@ -89,6 +96,7 @@ extension UIImage {
         try? requestHandler.perform([textRecognitionRequest])
     }
 }
+#endif
 
 fileprivate extension Goal {
 

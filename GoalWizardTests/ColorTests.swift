@@ -11,9 +11,15 @@ import SnapshotTesting
 
 
 extension Color {
+    
     func toCGColor() -> CGColor? {
-        let uiColor = UIColor(self)
-        return uiColor.cgColor
+        #if canImport(UIKit)
+        return UIColor(self).cgColor
+        #elseif canImport(AppKit)
+        return NSColor(self).cgColor
+        #else
+        return nil
+        #endif
     }
 }
 
