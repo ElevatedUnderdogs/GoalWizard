@@ -60,6 +60,16 @@ extension Goal {
         )
     }
 
+    func cutOut() -> Goal {
+        isUserMarkedForDeletion = true
+        updateProgressUpTheTree()
+        updateCompletionDateUpTheTree()
+        // You must update the tree before attaching from it!
+        parent = nil
+        try! Goal.context.save()
+        return self
+    }
+
     func add(sub goal: Goal) {
         guard goal.title != nil && goal.title != "" else {
             return 
