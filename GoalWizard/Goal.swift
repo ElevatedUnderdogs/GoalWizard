@@ -10,6 +10,26 @@ import CoreData
 
 extension Goal {
 
+    var closedDates: [Date] {
+        get {
+            closedDatesObject as? [Date] ?? []
+        }
+        set {
+            closedDatesObject = newValue as NSObject
+            willChangeValue(forKey: "closedDatesObject")
+        }
+    }
+
+    var completedDates: [Date] {
+        get {
+            completedDatesObject as? [Date] ?? []
+        }
+        set {
+            completedDatesObject = newValue as NSObject
+            willChangeValue(forKey: "completedDatesObject")
+        }
+    }
+
     static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
 
     var goalForRequest: String {

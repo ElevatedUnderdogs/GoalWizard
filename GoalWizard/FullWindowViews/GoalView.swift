@@ -71,7 +71,6 @@ struct GoalView: View {
                             goal.add(sub: pasteGoal)
                             pasteBoard.cutGoal = nil
                         }) {
-
                             // paste mode.
                             HStack {
                                 VStack {
@@ -92,12 +91,8 @@ struct GoalView: View {
 
                         // cutmode == true and goal is not topGoal.
                         Button(action: {
-
-                            pasteBoard.cutGoal = goal
-                            goal.isUserMarkedForDeletion = true
-                            goal.parent = nil
+                            pasteBoard.cutGoal = goal.cutOut()
                             presentationMode.wrappedValue.dismiss()
-
                         }) {
                             Image(systemName: "scissors.circle.fill")
                                 .resizable()
