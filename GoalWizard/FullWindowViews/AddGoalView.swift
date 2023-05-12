@@ -13,8 +13,8 @@ struct AddGoalView: View {
     @ObservedObject var parentGoal: Goal
 
     // Simply read these two properties in a unit test.
-    @State private var title: String = ""
-    @State private var daysEstimate: String = ""
+    @State var title: String = ""
+    @State var daysEstimate: String = ""
 
     var body: some View {
         NavigationView {

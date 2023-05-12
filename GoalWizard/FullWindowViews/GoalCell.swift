@@ -11,6 +11,7 @@ struct GoalCell: View {
     @Binding var step: Goal
     let searchText: String
     let index: Int
+    var pasteBoard: GoalPasteBoard
 
     var body: some View {
         HStack {
@@ -25,7 +26,7 @@ struct GoalCell: View {
                         .padding(.leading, 20)
                         .padding(.trailing, 10)
                     // Difficult to test, should never reach.
-                    Text(step.progressPercentage ?? "-")
+                    Text(step.notOptionalProgressPercentage)
                 }
                 HStack {
                     Text("\(step.notOptionalTitle)")
@@ -48,7 +49,7 @@ struct GoalCell: View {
                             .foregroundColor(.green)
                     } else {
                         // This is difficult to test because ?? "" should never be reached. 
-                        Text("Est: " + (step.estimatedCompletionDate ?? ""))
+                        Text("Est: " + step.notOptionalEstimatedCompletionDate)
                             .font(.caption2)
                             .foregroundColor(Color.systemCompatibleTeal)
                     }
@@ -57,7 +58,11 @@ struct GoalCell: View {
             Spacer()
                 .frame(width: 10)
             NavigationLink(
-                destination: GoalView(goal: step)) {}
+                destination: GoalView(
+                    goal: step,
+                    pasteBoard: pasteBoard
+                )
+            ) {}
                 .frame(maxWidth: 20)
         }
         // This disables the default tap behavior for subviews...Wierd f
@@ -75,6 +80,6 @@ struct GoalCell: View {
 
 struct GoalCell_Previews: PreviewProvider {
     static var previews: some View {
-        GoalCell(step: .constant(.start), searchText: "", index: 2)
+        GoalCell(step: .constant(.start), searchText: "", index: 2, pasteBoard: GoalPasteBoard())
     }
 }

@@ -33,8 +33,10 @@ class GoalTestsGptapi: XCTestCase {
 
     override func setUp() {
         super.setUp()
-#if !targetEnvironment(simulator)
+#if os(iOS)
+    #if !targetEnvironment(simulator)
 fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
 #endif
         clearGoals()
         goal = Goal.empty
@@ -109,8 +111,10 @@ final class GoalTests: XCTestCase {
 
     override class func setUp() {
         super.setUp()
-#if !targetEnvironment(simulator)
+#if os(iOS)
+    #if !targetEnvironment(simulator)
 fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
 #endif
     }
 
@@ -121,6 +125,48 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
     func testThisFirst() {
         clearGoals()
+    }
+
+    func testClosedDates() {
+        let testDates = [Date(), Date().addingTimeInterval(3600), Date().addingTimeInterval(7200)]
+        let goal: Goal = .start
+        goal.closedDates = testDates
+        XCTAssertEqual(goal.closedDates, testDates, "Closed dates should match what was set")
+    }
+
+    func testCompletedDates() {
+        let testDates = [Date(), Date().addingTimeInterval(3600), Date().addingTimeInterval(7200)]
+        let goal: Goal = .start
+        goal.completedDates = testDates
+        XCTAssertEqual(goal.completedDates, testDates, "Completed dates should match what was set")
+    }
+
+    func testEmptyDates() {
+        let goal = Goal.empty
+        goal.completedDatesObject = nil
+        goal.closedDatesObject = nil
+        XCTAssertEqual(goal.closedDates, [])
+        XCTAssertEqual(goal.completedDates, [])
+    }
+
+    func testEmptyValues() {
+        let goal = Goal.empty
+        
+    }
+
+    func testCutOut() {
+        let parentGoal = Goal.start
+        let originalSubGoalCount = parentGoal.subGoalCount
+        let goal: Goal = .empty
+        goal.parent = parentGoal
+
+        XCTAssertEqual(parentGoal.subGoalCount, originalSubGoalCount + 1)
+        XCTAssertNotNil(goal.parent, "Parent goal should not be nil")
+        XCTAssertNoThrow(goal.cutOut(), "Cut out should not throw an error")
+
+        XCTAssertTrue(goal.isUserMarkedForDeletion, "Goal should be marked for deletion")
+        XCTAssertNil(goal.parent, "Parent goal should be nil")
+        XCTAssertEqual(parentGoal.subGoalCount, originalSubGoalCount)
     }
 
     func testAddEmpty() {

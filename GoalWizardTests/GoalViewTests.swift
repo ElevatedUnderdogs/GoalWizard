@@ -15,8 +15,10 @@ final class GoalViewTests: XCTestCase {
     override func setUp() {
         super.setUp()
         self.clearGoals()
-#if !targetEnvironment(simulator)
+#if os(iOS)
+    #if !targetEnvironment(simulator)
         fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
 #endif
     }
 
@@ -29,7 +31,7 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
-        let goalView = GoalView(goal: goal)
+        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -50,7 +52,7 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
-        let goalView = GoalView(goal: goal)
+        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -82,7 +84,7 @@ final class GoalViewTests: XCTestCase {
 
     func testUpParentsAfterDelete() {
         let goal: Goal = .start
-        let goalView = GoalView(goal: goal)
+        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -126,12 +128,12 @@ final class GoalViewTests: XCTestCase {
         let nonTopGoal = Goal.empty
 
         // Initialize the GoalView with the non-topGoal
-        let goalView = GoalView(goal: nonTopGoal)
+        let goalView: some View & TestableView = GoalView(goal: nonTopGoal, pasteBoard: GoalPasteBoard())
 
         // Test that the goal in the GoalView is the same as the nonTopGoal you created
-        XCTAssertEqual(goalView.goal, nonTopGoal)
-        let _ = goalView.body
+        XCTAssertEqual(goalView.model as? Goal, nonTopGoal)
     }
+
 
     // Why isn't the modify state being set in unit tests!?
 
@@ -165,6 +167,19 @@ final class GoalViewTests: XCTestCase {
 //        let _ = goalView.body
 //    }
 }
+
+
+protocol TestableView {
+    associatedtype Model
+    var model: Model { get }
+}
+
+extension GoalView: TestableView {
+    // TestableView
+    typealias Model = Goal
+    var model: Model { goal }
+}
+
 
 import SwiftUI
 

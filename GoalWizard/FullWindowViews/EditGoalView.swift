@@ -82,7 +82,7 @@ struct EditGoalView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("AddGoalButton")
+                        .accessibilityIdentifier("Edit Goal Button")
 #else
                     Text("Close (Saved)")
                         .font(.headline)
@@ -90,7 +90,7 @@ struct EditGoalView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                     // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("AddGoalButton")
+                        .accessibilityIdentifier("Edit Goal Button")
 #endif
                 }
                 .padding(.top, 20)
@@ -112,27 +112,6 @@ struct EditGoalView: View {
 struct EditGoalView_Previews: PreviewProvider {
     // I can initialize a preview and read the body.
     static var previews: some View {
-        EditGoalView(goal: Goal.edit)
-    }
-}
-
-import CoreData
-
-fileprivate extension Goal {
-
-    static var edit: Goal {
-        let goal = Goal(context: Goal.context)
-        goal.estimatedCompletionDate = ""
-        goal.id = UUID()
-        goal.title = "Edit me!"
-        goal.daysEstimate = 1
-        goal.thisCompleted = false
-        goal.progress = 0
-        goal.progressPercentage = ""
-        goal.steps = []
-        goal.topGoal = true
-        goal.updateProgressUpTheTree()
-        goal.updateCompletionDateUpTheTree()
-        return goal
+        EditGoalView(goal: Goal.start)
     }
 }

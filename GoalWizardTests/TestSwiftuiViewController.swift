@@ -38,7 +38,8 @@
 //
 //    override func setUp() {
 //        super.setUp()
-//#if !targetEnvironment(simulator)
+//#if os(iOS)
+ //   #if !targetEnvironment(simulator)
 //fatalError("These tests should only run on a simulator, not on a physical device.")
 //#endif
 //        //sut = MySwiftUIViewController(rootView: MySwiftUIView())

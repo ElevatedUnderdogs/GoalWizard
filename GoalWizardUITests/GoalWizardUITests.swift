@@ -13,8 +13,10 @@ final class GoalWizardUITests: XCTestCase {
 
     override func setUpWithError() throws {
 
-#if !targetEnvironment(simulator)
+#if os(iOS)
+    #if !targetEnvironment(simulator)
 fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
 #endif
         // Put setup code here. This method is called before the invocation of each test method in the class.
 
@@ -39,6 +41,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
     }
 
     override func tearDownWithError() throws {
+        app = nil
         // Put teardown code here. This method is called after the invocation of each test method in the class.
     }
 
@@ -73,7 +76,8 @@ fatalError("These tests should only run on a simulator, not on a physical device
             app/*@START_MENU_TOKEN@*/.textFields["EditGoalTextField"]/*[[".otherElements[\"Edit Goal View\"]",".textFields[\"Edit goal\"]",".textFields[\"EditGoalTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
             let rand2: [String] = random4Char
             app/*@START_MENU_TOKEN@*/.textFields["EditGoalTextField"]/*[[".otherElements[\"Edit Goal View\"]",".textFields[\"Edit goal\"]",".textFields[\"EditGoalTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.typeText(rand2.joined())
-            app/*@START_MENU_TOKEN@*/.buttons["CloseSavedButton"]/*[[".otherElements[\"Edit Goal View\"]",".buttons[\"Close (Saved)\"]",".buttons[\"CloseSavedButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+
+            app.buttons["Edit Goal Button"].tap()
             app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
             let bigger: String = [rand4[0], rand4[1], rand4[2]].joined() + rand2.joined()
             XCTAssertTrue(
@@ -97,7 +101,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
              */
             //app.buttons["hiddenButton"].tap()
-            //testAddEditGoal()
+            //testAddEditGoal()           u
         }
     }
 
@@ -111,8 +115,6 @@ fatalError("These tests should only run on a simulator, not on a physical device
             app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(rand4.joined())
             app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
             XCTAssertTrue(app.staticTexts["0%"].exists)
-
-          //  XCUIApplication().collectionViews["Goal List"].tap()
             goalList.staticTexts[rand4.joined()].tap()
 
             app.images["circle"].tap()

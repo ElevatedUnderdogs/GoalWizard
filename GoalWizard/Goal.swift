@@ -51,10 +51,20 @@ extension Goal {
         }
     }
 
+    public var notOptionalEstimatedCompletionDate: String {
+        estimatedCompletionDate ?? "-"
+    }
+
+    public var notOptionalProgressPercentage: String {
+        progressPercentage ?? "-"
+    }
+
     static var empty: Goal {
         let newGoal = Goal(context: Goal.context)
         newGoal.isUserMarkedForDeletion = false
         newGoal.timeStamp = Date()
+        newGoal.closedDatesObject = [Date]() as NSObject
+        newGoal.completedDatesObject = [Date]() as NSObject
         newGoal.estimatedCompletionDate = ""
         newGoal.id = UUID()
         newGoal.thisCompleted = false

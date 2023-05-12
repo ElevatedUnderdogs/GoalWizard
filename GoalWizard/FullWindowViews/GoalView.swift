@@ -19,8 +19,14 @@ struct GoalView: View {
     @State var searchText: String = ""
     @State var modifyState: ModifyState? = nil
     @State var buttonState: ButtonState = .normal
-    @EnvironmentObject var pasteBoard: GoalPasteBoard
+    private(set) var pasteBoard: GoalPasteBoard
     @Environment(\.presentationMode) var presentationMode
+
+    // Add an initializer that accepts a Goal and a GoalPasteBoard
+    init(goal: Goal, pasteBoard: GoalPasteBoard) {
+        self.goal = goal
+        self.pasteBoard = pasteBoard
+    }
 
     var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
         goal.steps.goals.filteredSteps(with: searchText)
@@ -243,8 +249,14 @@ struct GoalView: View {
                                     id: \.1.id
                             ) { index, step in
                                 // Tap a goal cell in the incompleted section (needs a completed)
-                                GoalCell(step: .constant(step), searchText: searchText, index: index)
-                                    .accessibilityIdentifier("goal_cell_\(index)")
+                                GoalCell(
+                                    step: .constant(step),
+                                    searchText: searchText,
+                                    index: index,
+                                    // passed for navigation from the cell.
+                                    pasteBoard: pasteBoard
+                                )
+                                .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
                                 // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
@@ -260,8 +272,13 @@ struct GoalView: View {
                                     id: \.1.id
                             ) { index, step in
                                 // tap a goal cell in the completed section.
-                                GoalCell(step: .constant(step), searchText: searchText, index: index)
-                                    .accessibilityIdentifier("goal_cell_\(index)")
+                                GoalCell(
+                                    step: .constant(step),
+                                    searchText: searchText,
+                                    index: index,
+                                    pasteBoard: pasteBoard
+                                )
+                                .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
                                 // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
@@ -304,6 +321,6 @@ struct GoalView: View {
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         // I can reach this with a GoalView ui test.
-        GoalView(goal: Goal.start)
+        GoalView(goal: Goal.start, pasteBoard: GoalPasteBoard())
     }
 }

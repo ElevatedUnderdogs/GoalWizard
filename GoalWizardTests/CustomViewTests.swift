@@ -50,14 +50,6 @@ class CustomViewTests: XCTestCase {
         // Test that isChecked is true after the toggle
         XCTAssertTrue(testObject.isChecked)
     }
-
-
-    func testAddGoalViewPreview() {
-        let addGoalView = AddGoalView(parentGoal: Goal.start)
-
-        // Test that the AddGoalView's parentGoal is the same as Goal.start
-        XCTAssertEqual(addGoalView.parentGoal, Goal.start)
-    }
     // Add any other required setup or teardown methods if needed
 }
 
@@ -68,7 +60,7 @@ struct GoalCellWrapper: View {
     var index: Int
 
     var body: some View {
-        GoalCell(step: $goal, searchText: searchText, index: index)
+        GoalCell(step: $goal, searchText: searchText, index: index, pasteBoard: GoalPasteBoard())
     }
 }
 

@@ -18,8 +18,7 @@ struct GoalWizardApp: App {
 
     var body: some Scene {
         WindowGroup {
-            GoalView(goal: .start)
-                .environmentObject(pasteBoard)
+            GoalView(goal: .start, pasteBoard: pasteBoard)
         }
     }
 }
