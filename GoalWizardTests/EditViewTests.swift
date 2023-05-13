@@ -41,8 +41,6 @@ class EditGoalViewTests: XCTestCase {
 #if canImport(UIKit)
     // For some reason the test was intermittently incorrectly picking up a macos image. 
     func testEditGoalViewSnapshotUsingOCR() {
-
-
         let goal = Goal.edit
         let editGoalView = EditGoalView(goal: goal)
         let snapshot = takeSnapshot(of: editGoalView)
@@ -78,7 +76,7 @@ extension UIImage {
 
     func ocrText(completion: @escaping (String) -> Void) {
         let requestHandler = VNImageRequestHandler(cgImage: self.cgImage!, options: [:])
-        let textRecognitionRequest = VNRecognizeTextRequest { (request, error) in
+        let textRecognitionRequest = VNRecognizeTextRequest { (request, _) in
             guard let observations = request.results as? [VNRecognizedTextObservation] else {
                 return
             }

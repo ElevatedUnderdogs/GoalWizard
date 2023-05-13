@@ -53,7 +53,6 @@ class CustomViewTests: XCTestCase {
     // Add any other required setup or teardown methods if needed
 }
 
-
 struct GoalCellWrapper: View {
     @State private var goal: Goal = .start
     var searchText: String

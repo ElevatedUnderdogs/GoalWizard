@@ -34,7 +34,6 @@ extension URLRequest {
         return request
     }
 
-
     static func openAIRequest(
         url: URL = .davinci,
         prompt: String
@@ -108,7 +107,6 @@ extension URLRequest {
             return request
         }
 }
-
 
 // Extension to create messages for GPT-3.5 Turbo chat requests
 extension Array where Element == [String: String] {

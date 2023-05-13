@@ -28,16 +28,10 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
         let element = app.otherElements["Add"]
 
-        // Set a timeout (in seconds) for how long the test should wait for the element to appear
         let timeout: TimeInterval = 1
         let expectation = expectation(for: NSPredicate(format: "exists == true"), evaluatedWith: element, handler: nil)
 
-        // Wait for the element to appear
-        let _ = XCTWaiter().wait(for: [expectation], timeout: timeout)
-        //XCTAssertEqual(result, .completed, "App did not finish launching within the given timeout")
-        // Replace "elementIdentifier" with the accessibility identifier of the view you expect to appear
-
-        // In UI tests it’s important to set the initial state - such as interface orientation - required for your tests before they run. The setUp method is a good place to do this.
+        _ = XCTWaiter().wait(for: [expectation], timeout: timeout)
     }
 
     override func tearDownWithError() throws {
@@ -60,6 +54,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         ]
     }
 
+    // swiftlint: disable line_length
     // if there are no cells, then add one, if there are any, change the first.
     func testAddEditGoal() {
         let goalList = app.collectionViews["Goal List"]
@@ -100,13 +95,14 @@ fatalError("These tests should only run on a simulator, not on a physical device
               .accessibilityIdentifier("hiddenButton")
 
              */
-            //app.buttons["hiddenButton"].tap()
-            //testAddEditGoal()           u
+            // app.buttons["hiddenButton"].tap()
+            // testAddEditGoal()           u
         }
     }
 
     // if there are no cells, then add one, if there are any, change the first.
     func testProgress() {
+        XCUIDevice.shared.orientation = .portrait
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 50 {
             app.buttons["Add"].tap()
@@ -137,16 +133,17 @@ fatalError("These tests should only run on a simulator, not on a physical device
               .accessibilityIdentifier("hiddenButton")
 
              */
-            //app.buttons["hiddenButton"].tap()
-            //testAddEditGoal()
+            // app.buttons["hiddenButton"].tap()
+            // testAddEditGoal()
         }
     }
+    // swiftlint: enable line_length
 
-    private func testWhenNoCells() {
+    func testWhenNoCells() {
 
     }
 
-    private func testWhenHasCells() {
+    func testWhenHasCells() {
 
     }
 }

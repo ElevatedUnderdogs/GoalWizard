@@ -9,9 +9,11 @@ import XCTest
 @testable import GoalWizard
 import CoreData
 
-
 class StringTextCase: XCTestCase {
 
+    // Its not a complex function.  Its only for tests.  
+    // swiftlint: disable function_body_length
+    // swiftlint: disable line_length
     func testGetGoalTree() {
         let goalTreeMethod: String = .goalTreeFrom(goal: "Get a cat")
         let testString: String =
@@ -140,4 +142,6 @@ class StringTextCase: XCTestCase {
                 """
         XCTAssertEqual(goalTreeMethod, testString)
     }
+    // swiftlint: enable function_body_length
+    // swiftlint: enable line_length
 }

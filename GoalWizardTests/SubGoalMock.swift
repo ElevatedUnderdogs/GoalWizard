@@ -29,12 +29,13 @@ struct ErrorSubGoalMock: HasCallCodable {
 }
 
 struct SubGoalMock: HasCallCodable {
-    
+
     func callCodable<T>(
         expressive: Bool,
         _ action: @escaping (T?) -> Void
-    ) where T : Decodable, T : Encodable {
+    ) where T: Decodable, T: Encodable {
         // JSON string containing sample data for OpenAIResponse<Choices>
+        // swiftlint: disable line_length
         let jsonString = """
         {
             "choices": [
@@ -58,6 +59,7 @@ struct SubGoalMock: HasCallCodable {
             "created": 1677649420.123456
         }
         """
+        // swiftlint: enable line_length
 
         // Convert the JSON string to Data
         guard let jsonData = jsonString.data(using: .utf8) else {
@@ -76,4 +78,3 @@ struct SubGoalMock: HasCallCodable {
         }
     }
 }
-

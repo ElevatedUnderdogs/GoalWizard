@@ -16,6 +16,7 @@ struct AddGoalView: View {
     @State var title: String = ""
     @State var daysEstimate: String = ""
 
+    // swiftlint: disable multiple_closures_with_trailing_closure
     var body: some View {
         NavigationView {
             VStack {
@@ -68,12 +69,14 @@ struct AddGoalView: View {
                         RoundedRectangle(cornerRadius: 10)
                             .stroke(Color.gray, lineWidth: 1)
                     )
-                #endif
-                Button(action: {
-                    parentGoal.addSuBGoal(title: title, estimatedTime: Int64(daysEstimate) ?? 1)
-                    presentationMode.wrappedValue.dismiss()
-                }) {
-                #if os(iOS)
+#endif
+                Button(
+                    action: {
+                        parentGoal.addSuBGoal(title: title, estimatedTime: Int64(daysEstimate) ?? 1)
+                        presentationMode.wrappedValue.dismiss()
+                    }
+                ) {
+#if os(iOS)
                     Text("Add Goal")
                         .font(.headline)
                         .foregroundColor(.white)
@@ -90,7 +93,6 @@ struct AddGoalView: View {
                        // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
                         .accessibilityIdentifier("AddGoalButton")
                     #endif
-                    
                 }
                 .padding(.top, 20)
 
@@ -105,6 +107,7 @@ struct AddGoalView: View {
         #endif
         }
     }
+    // swiftlint: enable multiple_closures_with_trailing_closure
 }
 
 struct AddGoalView_Previews: PreviewProvider {

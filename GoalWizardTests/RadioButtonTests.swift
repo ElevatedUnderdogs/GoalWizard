@@ -10,8 +10,8 @@ import SnapshotTesting
 @testable import GoalWizard
 import CommonExtensions
 
-//
-//class RadioButtonTests: XCTestCase {
+// swiftlint: disable line_length
+// class RadioButtonTests: XCTestCase {
 //    func testRadioButtonToggling() {
 //        var isChecked = false
 //        let isCheckedBinding = State<Bool>(
@@ -49,9 +49,9 @@ import CommonExtensions
 //
 //        return (red > threshold && green > threshold && blue > threshold) || alpha < threshold
 //    }
-//}
+// }
 //
-//extension UIImage {
+// extension UIImage {
 //    func getPixelColor(at point: CGPoint) -> UIColor {
 //        let pixelData = self.cgImage!.dataProvider!.data
 //        let data: UnsafePointer<UInt8> = CFDataGetBytePtr(pixelData)
@@ -64,9 +64,9 @@ import CommonExtensions
 //
 //        return UIColor(red: r, green: g, blue: b, alpha: a)
 //    }
-//}
+// }
 //
-//extension UIColor {
+// extension UIColor {
 //    var hexString: String? {
 //        var red: CGFloat = 0
 //        var green: CGFloat = 0
@@ -96,5 +96,6 @@ import CommonExtensions
 //
 //        return nil
 //    }
-//}
+// }
 //
+// swiftlint: enable line_length

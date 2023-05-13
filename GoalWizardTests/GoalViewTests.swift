@@ -9,7 +9,6 @@ import XCTest
 @testable import GoalWizard
 import CoreData
 
-
 final class GoalViewTests: XCTestCase {
 
     override func setUp() {
@@ -26,7 +25,7 @@ final class GoalViewTests: XCTestCase {
         super.tearDown()
         self.clearGoals()
     }
-    
+
     func testDeleteGoalInView() {
         let goal: Goal = .start
         let text1 = "Become attorney"
@@ -107,8 +106,6 @@ final class GoalViewTests: XCTestCase {
         goal3.thisCompleted = true
         goal4.thisCompleted = true
 
-
-
         goal4.updateProgressUpTheTree()
         goal4.updateCompletionDateUpTheTree()
 
@@ -119,9 +116,11 @@ final class GoalViewTests: XCTestCase {
         goalView.delete(complete: IndexSet([0]))
 
         // Verify that the parent goal's progress has updated again
-        XCTAssertEqual(goal.progress, 1.0 / 2.0, "Parent goal's progress should be 1/2 after deleting one of the completed subgoals")
+        XCTAssertEqual(
+            goal.progress, 1.0 / 2.0,
+            "Parent goal's progress should be 1/2 after deleting one of the completed subgoals"
+        )
     }
-
 
     func testGoalViewWithNonTopGoal() {
         // Set up a non-topGoal with one or more goals in its steps property
@@ -133,7 +132,6 @@ final class GoalViewTests: XCTestCase {
         // Test that the goal in the GoalView is the same as the nonTopGoal you created
         XCTAssertEqual(goalView.model as? Goal, nonTopGoal)
     }
-
 
     // Why isn't the modify state being set in unit tests!?
 
@@ -168,7 +166,6 @@ final class GoalViewTests: XCTestCase {
 //    }
 }
 
-
 protocol TestableView {
     associatedtype Model
     var model: Model { get }
@@ -180,12 +177,10 @@ extension GoalView: TestableView {
     var model: Model { goal }
 }
 
-
 import SwiftUI
 
-
 class PreviewProviderTests: XCTestCase {
-    
+
     func testGoalCellPreview() {
         let goalCellPreview = GoalCell_Previews.previews as? GoalCell
         XCTAssertNotNil(goalCellPreview)

@@ -16,6 +16,7 @@
 		7546B0DB29E7401A00524F3C /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DA29E7401A00524F3C /* URLTests.swift */; };
 		7546B0DD29E7421900524F3C /* RadioButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DC29E7421900524F3C /* RadioButtonTests.swift */; };
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
+		75BC3D802A0F197300713D1B /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC3D7F2A0F197300713D1B /* Image.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
 		75C0B10629D7EEAA00D886CA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 75C0B10529D7EEAA00D886CA /* Assets.xcassets */; };
@@ -82,6 +83,7 @@
 		7546B0DA29E7401A00524F3C /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
 		7546B0DC29E7421900524F3C /* RadioButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonTests.swift; sourceTree = "<group>"; };
 		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
+		75BC3D7F2A0F197300713D1B /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardApp.swift; sourceTree = "<group>"; };
 		75C0B10329D7EEA900D886CA /* GoalView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalView.swift; sourceTree = "<group>"; };
@@ -235,6 +237,7 @@
 			isa = PBXGroup;
 			children = (
 				75C8B87C29E3F00300493D9C /* GoalView.Models.swift */,
+				75BC3D7F2A0F197300713D1B /* Image.swift */,
 				75C0B13529D8BC1400D886CA /* SkeuomorphicButtonStyle.swift */,
 				75C0B13B29D8C39C00D886CA /* NumberKeyboardModifier.swift */,
 				75C0B13929D8BEE200D886CA /* Color.swift */,
@@ -282,6 +285,7 @@
 				75C0B0FA29D7EEA900D886CA /* Sources */,
 				75C0B0FB29D7EEA900D886CA /* Frameworks */,
 				75C0B0FC29D7EEA900D886CA /* Resources */,
+				75BC3D7E2A0F0BB900713D1B /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -343,7 +347,7 @@
 			attributes = {
 				BuildIndependentTargetsInParallel = 1;
 				LastSwiftUpdateCheck = 1420;
-				LastUpgradeCheck = 1420;
+				LastUpgradeCheck = 1430;
 				TargetAttributes = {
 					75C0B0FD29D7EEA900D886CA = {
 						CreatedOnToolsVersion = 14.2;
@@ -409,12 +413,34 @@
 		};
 /* End PBXResourcesBuildPhase section */
 
+/* Begin PBXShellScriptBuildPhase section */
+		75BC3D7E2A0F0BB900713D1B /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			alwaysOutOfDate = 1;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputFileListPaths = (
+			);
+			inputPaths = (
+			);
+			outputFileListPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "if [ -f '/usr/local/bin/swiftlint' ]; then\n    /usr/local/bin/swiftlint\nelif [ -f '/opt/homebrew/bin/swiftlint' ]; then\n    /opt/homebrew/bin/swiftlint\nelse\n    echo \"warning: SwiftLint not installed, download from https://github.com/realm/SwiftLint\"\nfi\n";
+		};
+/* End PBXShellScriptBuildPhase section */
+
 /* Begin PBXSourcesBuildPhase section */
 		75C0B0FA29D7EEA900D886CA /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 				75C8B7FA29DEA54500493D9C /* String.swift in Sources */,
+				75BC3D802A0F197300713D1B /* Image.swift in Sources */,
 				75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */,
 				75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */,
 				75C0B13C29D8C39C00D886CA /* NumberKeyboardModifier.swift in Sources */,
@@ -522,6 +548,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
@@ -580,6 +607,7 @@
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				COPY_PHASE_STRIP = NO;
+				DEAD_CODE_STRIPPING = YES;
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
@@ -606,6 +634,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoalWizard/GoalWizard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"GoalWizard/Preview Content\"";
 				DEVELOPMENT_TEAM = 8L7Z3WU967;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -645,6 +674,7 @@
 				CODE_SIGN_ENTITLEMENTS = GoalWizard/GoalWizard.entitlements;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_ASSET_PATHS = "\"GoalWizard/Preview Content\"";
 				DEVELOPMENT_TEAM = 8L7Z3WU967;
 				ENABLE_HARDENED_RUNTIME = YES;
@@ -683,6 +713,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8L7Z3WU967;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -706,6 +737,7 @@
 				BUNDLE_LOADER = "$(TEST_HOST)";
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8L7Z3WU967;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -728,6 +760,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8L7Z3WU967;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;
@@ -750,6 +783,7 @@
 				ALWAYS_EMBED_SWIFT_STANDARD_LIBRARIES = YES;
 				CODE_SIGN_STYLE = Automatic;
 				CURRENT_PROJECT_VERSION = 1;
+				DEAD_CODE_STRIPPING = YES;
 				DEVELOPMENT_TEAM = 8L7Z3WU967;
 				GENERATE_INFOPLIST_FILE = YES;
 				IPHONEOS_DEPLOYMENT_TARGET = 16.2;

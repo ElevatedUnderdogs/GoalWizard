@@ -13,12 +13,12 @@ class RadioPreviewTests: XCTestCase {
 
     func testRadio() {
         RadioButton_Previews.isChecked = true
-        let _ = RadioButton_Previews.previews
+        _ = RadioButton_Previews.previews
         let radio = RadioButton(isChecked: .constant(false))
         radio.isChecked = true
-        let _ = radio.body
+        _ = radio.body
         radio.isChecked = false
         let greenGlow = GreenGlowingText(text: "Completed")
-        let _ = greenGlow.body
+        _ = greenGlow.body
     }
 }

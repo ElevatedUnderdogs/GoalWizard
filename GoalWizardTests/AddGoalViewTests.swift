@@ -8,9 +8,7 @@
 import Foundation
 import XCTest
 import SwiftUI
-import ViewInspector
 @testable import GoalWizard
-
 
 class AddGoalViewTests: XCTestCase {
 

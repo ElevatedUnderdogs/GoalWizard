@@ -17,6 +17,8 @@ extension String {
         "AppIconBlk"
     }
 
+    // swiftlint: disable function_body_length
+    // swiftlint: disable line_length
     static func goalTreeFrom(goal: String) -> String {
         """
         Example prompt:
@@ -142,78 +144,6 @@ extension String {
         }
         """
     }
+    // swiftlint: enable function_body_length
+    // swiftlint: enable line_length
 }
-//
-//
-//class MyDecoder {
-//    var parsedObjects: [String: Any] = [:]
-//
-//    func decode(json: Data) throws -> Any? {
-//        let jsonObject = try JSONSerialization.jsonObject(with: json, options: [])
-//
-//        return try decodeValue(jsonObject)
-//    }
-//
-//    private func decodeValue(_ value: Any) throws -> Any? {
-//        switch value {
-//        case let dict as [String: Any]:
-//            if let refId = dict["__ref"] as? String {
-//                return parsedObjects[refId]
-//            }
-//            let newObject = MyObject()
-//            parsedObjects[ObjectIdentifier(newObject).debugDescription] = newObject
-//
-//            for (key, subValue) in dict {
-//                newObject[key] = try decodeValue(subValue)
-//            }
-//            return newObject
-//        case let array as [Any]:
-//            return try array.map { try decodeValue($0) }
-//        default:
-//            return value
-//        }
-//    }
-//}
-
-/*
- let options = PropertyListSerialization.WriteOptions(0)
- if PropertyListSerialization.propertyList(anyObject, isValidFor: .binary),
-    let data: Data = try? PropertyListSerialization.data(fromPropertyList: anyObject, format: .binary, options: 0) {
-     let goal = try? JSONDecoder().decode(GoalStruct.self, from: data)
-     print("succeeded? \(goal?.steps.map(\.title) as Any)")
- }
-
- if PropertyListSerialization.propertyList(anyObject, isValidFor: .openStep),
-    let data: Data = try? PropertyListSerialization.data(fromPropertyList: anyObject, format: .openStep, options: 0) {
-     let goal = try? JSONDecoder().decode(GoalStruct.self, from: data)
-     print("succeeded? \(goal?.steps.map(\.title) as Any)")
- }
-
- if PropertyListSerialization.propertyList(anyObject, isValidFor: .xml),
-    let data: Data = try? PropertyListSerialization.data(fromPropertyList: anyObject, format: .xml, options: 0) {
-     let goal = try? JSONDecoder().decode(GoalStruct.self, from: data)
-     print("succeeded? \(goal?.steps.map(\.title) as Any)")
- }
-
- print(valueJSON["content"] as? [AnyHashable: Any])
- print(valueJSON["content"] as? String)
- print((valueJSON["content"] as? String)?.json)
-
- print(try? JSONSerialization.isValidJSONObject(valueJSON["content"]))
-
- guard let data = try? JSONSerialization.data(withJSONObject: valueJSON["content"] ?? [:]),
-       let jsonString = String(data: data, encoding: .utf8),
-       let json = try? JSONSerialization.jsonObject(with: jsonString.data(using: .utf8)!) as? [String: Any] else {
-     print("Failed to cast valueJSON to dictionary")
-     return
- }
-
- print(json)
- guard let content: [String: Any] = valueJSON["content"] as? [String: Any] else {
-     return
- }
- let gptGoal: Goal? = .fromJsonIterative(json: content)
- print(goal.title)
- print(gptGoal?.title)
- print(gptGoal?.steps.goals.map(\.title))
- */

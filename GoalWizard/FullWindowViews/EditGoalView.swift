@@ -31,13 +31,14 @@ struct EditGoalView: View {
         Goal.context.updateGoal(
             goal: goal,
             // I can target this with a unit test setting the goal title to nil
-            title: goal.title ?? "",
+            title: goal.notOptionalTitle,
             estimatedTime: goal.daysEstimate
         )
     }
 
+    // swiftlint: disable multiple_closures_with_trailing_closure
     var body: some View {
-        let titleBinder = Binding<String> (
+        let titleBinder = Binding<String>(
             get: { goal.notOptionalTitle },
             set: { setGoal(title: $0) }
         )
@@ -106,6 +107,7 @@ struct EditGoalView: View {
             }.accessibilityIdentifier("DoneButton"))
 #endif
         }
+        // swiftlint: enable multiple_closures_with_trailing_closure
     }
 }
 

@@ -13,11 +13,11 @@ import Foundation
 import Dispatch
 
 struct GoalView: View {
-    
+
     @ObservedObject var goal: Goal
     @State var showSearchView = false
     @State var searchText: String = ""
-    @State var modifyState: ModifyState? = nil
+    @State var modifyState: ModifyState?
     @State var buttonState: ButtonState = .normal
     private(set) var pasteBoard: GoalPasteBoard
     @Environment(\.presentationMode) var presentationMode
@@ -49,6 +49,7 @@ struct GoalView: View {
         Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
     }
 
+    // swiftlint: disable multiple_closures_with_trailing_closure
     var body: some View {
         VersionBasedNavigationStack {
             VStack {
@@ -60,11 +61,7 @@ struct GoalView: View {
                             // Tap home button.
                             print("home")
                         }) {
-                            Image(systemName: "house.fill")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .aspectRatio(contentMode: .fit)
-                                .accessibilityIdentifier("Home Button")
+                            Image.house
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
 #endif
@@ -81,15 +78,15 @@ struct GoalView: View {
                             HStack {
                                 VStack {
                                     Text("Paste").font(.footnote)
-                                    if let name = pasteBoard.cutGoal?.notOptionalTitle.components(separatedBy: " ").first {
+                                    if let name = pasteBoard
+                                        .cutGoal?
+                                        .notOptionalTitle
+                                        .components(separatedBy: " ")
+                                        .first {
                                         Text(name + "...").font(.footnote)
                                     }
                                 }
-                                Image(systemName: "doc.on.clipboard.fill")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .aspectRatio(contentMode: .fit)
-                                    .accessibilityIdentifier("Search Button")
+                                Image.paste
                             }
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
@@ -100,11 +97,7 @@ struct GoalView: View {
                             pasteBoard.cutGoal = goal.cutOut()
                             presentationMode.wrappedValue.dismiss()
                         }) {
-                            Image(systemName: "scissors.circle.fill")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .aspectRatio(contentMode: .fit)
-                                .accessibilityIdentifier("Search Button")
+                            Image.cut
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
                     }
@@ -112,23 +105,11 @@ struct GoalView: View {
                         // Tap the search view button.
                         showSearchView.toggle()
                     }) {
-                        Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .aspectRatio(contentMode: .fit)
-                            .accessibilityIdentifier("Search Button")
+                        Image.search
                     }
                     .buttonStyle(SkeuomorphicButtonStyle())
 
-                    Button(action: {
-                        modifyState = .add
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .aspectRatio(contentMode: .fit)
-                            .accessibilityIdentifier("Add Button")
-                    }
+                    Button(action: { modifyState = .add }) { Image.add }
                     .buttonStyle(SkeuomorphicButtonStyle())
                 }
                 .padding(.horizontal)
@@ -160,37 +141,19 @@ struct GoalView: View {
                             }
                         Spacer()
                             .frame(width: 20)
-                        Button(action: {
-                            modifyState = .edit
-                        }) {
-                            Image(systemName: "pencil.circle")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .aspectRatio(contentMode: .fit)
-                        }
+                        Button(action: { modifyState = .edit }) { Image.edit }
                         if buttonState == .normal {
                             // Make a ui test for this and record the response!.
                             Button(action: {
                                 buttonState = .loading
-                                goal.gptAddSubGoals { error in
+                                goal.gptAddSubGoals { _ in
                                     buttonState = .hidden
                                 }
                             }) {
 #if os(macOS)
-                                Image(systemName: "bolt.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.green)
-                                    .padding()
+                                Image.openaiBolt
 #else
-                                Image("goalWizardGenicon")
-                                    .resizable()
-                                    .cornerRadius(15)
-                                    .frame(width: 35, height: 30)
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.green)
+                                Image.openaiWizard
 #endif
                             }
 #if os(macOS)
@@ -213,14 +176,7 @@ struct GoalView: View {
                                 .fontWeight(.bold)
                                 .padding(.top)
                             Spacer()
-                            Button(action: {
-                                modifyState = .edit
-                            }) {
-                                Image(systemName: "pencil.circle")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .aspectRatio(contentMode: .fit)
-                            }
+                            Button(action: { modifyState = .edit }) { Image.edit }
                             Spacer()
                                 .frame(width: 20)
                         }
@@ -229,7 +185,7 @@ struct GoalView: View {
                                 .frame(height: 20)
                                 .padding(.leading, 20)
                                 .padding(.trailing, 10)
-                            Text(goal.progressPercentage ?? "")
+                            Text(goal.notOptionalProgressPercentage)
                                 .padding(.trailing, 10)
                         }
                     }
@@ -259,7 +215,9 @@ struct GoalView: View {
                                 .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
-                                // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
+                                // Might not be worth it, swipe to delete keeps
+                                // failing in unit tests. perhaps there is a
+                                // apple provided method for swiping the first cell to the left.
                                 delete(impcomplete: indexSet)
                             }
                         }
@@ -281,7 +239,9 @@ struct GoalView: View {
                                 .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
-                                // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
+                                // Might not be worth it, swipe to delete keeps
+                                // failing in unit tests. perhaps there is a apple
+                                // provided method for swiping the first cell to the left.
                                 delete(complete: indexSet)
                             }
                         }
@@ -315,6 +275,7 @@ struct GoalView: View {
             .frame(minWidth: 200, maxWidth: 250)
 #endif
         }
+        // swiftlint: enable multiple_closures_with_trailing_closure
     }
 }
 

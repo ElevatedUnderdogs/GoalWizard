@@ -10,7 +10,7 @@ import Foundation
 protocol HasCallCodable {
     func callCodable<T: Codable>(
         expressive: Bool,
-        _ action: @escaping (T?)->Void
+        _ action: @escaping (T?) -> Void
     )
 }
 

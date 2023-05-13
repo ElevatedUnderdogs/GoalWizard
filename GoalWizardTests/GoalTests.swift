@@ -25,9 +25,6 @@ extension Goal {
     }
 }
 
-
-
-
 class GoalTestsGptapi: XCTestCase {
     var goal: Goal!
 
@@ -53,10 +50,14 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
     func testGptAddSubGoalsSuccess() {
         let initialGoalCount = Goal.context.goals.count
-        goal.gptAddSubGoals(request: { _ in SubGoalMock() }, hasAsync: RightNow()) { error in
-            XCTAssertNil(error)
-            XCTAssertTrue(self.goal.steps.goals.count > 0)
-        }
+        goal.gptAddSubGoals(
+            request: { _ in SubGoalMock() },
+            hasAsync: RightNow(),
+            completion: { error in
+                XCTAssertNil(error)
+                XCTAssertTrue(self.goal.steps.goals.count > 0)
+            }
+        )
         let savedGoals = Goal.context.goals
         // Check that the goal count has not changed
         XCTAssertNotEqual(savedGoals.count, initialGoalCount)
@@ -72,9 +73,13 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
     func testGptAddSubGoalsFailure() {
         let initialGoalCount = Goal.context.goals.count
-        goal.gptAddSubGoals(request: { _ in ErrorSubGoalMock() }, hasAsync: RightNow()) { error in
-            XCTAssertEqual(self.goal.steps.goals.count, 0)
-        }
+        goal.gptAddSubGoals(
+            request: { _ in ErrorSubGoalMock() },
+            hasAsync: RightNow(),
+            completion: { _ in
+                XCTAssertEqual(self.goal.steps.goals.count, 0)
+            }
+        )
         let savedGoals = Goal.context.goals
 
         // Check that the goal count has not changed
@@ -105,7 +110,6 @@ extension XCTestCase {
         XCTAssertEqual(0, Goal.context.goals.count, "ERROR MESSAGE: " + Goal.context.goals.first!.title! + "<")
     }
 }
-
 
 final class GoalTests: XCTestCase {
 
@@ -149,10 +153,39 @@ fatalError("These tests should only run on a simulator, not on a physical device
         XCTAssertEqual(goal.completedDates, [])
     }
 
-    func testEmptyValues() {
+    func testNotOptionalEstimatedCompletionDate() {
         let goal = Goal.empty
-        
-    }
+         goal.estimatedCompletionDate = nil
+         XCTAssertEqual(goal.notOptionalEstimatedCompletionDate, "-")
+     }
+
+     func testNotOptionalProgressPercentage() {
+         let goal = Goal.empty
+         goal.progressPercentage = nil
+         XCTAssertEqual(goal.notOptionalProgressPercentage, "-")
+     }
+
+     func testAddSubGoalWithEmptyTitle() {
+         let goal = Goal.empty
+         let subGoal = Goal.empty
+         subGoal.title = ""
+         goal.add(sub: subGoal)
+         XCTAssertEqual(goal.steps?.count, 0)
+     }
+
+     func testAddSubGoalWithNilSteps() {
+         let goal = Goal.empty
+         let subGoal = Goal.empty
+         subGoal.title = "Sub Goal"
+         goal.steps = nil
+         goal.add(sub: subGoal)
+         XCTAssertEqual(goal.steps?.count, 1)
+     }
+
+     func testProgressWithZeroTotalDays() {
+         let goals = [Goal]()
+         XCTAssertEqual(goals.progress, 0)
+     }
 
     func testCutOut() {
         let parentGoal = Goal.start
@@ -258,7 +291,6 @@ fatalError("These tests should only run on a simulator, not on a physical device
         clearGoals()
     }
 
-    
     func testAddSubGoalTitle() {
         let first = Goal.empty
         let buffer1 = String(describing: UUID())
@@ -363,7 +395,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         wait(for: [expectation], timeout: 1)
     }
 }
-
+// swiftlint: disable file_length
 class GptBuilderTests: XCTestCase {
 
     func testGptBuilder() {
@@ -391,3 +423,4 @@ class GptBuilderTests: XCTestCase {
         XCTAssertNotNil(message)
     }
 }
+// swiftlint: enable file_length

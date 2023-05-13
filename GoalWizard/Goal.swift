@@ -96,18 +96,16 @@ extension Goal {
         updateCompletionDateUpTheTree()
         // You must update the tree before attaching from it!
         parent = nil
-        try! Goal.context.save()
+        Goal.context.saveHandleErrors()
         return self
     }
 
     func add(sub goal: Goal) {
-        guard goal.title != nil && goal.title != "" else {
-            return 
-        }
+        guard goal.title != nil && goal.title != "" else { return }
         goal.parent = self
         // We can force assign the steps to nil and then add a step. 
         steps = steps?.addElement(goal) ?? []
-        try! Goal.context.save()
+        Goal.context.saveHandleErrors()
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
     }
@@ -117,13 +115,14 @@ extension Goal {
         steps = steps?.addElements(subGoals)
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
-        try! Goal.context.save()
+        Goal.context.saveHandleErrors()
     }
 
     static var start: Goal {
-        Goal.context.topGoal ?? Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
+        Goal.context.topGoal ??
+        Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
     }
-    
+
     public override func didChangeValue(forKey key: String) {
         super.didChangeValue(forKey: key)
         if key == "daysEstimate" || key == "thisCompleted" {
@@ -150,11 +149,11 @@ extension Goal {
     }
 
     func updateProgressUpTheTree() {
-        var up: Goal = self
+        var upward: Goal = self
         updateProgressProperties()
-        while let next = up.parent {
-            up = next
-            up.updateProgressProperties()
+        while let next = upward.parent {
+            upward = next
+            upward.updateProgressProperties()
         }
     }
 
@@ -172,11 +171,11 @@ extension Goal {
     }
 
     func updateCompletionDateUpTheTree() {
-        var up: Goal = self
+        var upward: Goal = self
         updateCompletionDateProperties()
-        while let next = up.parent {
-            up = next
-            up.updateCompletionDateProperties()
+        while let next = upward.parent {
+            upward = next
+            upward.updateCompletionDateProperties()
         }
     }
 
@@ -221,7 +220,8 @@ extension [Goal] {
     }
 
     var progress: Double {
-        // Set the total days to steps as 0, just 1 step with 0 estimatedDays force assign it, then read the progress from the list.
+        // Set the total days to steps as 0, just 1 step
+        // with 0 estimatedDays force assign it, then read the progress from the list.
         guard totalDays > 0 else { return 0 }
         return Double(totalDays - daysLeft) / Double(totalDays)
     }

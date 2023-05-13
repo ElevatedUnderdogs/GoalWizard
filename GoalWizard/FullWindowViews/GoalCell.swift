@@ -77,7 +77,6 @@ struct GoalCell: View {
 
 }
 
-
 struct GoalCell_Previews: PreviewProvider {
     static var previews: some View {
         GoalCell(step: .constant(.start), searchText: "", index: 2, pasteBoard: GoalPasteBoard())

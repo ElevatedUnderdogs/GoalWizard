@@ -8,7 +8,7 @@
 import SwiftUI
 
 class GoalPasteBoard: ObservableObject {
-    @Published var cutGoal: Goal? = nil
+    @Published var cutGoal: Goal?
 }
 
 @main

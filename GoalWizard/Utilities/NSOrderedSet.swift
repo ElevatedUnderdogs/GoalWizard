@@ -13,9 +13,9 @@ extension NSOrderedSet {
 
     /// Do not use: @discardableResult, because you need to reassign the set.
     func addElement(_ element: Any) -> NSOrderedSet {
-        let mutableSet = mutableCopy() as! NSMutableOrderedSet
+        let mutableSet = NSMutableOrderedSet(orderedSet: self)
         mutableSet.add(element)
-        return mutableSet.copy() as! NSOrderedSet
+        return NSOrderedSet(orderedSet: mutableSet)
     }
 
     func addElements(_ elements: [Any]) -> NSOrderedSet {

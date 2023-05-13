@@ -10,6 +10,7 @@ import SwiftUI
 struct RadioButton: View {
     @Binding var isChecked: Bool
 
+    // swiftlint: disable multiple_closures_with_trailing_closure
     var body: some View {
         Button(action: {
             // Tap the check box 3 times.
@@ -20,8 +21,8 @@ struct RadioButton: View {
                 .frame(width: 24, height: 24)
         }
     }
+    // swiftlint: enable multiple_closures_with_trailing_closure
 }
-
 
 struct RadioButton_Previews: PreviewProvider {
     @State static var isChecked = false
@@ -38,9 +39,6 @@ struct RadioButton_Previews: PreviewProvider {
         .previewLayout(.sizeThatFits)
     }
 }
-
-
-import SwiftUI
 
 struct GreenGlowingText: View {
     var text: String

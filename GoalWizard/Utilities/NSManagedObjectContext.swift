@@ -72,8 +72,15 @@ extension NSManagedObjectContext {
 
         newGoal.updateProgressUpTheTree()
         newGoal.updateCompletionDateUpTheTree()
-        try! save()
+        saveHandleErrors()
         return newGoal
+    }
+
+    func saveHandleErrors() {
+        do {
+            try save()
+        } catch {
+        }
     }
 
     func deleteGoal(atOffsets offsets: IndexSet, goal: Goal) {
@@ -90,7 +97,7 @@ extension NSManagedObjectContext {
 
         goal.steps = mutableSteps.copy() as? NSOrderedSet
         // still need to call save state.
-        try! save()
+        saveHandleErrors()
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()
     }
@@ -114,6 +121,6 @@ extension NSManagedObjectContext {
         goal.daysEstimate = estimatedTime
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()
-        try! save()
+        saveHandleErrors()
     }
 }

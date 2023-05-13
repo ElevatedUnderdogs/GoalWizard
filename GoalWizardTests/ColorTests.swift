@@ -9,9 +9,7 @@ import SwiftUI
 import SnapshotTesting
 @testable import GoalWizard
 
-
 extension Color {
-    
     func toCGColor() -> CGColor? {
         #if canImport(UIKit)
         return UIColor(self).cgColor
@@ -23,16 +21,15 @@ extension Color {
     }
 }
 
-
 extension CGColor {
     var hexString: String? {
         guard let components = components, components.count >= 3 else {
             return nil
         }
-        let r = Int(components[0] * 255)
-        let g = Int(components[1] * 255)
-        let b = Int(components[2] * 255)
-        return String(format: "#%02X%02X%02X", r, g, b)
+        let red = Int(components[0] * 255)
+        let green = Int(components[1] * 255)
+        let blue = Int(components[2] * 255)
+        return String(format: "#%02X%02X%02X", red, green, blue)
     }
 }
 
