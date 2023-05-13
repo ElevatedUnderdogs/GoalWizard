@@ -1,2 +1,10 @@
 disabled_rules: # rule identifiers to exclude from running
   - private_over_fileprivate
+
+custom_rules:
+  disallow_topGoal_set_true:
+    included: ".*\\.swift" # This applies the rule to all .swift files
+    name: "Disallow '.topGoal = true'"
+    regex: "\\s*\\.topGoal\\s*=\\s*true"
+    message: "Directly setting '.topGoal = true' is disallowed."
+    severity: error

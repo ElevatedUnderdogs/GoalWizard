@@ -111,6 +111,7 @@ extension XCTestCase {
     }
 }
 
+// swiftlint: disable type_body_length
 final class GoalTests: XCTestCase {
 
     override class func setUp() {
@@ -210,6 +211,18 @@ fatalError("These tests should only run on a simulator, not on a physical device
         goal2.title = text2
         goal.add(sub: goal2)
         XCTAssertEqual(goal.subGoalCount, 0, goal.steps.goals.first?.title ?? "nil")
+    }
+
+    func testIsCompleted() {
+        let goal: Goal = .empty
+        let text1 = "Become attorney"
+        goal.title = text1
+        let goal2: Goal = .empty
+        let text2 = "Go to law school"
+        goal2.title = text2
+        goal.add(sub: goal2)
+        goal2.thisCompleted = true
+        XCTAssertTrue(goal.isCompleted)
     }
 
     func testGoalParents() {
@@ -395,6 +408,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         wait(for: [expectation], timeout: 1)
     }
 }
+// swiftlint: enable type_body_length
 // swiftlint: disable file_length
 class GptBuilderTests: XCTestCase {
 

@@ -9,6 +9,13 @@ import Foundation
 
 extension String {
 
+    func decodedContent<T: Codable>() throws -> T {
+        // `data(using` is a StringProtocol method,
+        // this always succeeds with `String`.
+        let data = data(using: .utf8)!
+        return try JSONDecoder().decode(T.self, from: data)
+    }
+
     static var appIcon: String {
         "AppIcon"
     }

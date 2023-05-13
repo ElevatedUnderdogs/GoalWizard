@@ -9,50 +9,45 @@ import SwiftUI
 
 extension Image {
 
+    func standard(side: CGFloat = 24) -> some View {
+        resizable()
+        .frame(width: side, height: side)
+        .aspectRatio(contentMode: .fit)
+    }
+
     static var house: some View {
         Image(systemName: "house.fill")
-            .resizable()
-            .frame(width: 24, height: 24)
-            .aspectRatio(contentMode: .fit)
+            .standard()
             .accessibilityIdentifier("Home Button")
     }
 
     static var paste: some View {
         Image(systemName: "doc.on.clipboard.fill")
-            .resizable()
-            .frame(width: 24, height: 24)
-            .aspectRatio(contentMode: .fit)
+            .standard()
             .accessibilityIdentifier("paste Button")
     }
 
     static var cut: some View {
         Image(systemName: "scissors.circle.fill")
-            .resizable()
-            .frame(width: 24, height: 24)
-            .aspectRatio(contentMode: .fit)
+            .standard()
             .accessibilityIdentifier("cut Button")
     }
 
     static var search: some View {
         Image(systemName: "magnifyingglass")
-            .resizable()
-            .frame(width: 24, height: 24)
-            .aspectRatio(contentMode: .fit)
+            .standard()
             .accessibilityIdentifier("Search Button")
     }
 
     static var add: some View {
         Image(systemName: "plus.circle.fill")
-            .resizable()
-            .frame(width: 24, height: 24)
-            .aspectRatio(contentMode: .fit)
+            .standard()
             .accessibilityIdentifier("Add Button")
     }
 
     static var edit: some View {
         Image(systemName: "pencil.circle")
-            .resizable()
-            .frame(width: 24, height: 24)
+            .standard()
             .aspectRatio(contentMode: .fit)
     }
 

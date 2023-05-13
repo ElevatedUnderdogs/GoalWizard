@@ -30,7 +30,7 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
-        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
+        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard(), navigationPath: .constant([]))
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -51,7 +51,7 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
-        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
+        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard(), navigationPath: .constant([]))
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -71,19 +71,38 @@ final class GoalViewTests: XCTestCase {
         goal4.thisCompleted = true
         XCTAssertEqual(goalView.filteredSteps.completed, [goal4])
         goalView.delete(complete: [0])
-        XCTAssertEqual(goalView.filteredSteps.completed, [])
+        XCTAssertEqual(
+            goalView.filteredSteps.completed,
+            []
+        )
 
-        XCTAssertEqual(Set(Goal.context.goals.map(\.title)), Set([text1, text2, text3]))
+        XCTAssertEqual(
+            Set(Goal.context.goals.map(\.title)),
+            Set([text1, text2, text3])
+        )
 
-        XCTAssertEqual(Set(goalView.filteredSteps.incomplete.map(\.title)), Set([text2, text3]))
+        XCTAssertEqual(
+            Set(goalView.filteredSteps.incomplete.map(\.title)),
+            Set([text2, text3])
+        )
         goalView.delete(impcomplete: [0])
-        XCTAssertEqual(Set(goalView.filteredSteps.incomplete.map(\.title)), Set([text3]))
-        XCTAssertEqual(Set(Goal.context.goals.map(\.title)), Set([text1, text3]))
+        XCTAssertEqual(
+            Set(goalView.filteredSteps.incomplete.map(\.title)),
+            Set([text3])
+        )
+        XCTAssertEqual(
+            Set(Goal.context.goals.map(\.title)),
+            Set([text1, text3])
+        )
     }
 
     func testUpParentsAfterDelete() {
         let goal: Goal = .start
-        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
+        let goalView = GoalView(
+            goal: goal,
+            pasteBoard: GoalPasteBoard(),
+            navigationPath: .constant([])
+        )
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -127,8 +146,11 @@ final class GoalViewTests: XCTestCase {
         let nonTopGoal = Goal.empty
 
         // Initialize the GoalView with the non-topGoal
-        let goalView: some View & TestableView = GoalView(goal: nonTopGoal, pasteBoard: GoalPasteBoard())
-
+        let goalView: some View & TestableView = GoalView(
+            goal: nonTopGoal,
+            pasteBoard: GoalPasteBoard(),
+            navigationPath: .constant([])
+        )
         // Test that the goal in the GoalView is the same as the nonTopGoal you created
         XCTAssertEqual(goalView.model as? Goal, nonTopGoal)
     }

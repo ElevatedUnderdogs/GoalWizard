@@ -22,35 +22,6 @@ class CustomViewTests: XCTestCase {
         let nonEmptyArray: [Int]? = [1, 2, 3]
         XCTAssertFalse(nonEmptyArray.isEmpty)
     }
-
-    func testRadioButtonToggle() {
-        class TestObject: ObservableObject {
-            @Published var isChecked = false
-        }
-
-        let testObject = TestObject()
-
-        // Create a simple wrapper view that embeds the RadioButton
-        struct RadioButtonWrapper: View {
-            @ObservedObject var testObject: TestObject
-
-            var body: some View {
-                RadioButton(isChecked: $testObject.isChecked)
-            }
-        }
-
-        _ = RadioButtonWrapper(testObject: testObject)
-
-        // Test that isChecked is initially false
-        XCTAssertFalse(testObject.isChecked)
-
-        // Simulate a tap action by toggling isChecked manually
-        testObject.isChecked.toggle()
-
-        // Test that isChecked is true after the toggle
-        XCTAssertTrue(testObject.isChecked)
-    }
-    // Add any other required setup or teardown methods if needed
 }
 
 struct GoalCellWrapper: View {

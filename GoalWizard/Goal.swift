@@ -103,8 +103,8 @@ extension Goal {
     func add(sub goal: Goal) {
         guard goal.title != nil && goal.title != "" else { return }
         goal.parent = self
-        // We can force assign the steps to nil and then add a step. 
-        steps = steps?.addElement(goal) ?? []
+        // We can't force assign this to nil, this always defaults to empty set.
+        steps = steps!.addElement(goal)
         Goal.context.saveHandleErrors()
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
@@ -191,8 +191,8 @@ extension Goal {
     ) {
         request(notOptionalTitle).callCodable(expressive: false) { (response: OpenAIResponse<Choices>?) in
             hasAsync.async { [weak self] in
-                // The decodedContent always succeeds because it was converted from data and back to it. 
-                let newGoals = (try? response?.choices.first?.message.decodedContent().goals ?? []) ?? []
+                // The decodedContent always succeeds because it was converted from data and back to it.
+                let newGoals: [Goal] = response?.choices.first?.message.contentT?.goals ?? []
                 self?.add(subGoals: newGoals)
                 completion(nil)
             }

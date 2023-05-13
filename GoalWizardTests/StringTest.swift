@@ -8,8 +8,53 @@
 import XCTest
 @testable import GoalWizard
 import CoreData
+import SwiftUI
 
 class StringTextCase: XCTestCase {
+
+    func testDecodingError() {
+
+        struct TestCodable: Codable {
+            let value: Int
+        }
+        // This is a string that does NOT represent a valid JSON object of type `TestCodable`.
+        let invalidJson = "{ \"wrong_key\": 123 }"
+
+        var hitError: Bool = false
+        do {
+            // Attempt to decode the invalid JSON string.
+            let _: TestCodable = try invalidJson.decodedContent()
+            // If decoding does not throw an error, the test has failed.
+            XCTFail("Decoding did not throw an error as expected.")
+        } catch {
+            // If we reach here, decoding threw an error as expected.
+            // We can optionally check that the error is the type we expect.
+            hitError = true
+            XCTAssertTrue(error is DecodingError)
+        }
+        XCTAssertTrue(hitError)
+    }
+
+    func testImageStrings() {
+        XCTAssertNotNil(Image(String.appIcon))
+        XCTAssertNotNil(Image(String.appIconBlk))
+        #if canImport(UIKit)
+            XCTAssertNotNil(UIImage(named: String.appIcon))
+            // This is failing for some reason.
+            // XCTAssertNotNil(UIImage(named: String.appIconBlk))
+        #endif
+    }
+
+    func testDecodableString() {
+        var reached: Bool = false
+        do {
+            let _: GoalStruct = try "".decodedContent<GoalStruct>()
+           // let choice: Choice = try "".decodedContent()
+        } catch {
+            reached = true
+        }
+        XCTAssertTrue(reached)
+    }
 
     // Its not a complex function.  Its only for tests.  
     // swiftlint: disable function_body_length

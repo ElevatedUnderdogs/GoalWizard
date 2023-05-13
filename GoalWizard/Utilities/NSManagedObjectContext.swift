@@ -10,23 +10,13 @@ import CoreData
 extension NSManagedObjectContext {
 
     var topGoal: Goal? {
-        let fetchRequest: NSFetchRequest<Goal> = Goal.fetchRequest()
-        fetchRequest.predicate = NSPredicate(format: "topGoal == %@", NSNumber(value: true))
         // Can't extract this into an extension because objective c can't
         // access associated generics in extensions.
-        do {
-            let goals = try fetch(fetchRequest)
-            if goals.count > 1 {
-                // Clear the goals, and then read from topGoal. 
-                print("TopGoalError.multipleTopGoals.localizedDescription")
-                return nil
-            }
-            return goals.first
-        } catch {
-            // Difficult to trigger, app crashes instead of throwing an error when attempting, not worth it for tests.
-            print("Failed to fetch top goal: \(error.localizedDescription)")
-            return nil
-        }
+        // Don't need to check for multiple because swiftlint rule protects.
+        // Difficult to trigger, app crashes instead of throwing an error when attempting, not worth it for tests.
+        // swiftlint: disable force_try
+        try! fetch(.topGoalRequest).first
+        // swiftlint: enable force_try
     }
 
     var goals: [Goal] {
@@ -37,21 +27,13 @@ extension NSManagedObjectContext {
         elements(entityName: "Goal")
     }
 
-    var deletedGoals: [Goal] {
-        allGoals.filter(\.isUserMarkedForDeletion)
-    }
-
     func elements<T: NSFetchRequestResult>(entityName: String) -> [T] {
         let request: NSFetchRequest<T> = NSFetchRequest<T>(entityName: entityName)
         // Can't extract this into an extension because objective c can't
         // access associated generics in extensions.
-        do {
-            return try fetch(request)
-        } catch {
-            // Difficult to trigger, app crashes instead of throwing an error when attempting, not worth it for tests.
-            print("Could not load data: \(error.localizedDescription)")
-            return []
-        }
+        // swiftlint: disable force_try
+        return try! fetch(request)
+        // swiftlint: enable force_try
     }
 
     @discardableResult
@@ -85,18 +67,23 @@ extension NSManagedObjectContext {
 
     func deleteGoal(atOffsets offsets: IndexSet, goal: Goal) {
         // This always succeeds, difficult to test.
-        let mutableSteps = goal.steps?.mutableCopy() as? NSMutableOrderedSet ?? NSMutableOrderedSet()
 
+        // steps automatically sets to empty set
+        // can't turn it nil for the life of me.
+        let mutableSteps = goal.steps!.mutableOrderedSet
         // it is better to delete from the back to front so that the indices don't shift while deleting.
         for index in offsets.sorted(by: >) {
-            guard let subGoal = mutableSteps.object(at: index) as? Goal else { continue }
+            // Ensure the index is within the range of mutableSteps
+            guard index >= 0, index < mutableSteps.count,
+                    let subGoal = mutableSteps.object(at: index) as? Goal else {
+                continue
+            }
             print(subGoal.title as Any)
             deleteGoal(goal: subGoal)
             mutableSteps.removeObject(at: index)
         }
 
-        goal.steps = mutableSteps.copy() as? NSOrderedSet
-        // still need to call save state.
+        goal.steps = NSOrderedSet(orderedSet: mutableSteps)
         saveHandleErrors()
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()

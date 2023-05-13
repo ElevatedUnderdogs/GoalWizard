@@ -11,12 +11,17 @@ import CoreData
 extension NSPersistentContainer {
 
     static var goalTable: NSPersistentContainer = {
-        let container = NSPersistentContainer(name: "Goal")
+        table(name: "Goal")
+    }()
+
+    static private func table(
+        name: String,
+        exposeError: (((any Error)?) -> Void)? = nil
+    ) -> NSPersistentContainer {
+        let container = NSPersistentContainer(name: name)
         container.loadPersistentStores { _, error in
-            guard let error = error as? NSError else { return }
-            // This is a difficult path to reach, if I make this loud, I will have to throw errors everywhere... 
-            fatalError("Unresolved error \(error), \(error.userInfo)")
+            exposeError?(error)
         }
         return container
-    }()
+    }
 }

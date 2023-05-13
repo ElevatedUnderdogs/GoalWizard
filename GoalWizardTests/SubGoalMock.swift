@@ -19,7 +19,7 @@ struct ErrorSubGoalMock: HasCallCodable {
         let invalidMessage = Message<T>(content: invalidContent, role: "user")
 
         do {
-            _ = try invalidMessage.decodedContent() as T
+            _ = try invalidMessage.content.decodedContent() as T
             action(nil)
         } catch {
             print("Error decoding content:", error.localizedDescription)

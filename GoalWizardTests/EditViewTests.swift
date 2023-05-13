@@ -69,6 +69,14 @@ class EditGoalViewTests: XCTestCase {
     }
 #endif
 
+    func testEdit() {
+        XCTAssertNoThrow(EditGoalView_Previews.previews)
+    }
+
+    func testExit() {
+        let editGoalView = EditGoalView(goal: .empty)
+        editGoalView.set(dayEstimate: "Cats")
+    }
 }
 
 #if canImport(UIKit)
@@ -108,7 +116,10 @@ fileprivate extension Goal {
         goal.progress = 0
         goal.progressPercentage = ""
         goal.steps = []
+        // its okay for tests. 
+        // swiftlint: disable disallow_topGoal_set_true
         goal.topGoal = true
+        // swiftlint: enable disallow_topGoal_set_true
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()
         return goal
