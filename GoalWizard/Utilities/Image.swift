@@ -51,16 +51,6 @@ extension Image {
             .aspectRatio(contentMode: .fit)
     }
 
-    static var openaiBolt: some View {
-        Image(systemName: "bolt.circle")
-            .resizable()
-            .scaledToFit()
-            .frame(width: 24, height: 24)
-            .aspectRatio(contentMode: .fit)
-            .foregroundColor(.green)
-            .padding()
-    }
-
     static var openaiWizard: some View {
         Image("goalWizardGenicon")
             .resizable()

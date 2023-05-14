@@ -83,7 +83,7 @@ struct EditGoalView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("Edit Goal Button")
+                        .accessibilityIdentifier("Edit Close Button")
 #else
                     Text("Close (Saved)")
                         .font(.headline)
@@ -91,7 +91,7 @@ struct EditGoalView: View {
                         .padding()
                         .frame(maxWidth: .infinity)
                     // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("Edit Goal Button")
+                        .accessibilityIdentifier("Edit Close Button")
 #endif
                 }
                 .padding(.top, 20)

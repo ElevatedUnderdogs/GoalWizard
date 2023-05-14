@@ -30,7 +30,7 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
-        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard(), navigationPath: .constant([]))
+        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -51,7 +51,7 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
-        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard(), navigationPath: .constant([]))
+        let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
@@ -100,8 +100,7 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let goalView = GoalView(
             goal: goal,
-            pasteBoard: GoalPasteBoard(),
-            navigationPath: .constant([])
+            pasteBoard: GoalPasteBoard()
         )
 
         let goal2: Goal = .empty
@@ -148,8 +147,7 @@ final class GoalViewTests: XCTestCase {
         // Initialize the GoalView with the non-topGoal
         let goalView: some View & TestableView = GoalView(
             goal: nonTopGoal,
-            pasteBoard: GoalPasteBoard(),
-            navigationPath: .constant([])
+            pasteBoard: GoalPasteBoard()
         )
         // Test that the goal in the GoalView is the same as the nonTopGoal you created
         XCTAssertEqual(goalView.model as? Goal, nonTopGoal)

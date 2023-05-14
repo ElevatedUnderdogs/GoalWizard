@@ -8,6 +8,7 @@
 import XCTest
 @testable import GoalWizard
 import CoreData
+import SwiftUI
 
 extension Goal {
 
@@ -213,6 +214,11 @@ fatalError("These tests should only run on a simulator, not on a physical device
         XCTAssertEqual(goal.subGoalCount, 0, goal.steps.goals.first?.title ?? "nil")
     }
 
+    func testPreview() {
+        _ = ContentView_Previews.previews
+
+    }
+
     func testIsCompleted() {
         let goal: Goal = .empty
         let text1 = "Become attorney"
@@ -414,10 +420,7 @@ class GptBuilderTests: XCTestCase {
 
     func testGptBuilder() {
         let goalTitle = "Sample Goal"
-        guard let request = gptBuilder(goalTitle) as? URLRequest else {
-            XCTFail("The builder is not returning a URLRequest.")
-            return
-        }
+        let request = URLRequest.gptBuilder(goalTitle)
 
         XCTAssertEqual(request.url, URL.gpt35Turbo)
         XCTAssertEqual(request.httpMethod, "POST")
