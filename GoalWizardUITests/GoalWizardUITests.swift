@@ -36,7 +36,6 @@ final class GoalWizardUITests: XCTestCase {
 #if canImport(UIKit)
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
 #endif
-
         clearAllCells()
     }
 
@@ -120,7 +119,8 @@ final class GoalWizardUITests: XCTestCase {
         goalListCollectionView.staticTexts[longString].tap()
         app.buttons["Edit"].tap()
 
-        let editTextField = app.textFields["EditGoalTextField"]
+        let editTextField = app.textViews["EditGoalTextField"]
+
         editTextField.tap()
 
         let longString2 = random4Char.joined()
@@ -130,8 +130,14 @@ final class GoalWizardUITests: XCTestCase {
 
         app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
         let swipableTexts = swipeableTexts
-        XCTAssertTrue(swipableTexts.contains(longString2))
-        XCTAssertFalse(swipableTexts.contains(longString))
+        XCTAssertTrue(
+            swipableTexts.contains(where: { $0.contains(longString2) }),
+            "longString: " + longString2 + swipableTexts.joined(separator: ",")
+        )
+        XCTAssertFalse(
+            swipableTexts.contains(longString),
+            "longString: " + longString + swipableTexts.joined(separator: ",")
+        )
     }
 
     func testEditEstimatedDays() {
@@ -168,17 +174,18 @@ final class GoalWizardUITests: XCTestCase {
             //  XCUIApplication().collectionViews["Goal List"].tap()
             goalList.staticTexts[rand4.joined()].tap()
             app.buttons["Edit"].tap()
-            app/*@START_MENU_TOKEN@*/.textFields["EditGoalTextField"]/*[[".otherElements[\"Edit Goal View\"]",".textFields[\"Edit goal\"]",".textFields[\"EditGoalTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
-            let rand2: [String] = random4Char
-            app/*@START_MENU_TOKEN@*/.textFields["EditGoalTextField"]/*[[".otherElements[\"Edit Goal View\"]",".textFields[\"Edit goal\"]",".textFields[\"EditGoalTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.typeText(rand2.joined())
+            app.textViews["EditGoalTextField"].tap()
+            let rand2: String = random4Char.joined()
+            app.textViews["EditGoalTextField"].typeText(rand2)
 
             app.buttons["Edit Close Button"].tap()
             app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
-            let bigger: String = [rand4[0], rand4[1], rand4[2]].joined() + rand2.joined()
+            let swipableTexts = swipeableTexts
             XCTAssertTrue(
-                goalList.staticTexts[bigger].exists ||
-                goalList.staticTexts[rand2.joined()].exists, "expected \(bigger), or \(rand2)"
+                swipableTexts.contains(where: { $0.contains(rand2) }),
+                "longString: " + rand2 + swipableTexts.joined(separator: ",")
             )
+
             XCTAssertFalse(goalList.staticTexts[rand4.joined()].exists)
         } else {
             // not worth it case.
@@ -250,7 +257,7 @@ final class GoalWizardUITests: XCTestCase {
             goalListCollectionView.staticTexts[eatMoreVegetables].tap()
             app.buttons["goalWizardGenicon"].tap()
             goalListCollectionView/*@START_MENU_TOKEN@*/.staticTexts["Research vegetable options"]/*[[".cells.staticTexts[\"Research vegetable options\"]",".staticTexts[\"Research vegetable options\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-            goalListCollectionView/*@START_MENU_TOKEN@*/.staticTexts["Look up different types of vegetables"]/*[[".cells.staticTexts[\"Look up different types of vegetables\"]",".staticTexts[\"Look up different types of vegetables\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            goalListCollectionView.staticTexts["Look up different types of vegetables"].tap()
         }
     }
 

@@ -63,11 +63,12 @@ struct EditGoalView: View {
                     .padding(.trailing)
                 }
 #endif
-                TextField("Edit goal", text: titleBinder)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    .lineLimit(0)
-                    .accessibilityIdentifier("EditGoalTextField")
+                MultiPlatformTextEditor(
+                    title: titleBinder,
+                    placeholder: "Edit goal",
+                    macOSAccessibility: "EditGoalTextField",
+                    iOSAccessibility: "EditGoalTextField"
+                )
                 TextField("", text: daysEstimateBinding)
                     .padding()
                     .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))

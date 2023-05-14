@@ -185,7 +185,7 @@ extension Goal {
     ///   - hasAsync: <#hasAsync description#>
     ///   - completion: <#completion description#>
     func gptAddSubGoals(
-        request: (_ text: String) -> HasCallCodable = URLRequest.gptBuilder,
+        request: (_ text: String) -> HasCallCodable = CommandLine.gptBuilder ?? URLRequest.gptBuilder,
         hasAsync: HasAsync = DispatchQueue.main,
         completion: @escaping ErrorAction
     ) {

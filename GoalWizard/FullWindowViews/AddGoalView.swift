@@ -35,29 +35,7 @@ struct AddGoalView: View {
                 }
             #endif
 
-            #if os(macOS)
-                TextField("Type your goal", text: $title)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    // This isn't word wrapping still
-                    .lineLimit(0)
-                    .accessibilityIdentifier("TitleTextField")
-            #else
-                VStack(alignment: .leading) {
-                    Text("Type your goal:")
-                        .foregroundColor(Color.gray)
-                    TextEditor(text: $title)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                        // This isn't word wrapping still
-                        .lineLimit(0)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .accessibilityIdentifier("TitleTextEditor")
-                }
-                #endif
+                MultiPlatformTextEditor(title: $title, placeholder: "Type your goal")
                 TextField("Days estimate (Default is 1 day)", text: $daysEstimate)
                     .padding()
                     // Same as the background color. blends.
@@ -89,7 +67,7 @@ struct AddGoalView: View {
                         .font(.headline)
                         .foregroundColor(.white)
                         .padding()
-                        .frame(maxWidth: .infinity)
+                         .frame(maxWidth: .infinity)
                        // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
                         .accessibilityIdentifier("AddGoalButton")
                     #endif
