@@ -185,7 +185,7 @@ extension Goal {
     ///   - hasAsync: <#hasAsync description#>
     ///   - completion: <#completion description#>
     func gptAddSubGoals(
-        request: (_ text: String) -> HasCallCodable = gptBuilder,
+        request: (_ text: String) -> HasCallCodable = URLRequest.gptBuilder,
         hasAsync: HasAsync = DispatchQueue.main,
         completion: @escaping ErrorAction
     ) {
@@ -198,14 +198,6 @@ extension Goal {
             }
         }
     }
-}
-
-fileprivate(set) var gptBuilder: (_ text: String) -> HasCallCodable = { goalTitle in
-    URLRequest.gpt35TurboChatRequest(
-        messages: .buildUserMessage(
-            content: .goalTreeFrom(goal: goalTitle)
-        )
-    )
 }
 
 // Provided in this file because of fileprivate computed properties.
