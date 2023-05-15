@@ -10,8 +10,8 @@ import SwiftUI
 struct MultiPlatformTextEditor: View {
     @Binding var title: String
     var placeholder: String
-    @State var macOSAccessibility: String = "TitleTextField"
-    @State var iOSAccessibility: String = "TitleTextEditor"
+    @State var macOSAccessibility: String
+    @State var iOSAccessibility: String
 
     var body: some View {
         #if os(macOS)

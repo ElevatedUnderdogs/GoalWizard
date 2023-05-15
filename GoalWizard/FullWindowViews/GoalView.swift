@@ -136,7 +136,8 @@ struct GoalView: View {
                                 Goal.context.updateGoal(
                                     goal: goal,
                                     title: goal.notOptionalTitle,
-                                    estimatedTime: goal.daysEstimate
+                                    estimatedTime: goal.daysEstimate,
+                                    importance: goal.importance
                                 )
                             }
                         Spacer()

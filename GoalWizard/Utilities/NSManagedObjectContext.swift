@@ -101,11 +101,13 @@ extension NSManagedObjectContext {
     func updateGoal(
         goal: Goal,
         title: String,
-        estimatedTime: Int64
+        estimatedTime: Int64,
+        importance: NSDecimalNumber?
     ) {
         // Modify the properties of the goal object
         goal.title = title
         goal.daysEstimate = estimatedTime
+        goal.importance = importance
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()
         saveHandleErrors()

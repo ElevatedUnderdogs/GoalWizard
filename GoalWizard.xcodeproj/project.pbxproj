@@ -8,6 +8,8 @@
 
 /* Begin PBXBuildFile section */
 		75111AD82A114814004441CB /* MultiPlatformTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75111AD72A114814004441CB /* MultiPlatformTextField.swift */; };
+		75111ADA2A11547C004441CB /* MultiPlatformActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75111AD92A11547C004441CB /* MultiPlatformActionButton.swift */; };
+		75111ADC2A115663004441CB /* NumberTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75111ADB2A115663004441CB /* NumberTextField.swift */; };
 		7513DE5829E8BC2300CB4468 /* MiscTestsForEdgeCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */; };
 		75296A0229E8C45F00C0A06C /* CustomViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75296A0129E8C45F00C0A06C /* CustomViewTests.swift */; };
 		754663242A0F694C003366FB /* GreenGlowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754663232A0F694C003366FB /* GreenGlowingText.swift */; };
@@ -78,6 +80,8 @@
 
 /* Begin PBXFileReference section */
 		75111AD72A114814004441CB /* MultiPlatformTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPlatformTextField.swift; sourceTree = "<group>"; };
+		75111AD92A11547C004441CB /* MultiPlatformActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPlatformActionButton.swift; sourceTree = "<group>"; };
+		75111ADB2A115663004441CB /* NumberTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberTextField.swift; sourceTree = "<group>"; };
 		7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscTestsForEdgeCases.swift; sourceTree = "<group>"; };
 		75296A0129E8C45F00C0A06C /* CustomViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewTests.swift; sourceTree = "<group>"; };
 		754663232A0F694C003366FB /* GreenGlowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreenGlowingText.swift; sourceTree = "<group>"; };
@@ -265,7 +269,6 @@
 				75C0B10329D7EEA900D886CA /* GoalView.swift */,
 				75C8B88429E4F18900493D9C /* GoalCell.swift */,
 				75C0B13329D8BACD00D886CA /* AddGoalView.swift */,
-				75111AD72A114814004441CB /* MultiPlatformTextField.swift */,
 				75C0B1EC29DA197400D886CA /* EditGoalView.swift */,
 			);
 			path = FullWindowViews;
@@ -274,6 +277,9 @@
 		75C0B1EE29DA3E0400D886CA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				75111AD72A114814004441CB /* MultiPlatformTextField.swift */,
+				75111AD92A11547C004441CB /* MultiPlatformActionButton.swift */,
+				75111ADB2A115663004441CB /* NumberTextField.swift */,
 				754663232A0F694C003366FB /* GreenGlowingText.swift */,
 				75C0B13F29D9223400D886CA /* ProgressBar.swift */,
 				75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */,
@@ -457,6 +463,7 @@
 				75C8B88129E3FBF400493D9C /* TestableHelpers.swift in Sources */,
 				7566A75F2A0F4FAA001FEF0E /* NSFetchRequest.swift in Sources */,
 				75C0B1F129DB947600D886CA /* Goal.xcdatamodeld in Sources */,
+				75111ADC2A115663004441CB /* NumberTextField.swift in Sources */,
 				75C8B7F129DCF96400493D9C /* NSManagedObjectContext.swift in Sources */,
 				75C0B12D29D7F2CF00D886CA /* Goal.swift in Sources */,
 				75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */,
@@ -471,6 +478,7 @@
 				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
 				75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */,
+				75111ADA2A11547C004441CB /* MultiPlatformActionButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

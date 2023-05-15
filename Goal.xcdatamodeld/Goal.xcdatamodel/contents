@@ -7,6 +7,7 @@
         <attribute name="estimatedCompletionDate" attributeType="String" defaultValueString="&quot;&quot;"/>
         <attribute name="forceUpdate" optional="YES" attributeType="String"/>
         <attribute name="id" attributeType="UUID" usesScalarValueType="NO"/>
+        <attribute name="importance" attributeType="Decimal" defaultValueString="1"/>
         <attribute name="isUserMarkedForDeletion" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="progress" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="progressPercentage" attributeType="String" defaultValueString="&quot;&quot;"/>

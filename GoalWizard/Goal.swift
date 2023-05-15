@@ -51,10 +51,12 @@ extension Goal {
         }
     }
 
+    /// The view is updating this when changing the estimates.
     public var notOptionalEstimatedCompletionDate: String {
         estimatedCompletionDate ?? "-"
     }
 
+    /// The view is updating this when changing the estimates.
     public var notOptionalProgressPercentage: String {
         progressPercentage ?? "-"
     }
@@ -232,6 +234,9 @@ extension [Goal] {
         let incompleteGoals = filteredGoals
             .filter { $0.progress < 1 }
             .sorted { lhs, rhs -> Bool in
+                if lhs.importance != rhs.importance {
+                    return (lhs.importance?.decimalValue ?? 1) > (rhs.importance?.decimalValue ?? 1)
+                }
                 if lhs.progress == rhs.progress {
                     return lhs.daysLeft < rhs.daysLeft
                 }

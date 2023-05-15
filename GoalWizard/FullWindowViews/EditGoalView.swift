@@ -20,23 +20,33 @@ struct EditGoalView: View {
         Goal.context.updateGoal(
             goal: goal,
             title: title,
-            estimatedTime: goal.daysEstimate
+            estimatedTime: goal.daysEstimate,
+            importance: goal.importance ?? 0
         )
     }
 
     func set(dayEstimate: String) {
-        // I can target this with a unit test passing a word "hello world".
         guard let intValue = Int64(dayEstimate) else { return }
         goal.daysEstimate = intValue
         Goal.context.updateGoal(
             goal: goal,
-            // I can target this with a unit test setting the goal title to nil
             title: goal.notOptionalTitle,
-            estimatedTime: goal.daysEstimate
+            estimatedTime: goal.daysEstimate,
+            importance: goal.importance ?? 0
         )
     }
 
-    // swiftlint: disable multiple_closures_with_trailing_closure
+    func set(importance: String) {
+        guard let decimal = importance.decimal?.number else { return }
+        goal.importance = decimal
+        Goal.context.updateGoal(
+            goal: goal,
+            title: goal.notOptionalTitle,
+            estimatedTime: goal.daysEstimate,
+            importance: goal.importance ?? 0
+        )
+    }
+
     var body: some View {
         let titleBinder = Binding<String>(
             get: { goal.notOptionalTitle },
@@ -44,8 +54,11 @@ struct EditGoalView: View {
         )
         let daysEstimateBinding: Binding<String> = Binding<String>(
             get: { String(goal.daysEstimate) },
-            // I can target this with an EditView ui test where I change the days estimate.
             set: { set(dayEstimate: $0) }
+        )
+        let importanceBinding: Binding<String> = Binding<String>(
+            get: { goal.importance.string },
+            set: { set(importance: $0) }
         )
         NavigationView {
             VStack {
@@ -69,34 +82,22 @@ struct EditGoalView: View {
                     macOSAccessibility: "EditGoalTextField",
                     iOSAccessibility: "EditGoalTextField"
                 )
-                TextField("", text: daysEstimateBinding)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    .modifier(NumberKeyboardModifier())
-                    .accessibilityIdentifier("DaysEstimateTextField")
-                Button(action: {
-                    dismiss()
-                }) {
-#if os(iOS)
-                    Text("Close (Saved)")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("Edit Close Button")
-#else
-                    Text("Close (Saved)")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                    // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("Edit Close Button")
-#endif
-                }
+                NumberTextField(
+                    placeholder: "",
+                    text: daysEstimateBinding,
+                    accessibilityIdentifier: "DaysEstimateTextField"
+                )
+                NumberTextField(
+                    placeholder: "Importance/Priority (Default is 1 day)",
+                    text: importanceBinding,
+                    accessibilityIdentifier: "ImportanceTextField"
+                )
+                MultiPlatformActionButton(
+                    title: "Close (Saved)",
+                    accessibilityId: "Edit Close Button",
+                    action: dismiss
+                )
                 .padding(.top, 20)
-
                 Spacer()
             }
             .padding(.horizontal)
@@ -108,7 +109,6 @@ struct EditGoalView: View {
             }.accessibilityIdentifier("DoneButton"))
 #endif
         }
-        // swiftlint: enable multiple_closures_with_trailing_closure
     }
 }
 
