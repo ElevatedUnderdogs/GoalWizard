@@ -21,7 +21,7 @@ struct EditGoalView: View {
             goal: goal,
             title: title,
             estimatedTime: goal.daysEstimate,
-            importance: goal.importance ?? 0
+            importance: goal.importance
         )
     }
 
@@ -32,18 +32,19 @@ struct EditGoalView: View {
             goal: goal,
             title: goal.notOptionalTitle,
             estimatedTime: goal.daysEstimate,
-            importance: goal.importance ?? 0
+            importance: goal.importance
         )
     }
 
     func set(importance: String) {
-        guard let decimal = importance.decimal?.number else { return }
-        goal.importance = decimal
+        guard importance.removedAllButFirstDecimal.decimal != nil else { return
+        }
+        goal.importance = importance
         Goal.context.updateGoal(
             goal: goal,
             title: goal.notOptionalTitle,
             estimatedTime: goal.daysEstimate,
-            importance: goal.importance ?? 0
+            importance: goal.importance
         )
     }
 
@@ -90,7 +91,8 @@ struct EditGoalView: View {
                 NumberTextField(
                     placeholder: "Importance/Priority (Default is 1 day)",
                     text: importanceBinding,
-                    accessibilityIdentifier: "ImportanceTextField"
+                    accessibilityIdentifier: "ImportanceTextField",
+                    hasDecimals: true
                 )
                 MultiPlatformActionButton(
                     title: "Close (Saved)",

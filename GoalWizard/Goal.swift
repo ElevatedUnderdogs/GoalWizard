@@ -84,10 +84,15 @@ extension Goal {
         steps.goals.count + steps.goals.reduce(0) { $0 + $1.subGoalCount }
     }
 
-    func addSuBGoal(title: String, estimatedTime: Int64) {
+    func addSuBGoal(
+        title: String,
+        estimatedTime: Int64,
+        importance: String
+    ) {
         Goal.context.createAndSaveGoal(
             title: title,
             estimatedTime: estimatedTime,
+            importance: importance,
             parent: self
         )
     }
@@ -235,7 +240,7 @@ extension [Goal] {
             .filter { $0.progress < 1 }
             .sorted { lhs, rhs -> Bool in
                 if lhs.importance != rhs.importance {
-                    return (lhs.importance?.decimalValue ?? 1) > (rhs.importance?.decimalValue ?? 1)
+                    return (lhs.importance?.decimal ?? 1) > (rhs.importance?.decimal ?? 1)
                 }
                 if lhs.progress == rhs.progress {
                     return lhs.daysLeft < rhs.daysLeft

@@ -49,13 +49,18 @@ struct AddGoalView: View {
                 NumberTextField(
                     placeholder: "Importance/Priority (Default is 1 day)",
                     text: $importance,
-                    accessibilityIdentifier: "ImportanceTextField"
+                    accessibilityIdentifier: "ImportanceTextField",
+                    hasDecimals: true
                 )
                 MultiPlatformActionButton(
                     title: "Add Goal",
                     accessibilityId: "AddGoalButton"
                 ) {
-                    parentGoal.addSuBGoal(title: title, estimatedTime: Int64(daysEstimate) ?? 1)
+                    parentGoal.addSuBGoal(
+                        title: title,
+                        estimatedTime: Int64(daysEstimate) ?? 1,
+                        importance: importance.removedAllButFirstDecimal
+                    )
                     presentationMode.wrappedValue.dismiss()
                 }
                 .padding(.top, 20)

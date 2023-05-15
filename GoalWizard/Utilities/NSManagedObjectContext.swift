@@ -40,6 +40,7 @@ extension NSManagedObjectContext {
     func createAndSaveGoal(
         title: String,
         estimatedTime: Int64 = 0,
+        importance: String = "1",
         isTopGoal: Bool = false,
         parent: Goal? = nil
     ) -> Goal {
@@ -51,7 +52,7 @@ extension NSManagedObjectContext {
         parent?.steps = parent?.steps?.addElement(newGoal)
         newGoal.title = title
         newGoal.daysEstimate = estimatedTime
-
+        newGoal.importance = importance
         newGoal.updateProgressUpTheTree()
         newGoal.updateCompletionDateUpTheTree()
         saveHandleErrors()
@@ -102,7 +103,7 @@ extension NSManagedObjectContext {
         goal: Goal,
         title: String,
         estimatedTime: Int64,
-        importance: NSDecimalNumber?
+        importance: String?
     ) {
         // Modify the properties of the goal object
         goal.title = title

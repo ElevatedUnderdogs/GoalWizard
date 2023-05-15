@@ -6,8 +6,23 @@
 //
 
 import Foundation
-
 extension String {
+
+    var removedAllButFirstDecimal: String {
+        var found: Bool = false
+        let chars = map {
+            if $0 == "." {
+                if found {
+                    return String.Element(" ")
+                } else {
+                    found = true
+                    return $0
+                }
+            }
+            return $0
+        }
+        return String(chars).replacingOccurrences(of: " ", with: "")
+    }
 
     func decodedContent<T: Codable>() throws -> T {
         // `data(using` is a StringProtocol method,

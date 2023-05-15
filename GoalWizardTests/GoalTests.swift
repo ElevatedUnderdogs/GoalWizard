@@ -313,7 +313,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
     func testAddSubGoalTitle() {
         let first = Goal.empty
         let buffer1 = String(describing: UUID())
-        first.addSuBGoal(title: buffer1, estimatedTime: 3)
+        first.addSuBGoal(title: buffer1, estimatedTime: 3, importance: "1")
         XCTAssertEqual(first.steps.goals.first?.title, buffer1)
         XCTAssertEqual(first.steps.goals.first?.daysEstimate, 3)
         clearGoals()

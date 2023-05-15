@@ -33,19 +33,17 @@ struct GoalView: View {
     }
 
     func delete(impcomplete offsets: IndexSet) {
-        deleteGoals(offsets: offsets, filteredGoals: filteredSteps.incomplete)
+        deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.incomplete)
     }
 
     func delete(complete offsets: IndexSet) {
-        deleteGoals(offsets: offsets, filteredGoals: filteredSteps.completed)
+        deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.completed)
     }
 
-    private func deleteGoals(offsets: IndexSet, filteredGoals: [Goal]) {
+    private func deleteGoalAtFirst(offsets: IndexSet, filteredGoals: [Goal]) {
+        // dishonest function, says goals, but only grabs the first offset.
         let goalMatch: Goal? = offsets.map { filteredGoals[$0] }.first
         let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
-        for index in stepIndicesTodelete {
-            assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
-        }
         Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
     }
 

@@ -304,6 +304,27 @@ final class GoalWizardUITests: XCTestCase {
         app.buttons["AddGoalButton"].tap()
     }
 
+    func testImportanceRating() {
+        
+        let app = XCUIApplication()
+        let addButtonButton = app/*@START_MENU_TOKEN@*/.buttons["Add Button"]/*[[".buttons[\"Add\"]",".buttons[\"Add Button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        addButtonButton.tap()
+        
+        let titletexteditorTextView = app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        titletexteditorTextView.tap()
+        
+        let addgoalbuttonButton = app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/
+        addgoalbuttonButton.tap()
+        addButtonButton.tap()
+        titletexteditorTextView.tap()
+        titletexteditorTextView.tap()
+        let importancetextfieldTextField = app/*@START_MENU_TOKEN@*/.textFields["ImportanceTextField"]/*[[".otherElements[\"Add Goal View\"]",".textFields[\"Importance\/Priority (Default is 1 day)\"]",".textFields[\"ImportanceTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/
+        importancetextfieldTextField.tap()
+        importancetextfieldTextField.tap()
+        addgoalbuttonButton.tap()
+        
+    }
+
     func testAddComplete3X() {
         let goalList = app.collectionViews["Goal List"]
 

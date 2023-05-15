@@ -49,7 +49,8 @@ struct GoalCell: View {
                             .foregroundColor(Color.systemCompatibleTeal)
                     }
                 }
-                if let importance = step.importance?.decimalValue, importance != 1 {
+                if let importance = step.importance?.decimal,
+                    importance != 1 {
                     HStack {
                         Text("Importance: \(importance.roundedTo(digit: 2).string)")
                             .font(.caption2)
