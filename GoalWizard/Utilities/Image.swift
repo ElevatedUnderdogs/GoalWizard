@@ -9,6 +9,18 @@ import SwiftUI
 
 extension Image {
 
+    static var flattened: some View {
+        Image(systemName: "arrow.down.to.line")
+            .standard()
+            .accessibilityIdentifier("Flattened button")
+    }
+
+    static var expand: some View {
+        Image(systemName: "rectangle.expand.vertical")
+            .standard()
+            .accessibilityIdentifier("Expand to tree")
+    }
+
     func standard(side: CGFloat = 24) -> some View {
         resizable()
         .frame(width: side, height: side)

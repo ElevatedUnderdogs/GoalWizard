@@ -37,8 +37,7 @@ struct EditGoalView: View {
     }
 
     func set(importance: String) {
-        guard importance.removedAllButFirstDecimal.decimal != nil else { return
-        }
+        guard importance.removedAllButFirstDecimal.decimal != nil else { return }
         goal.importance = importance
         Goal.context.updateGoal(
             goal: goal,

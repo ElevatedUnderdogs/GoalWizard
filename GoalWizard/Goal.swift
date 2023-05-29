@@ -205,7 +205,21 @@ extension Goal {
             }
         }
     }
+
+    /// Same as steps except cast to [Goal]
+    var subGoals: [Goal] {
+        steps.goals
+    }
+
+    var leaves: [Goal] {
+        isLeaf ? [self] : subGoals.flatMap(\.leaves)
+    }
+
+    var isLeaf: Bool {
+        steps.isEmpty != false
+    }
 }
+
 
 // Provided in this file because of fileprivate computed properties.
 extension [Goal] {
@@ -225,14 +239,24 @@ extension [Goal] {
         return Double(totalDays - daysLeft) / Double(totalDays)
     }
 
-    func filteredSteps(with searchText: String) -> (incomplete: [Goal], completed: [Goal]) {
+    func filteredSteps(with searchText: String, flatten: Bool) -> (incomplete: [Goal], completed: [Goal]) {
         let filteredGoals: [Goal]
 
         if searchText.isEmpty {
-            filteredGoals = Array(self)
+            if flatten {
+                filteredGoals = Array(self).leaves
+            } else {
+                filteredGoals = Array(self)
+            }
         } else {
-            filteredGoals = filter { goal in
-                goal.title?.lowercased().contains(searchText.lowercased()) == true
+            if flatten {
+                filteredGoals = filter { goal in
+                    goal.title?.lowercased().contains(searchText.lowercased()) == true
+                }.leaves
+            } else {
+                filteredGoals = filter { goal in
+                    goal.title?.lowercased().contains(searchText.lowercased()) == true
+                }
             }
         }
 
@@ -250,5 +274,9 @@ extension [Goal] {
 
         let completedGoals = filteredGoals.filter { $0.progress == 1 }
         return (incomplete: incompleteGoals, completed: completedGoals)
+    }
+
+    var leaves: Self {
+        flatMap(\.leaves)
     }
 }

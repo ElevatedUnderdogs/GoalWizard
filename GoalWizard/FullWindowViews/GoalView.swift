@@ -4,7 +4,6 @@
 //
 //  Created by Scott Lydon on 3/31/23.
 //
-
 import SwiftUI
 import CoreData
 import Callable
@@ -16,6 +15,7 @@ struct GoalView: View {
 
     @ObservedObject var goal: Goal
     @State var showSearchView = false
+    @State var flattened = false
     @State var searchText: String = ""
     @State var modifyState: ModifyState?
     @State var buttonState: ButtonState = .normal
@@ -29,13 +29,15 @@ struct GoalView: View {
     }
 
     var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
-        goal.steps.goals.filteredSteps(with: searchText)
+        goal.steps.goals.filteredSteps(with: searchText, flatten: flattened)
     }
 
+    // Top section
     func delete(impcomplete offsets: IndexSet) {
         deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.incomplete)
     }
 
+    // bottom section
     func delete(complete offsets: IndexSet) {
         deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.completed)
     }
@@ -65,6 +67,27 @@ struct GoalView: View {
 #endif
                     }
                     Spacer()
+                    if let count = goal.steps?.count, count > 0 {
+                        if flattened {
+                            Button(action: {
+                                flattened.toggle()
+                            }) {
+                                VStack {
+                                    Image.expand
+                                    Text("Expand")
+                                }
+                            }.buttonStyle(SkeuomorphicButtonStyle())
+                        } else {
+                            Button(action: {
+                                flattened.toggle()
+                            }) {
+                                VStack {
+                                    Image.flattened
+                                    Text("Flatten")
+                                }
+                            }.buttonStyle(SkeuomorphicButtonStyle())
+                        }
+                    }
 
                     if let pasteGoal = pasteBoard.cutGoal {
                         Button(action: {
