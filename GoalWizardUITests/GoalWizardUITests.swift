@@ -66,10 +66,14 @@ final class GoalWizardUITests: XCTestCase {
     }
 
     private func deleteCellWith(title: String) {
+        if title.lowercased() == "Flatten".lowercased() { return }
         if app.staticTexts[title].exists &&
             app.staticTexts[title].isHittable &&
             app.staticTexts.matching(identifier: title).count <= 1 {
             app.staticTexts[title].swipeLeft(velocity: .slow)
+        } else if app.collectionViews["Goal List"].otherElements["goal_cell_0"].exists &&
+            app.collectionViews["Goal List"].otherElements["goal_cell_0"].isHittable {
+                app.collectionViews["Goal List"].otherElements["goal_cell_0"].swipeLeft(velocity: .slow)
         } else {
             print(
                 """
@@ -150,6 +154,7 @@ final class GoalWizardUITests: XCTestCase {
             "There should be one that we added.")
         let goalListCollectionView = app.collectionViews["Goal List"]
         goalListCollectionView.staticTexts[longString].tap()
+
         app.buttons["Edit"].tap()
         let daysEstimateTextField = app.textFields["DaysEstimateTextField"]
         daysEstimateTextField.tap()
@@ -160,16 +165,39 @@ final class GoalWizardUITests: XCTestCase {
         XCTAssertNotEqual(firstEstimates, newEstimates)
     }
 
+    func testEditImportance() {
+        let longString = random4Char.joined()
+        returnAfterAdd(new: longString)
+
+        let firstEstimates = swipeableTexts.filter { $0.contains("Est") }
+        XCTAssertGreaterThan(
+            firstEstimates.count, 0,
+            "There should be one that we added.")
+        let goalListCollectionView = app.collectionViews["Goal List"]
+        goalListCollectionView.staticTexts[longString].tap()
+        app.buttons["Edit"].tap()
+
+        let importanceTextField = app.textFields["ImportanceTextField"]
+        importanceTextField.tap()
+        importanceTextField.typeText("7")
+        app.navigationBars["Edit goal"].buttons["DoneButton"].tap()
+        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+        let seven = swipeableTexts.filter { $0.contains("7") }
+        XCTAssertNotEqual(firstEstimates, seven)
+    }
+
+
+
     // swiftlint: disable line_length
     // if there are no cells, then add one, if there are any, change the first.
     func testAddEditGoal() {
         let goalList = app.collectionViews["Goal List"]
-        if goalList.staticTexts.count < 4 {
+        if goalList.staticTexts.count < 8 {
             app.buttons["Add"].tap()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(rand4.joined())
-            app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].typeText(rand4.joined())
+            app.buttons["AddGoalButton"].tap()
 
             //  XCUIApplication().collectionViews["Goal List"].tap()
             goalList.staticTexts[rand4.joined()].tap()
@@ -213,10 +241,10 @@ final class GoalWizardUITests: XCTestCase {
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 50 {
             app.buttons["Add"].tap()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(rand4.joined())
-            app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].typeText(rand4.joined())
+            app.buttons["AddGoalButton"].tap()
             XCTAssertTrue(app.staticTexts["0%"].exists)
             goalList.staticTexts[rand4.joined()].tap()
 
@@ -249,14 +277,14 @@ final class GoalWizardUITests: XCTestCase {
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 8 {
             app.buttons["Add"].tap()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].tap()
             let eatMoreVegetables: String = "Eat more vegetables"
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(eatMoreVegetables)
-            app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].typeText(eatMoreVegetables)
+            app.buttons["AddGoalButton"].tap()
             let goalListCollectionView = app.collectionViews["Goal List"]
             goalListCollectionView.staticTexts[eatMoreVegetables].tap()
             app.buttons["goalWizardGenicon"].tap()
-            goalListCollectionView/*@START_MENU_TOKEN@*/.staticTexts["Research vegetable options"]/*[[".cells.staticTexts[\"Research vegetable options\"]",".staticTexts[\"Research vegetable options\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            goalListCollectionView.staticTexts["Research vegetable options"].tap()
             goalListCollectionView.staticTexts["Look up different types of vegetables"].tap()
         }
     }
@@ -265,12 +293,12 @@ final class GoalWizardUITests: XCTestCase {
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 10 {
             app.buttons["Add"].tap()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].tap()
             let random: String = random4Char.joined()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(random)
-            app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].typeText(random)
+            app.buttons["AddGoalButton"].tap()
             app.staticTexts[random].tap()
-            app/*@START_MENU_TOKEN@*/.buttons["Home Button"]/*[[".buttons[\"Home\"]",".buttons[\"Home Button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.buttons["Home Button"].tap()
             XCTAssert(app.staticTexts["All Goals"].exists)
         }
     }
@@ -288,9 +316,9 @@ final class GoalWizardUITests: XCTestCase {
             XCTAssertTrue(app.staticTexts[second].exists)
             XCTAssertTrue(app.staticTexts[third].exists)
 
-            app/*@START_MENU_TOKEN@*/.buttons["Search Button"]/*[[".buttons[\"Search\"]",".buttons[\"Search Button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-            app/*@START_MENU_TOKEN@*/.textFields["Search TextField"]/*[[".textFields[\"Search\"]",".textFields[\"Search TextField\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-            app/*@START_MENU_TOKEN@*/.textFields["Search TextField"]/*[[".textFields[\"Search\"]",".textFields[\"Search TextField\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(first)
+            app.buttons["Search Button"].tap()
+            app.textFields["Search TextField"].tap()
+            app.textFields["Search TextField"].typeText(first)
             XCTAssertTrue(app.staticTexts[first].exists)
             XCTAssertFalse(app.staticTexts[second].exists)
             XCTAssertFalse(app.staticTexts[third].exists)
@@ -299,41 +327,83 @@ final class GoalWizardUITests: XCTestCase {
 
     func returnAfterAdd(new: String) {
         app.buttons["Add"].tap()
-        app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-        app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(new)
+        app.textViews["TitleTextEditor"].tap()
+        app.textViews["TitleTextEditor"].typeText(new)
         app.buttons["AddGoalButton"].tap()
     }
 
     func testImportanceRating() {
         
         let app = XCUIApplication()
-        let addButtonButton = app/*@START_MENU_TOKEN@*/.buttons["Add Button"]/*[[".buttons[\"Add\"]",".buttons[\"Add Button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let addButtonButton = app.buttons["Add Button"]
         addButtonButton.tap()
         
-        let titletexteditorTextView = app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/
+        let titletexteditorTextView = app.textViews["TitleTextEditor"]
         titletexteditorTextView.tap()
         
-        let addgoalbuttonButton = app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/
+        let addgoalbuttonButton = app.buttons["AddGoalButton"]
         addgoalbuttonButton.tap()
         addButtonButton.tap()
         titletexteditorTextView.tap()
         titletexteditorTextView.tap()
-        let importancetextfieldTextField = app/*@START_MENU_TOKEN@*/.textFields["ImportanceTextField"]/*[[".otherElements[\"Add Goal View\"]",".textFields[\"Importance\/Priority (Default is 1 day)\"]",".textFields[\"ImportanceTextField\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/
+        let importancetextfieldTextField = app.textFields["ImportanceTextField"]
         importancetextfieldTextField.tap()
         importancetextfieldTextField.tap()
         addgoalbuttonButton.tap()
         
     }
 
+    /// When I fix the cell tap always navigating error, then this will need to be fixed. 
+    func testTreeFlattenPathLong() {
+        let goalList = app.collectionViews["Goal List"]
+
+        if goalList.staticTexts.count < 8 {
+            app.buttons["Add"].tap()
+            app.textViews["TitleTextEditor"].tap()
+            let rand4: [String] = random4Char
+            app.textViews["TitleTextEditor"].typeText(rand4.joined())
+            app.buttons["AddGoalButton"].tap()
+            let goalListCollectionView = app.collectionViews["Goal List"]
+            goalListCollectionView.staticTexts[rand4.joined()].tap()
+            let app = XCUIApplication()
+
+            for newGoal in ["Second", "Third"] {
+                app.buttons["Add Button"].tap()
+                let textEditor = app.textViews["TitleTextEditor"]
+                textEditor.tap()
+                textEditor.typeText(newGoal)
+                app.buttons["AddGoalButton"].tap()
+                app.collectionViews["Goal List"].staticTexts[newGoal].tap()
+            }
+            let backButton = app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"]
+            backButton.tap()
+            backButton.tap()
+            backButton.tap()
+            if app.buttons["Flattened button"].exists {
+                app.buttons["Flattened button"].tap()
+            }
+            goalList.children(matching: .cell).element(boundBy: 1).buttons["All Goals...Second"].tap()
+            backButton.tap()
+            XCTAssertTrue(goalList.buttons["All Goals->\n\(rand4.joined())->\nSecond"].exists)
+            goalList.buttons["All Goals->\n\(rand4.joined())->\nSecond"].tap()
+            backButton.tap()
+            XCTAssertTrue(goalList.buttons["All Goals...Second"].exists)
+        } else {
+            XCTFail("you might not be clearing cells properly")
+        }
+    }
+
+
+
     func testAddComplete3X() {
         let goalList = app.collectionViews["Goal List"]
 
         if goalList.staticTexts.count < 8 {
             app.buttons["Add"].tap()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(rand4.joined())
-            app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].typeText(rand4.joined())
+            app.buttons["AddGoalButton"].tap()
             let goalListCollectionView = app.collectionViews["Goal List"]
             goalListCollectionView.staticTexts[rand4.joined()].tap()
             let circleImage = app.images["circle"]
@@ -367,23 +437,23 @@ final class GoalWizardUITests: XCTestCase {
 
         if goalList.staticTexts.count < 8 {
             app.buttons["Add"].tap()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(rand4.joined())
-            app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].typeText(rand4.joined())
+            app.buttons["AddGoalButton"].tap()
 
             let goalListCollectionView = app.collectionViews["Goal List"]
             goalListCollectionView.staticTexts[rand4.joined()].tap()
-            app/*@START_MENU_TOKEN@*/.buttons["Add Button"]/*[[".buttons[\"Add\"]",".buttons[\"Add Button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.buttons["Add Button"].tap()
 
             let rand42: [String] = random4Char
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
-            app/*@START_MENU_TOKEN@*/.textViews["TitleTextEditor"]/*[[".otherElements[\"Add Goal View\"].textViews[\"TitleTextEditor\"]",".textViews[\"TitleTextEditor\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.typeText(rand42.joined())
-            app/*@START_MENU_TOKEN@*/.buttons["AddGoalButton"]/*[[".otherElements[\"Add Goal View\"]",".buttons[\"Add Goal\"]",".buttons[\"AddGoalButton\"]"],[[[-1,2],[-1,1],[-1,0,1]],[[-1,2],[-1,1]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.textViews["TitleTextEditor"].tap()
+            app.textViews["TitleTextEditor"].typeText(rand42.joined())
+            app.buttons["AddGoalButton"].tap()
             goalListCollectionView.staticTexts[rand42.joined()].tap()
-            app/*@START_MENU_TOKEN@*/.buttons["cut Button"]/*[[".buttons[\"scissors.circle.fill\"]",".buttons[\"cut Button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.buttons["cut Button"].tap()
             app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
-            app/*@START_MENU_TOKEN@*/.buttons["paste Button"]/*[[".buttons[\"Paste, Asfd...\"]",".buttons[\"paste Button\"]"],[[[-1,1],[-1,0]]],[0]]@END_MENU_TOKEN@*/.tap()
+            app.buttons["paste Button"].tap()
             XCTAssertTrue(goalListCollectionView.staticTexts[rand42.joined()].exists)
         } else {
             // not worth it case.

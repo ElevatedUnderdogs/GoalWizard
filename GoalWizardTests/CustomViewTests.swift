@@ -30,7 +30,13 @@ struct GoalCellWrapper: View {
     var index: Int
 
     var body: some View {
-        GoalCell(step: $goal, searchText: searchText, index: index, pasteBoard: GoalPasteBoard())
+        GoalCell(
+            step: $goal,
+            pathPresentation: nil,
+            searchText: searchText,
+            index: index,
+            pasteBoard: GoalPasteBoard()
+        )
     }
 }
 

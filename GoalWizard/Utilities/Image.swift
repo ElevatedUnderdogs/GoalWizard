@@ -15,8 +15,8 @@ extension Image {
             .accessibilityIdentifier("Flattened button")
     }
 
-    static var expand: some View {
-        Image(systemName: "rectangle.expand.vertical")
+    static var tree: some View {
+        Image(systemName: "arrow.triangle.branch")
             .standard()
             .accessibilityIdentifier("Expand to tree")
     }

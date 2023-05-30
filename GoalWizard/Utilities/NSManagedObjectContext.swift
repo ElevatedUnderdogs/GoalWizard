@@ -91,7 +91,7 @@ extension NSManagedObjectContext {
     }
 
     func deleteGoal(goal: Goal) {
-        goal.steps.goals.forEach { step in
+        goal.subGoals.forEach { step in
             deleteGoal(goal: step)
         }
         // still need to call save state

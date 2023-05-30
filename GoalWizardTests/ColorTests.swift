@@ -10,7 +10,7 @@ import SnapshotTesting
 @testable import GoalWizard
 
 extension Color {
-    func toCGColor() -> CGColor? {
+    var cgColor: CGColor? {
         #if canImport(UIKit)
         return UIColor(self).cgColor
         #elseif canImport(AppKit)
@@ -26,31 +26,33 @@ extension CGColor {
         guard let components = components, components.count >= 3 else {
             return nil
         }
-        let red = Int(components[0] * 255)
-        let green = Int(components[1] * 255)
-        let blue = Int(components[2] * 255)
-        return String(format: "#%02X%02X%02X", red, green, blue)
+        return String(
+            format: "#%02X%02X%02X",
+            Int(components[0] * 255),
+            Int(components[1] * 255),
+            Int(components[2] * 255)
+        )
     }
 }
 
 class ColorTests: XCTestCase {
     func testSystemGray6() {
-        let color = Color.systemGray6
-        XCTAssertEqual(color.toCGColor()?.hexString, "#000000")
+        XCTAssertEqual(Color.systemGray6.cgColor?.hexString, "#000000")
     }
 
     func testSystemCompatibleTeal() {
-        let color = Color.systemCompatibleTeal
-        XCTAssertEqual(color.toCGColor()?.hexString, "#2FB0C7")
+        XCTAssertEqual(Color.systemCompatibleTeal.cgColor?.hexString, "#2FB0C7")
     }
 
     func testSystemCompatibleBlue() {
-        let color = Color.systemCompatibleBlue
-        XCTAssertEqual(color.toCGColor()?.hexString, "#007AFE")
+        XCTAssertEqual(Color.systemCompatibleBlue.cgColor?.hexString, "#007AFE")
     }
 
     func testGoalGreen() {
-        let color = Color.goalGreen
-        XCTAssertEqual(color.toCGColor()?.hexString, "#33C758")
+        XCTAssertEqual(Color.goalGreen.cgColor?.hexString, "#33C758")
+    }
+
+    func testHierarchyPink() {
+        XCTAssertEqual(Color.hierarchyPink.cgColor?.hexString, "#FE989E")
     }
 }

@@ -103,7 +103,7 @@ class FilteredStepsTests: XCTestCase {
         let goals: [Goal] = [goal1, goal2, goal3]
 
         let searchText = "Goal"
-        var filteredSteps = goals.filteredSteps(with: searchText)
+        var filteredSteps = goals.filteredSteps(with: searchText, flatten: false)
 
         XCTAssertEqual(filteredSteps.incomplete.count, 2)
         XCTAssertEqual(filteredSteps.completed.count, 0)
@@ -119,7 +119,7 @@ class FilteredStepsTests: XCTestCase {
         goal2.add(sub: goal4) // 2/3
 
         print(goal2.progress, goal1.progress)
-        filteredSteps = goals.filteredSteps(with: searchText)
+        filteredSteps = goals.filteredSteps(with: searchText, flatten: false)
         XCTAssertEqual(filteredSteps.incomplete.first, goal2)
         XCTAssertEqual(filteredSteps.incomplete.last, goal1)
     }

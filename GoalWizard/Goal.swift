@@ -10,6 +10,31 @@ import CoreData
 
 extension Goal {
 
+    /// From most original ancestor to least.
+    var ancestors: [Goal] {
+        var result: [Goal] = []
+        var parent: Goal? = parent
+        while let notNilParent = parent {
+            result.append(notNilParent)
+            parent = notNilParent.parent
+        }
+        return result.reversed()
+    }
+
+    var fullAncestorPath: String {
+        if let first = ancestors.first, let last = ancestors.last {
+            return first === last ? first.notOptionalTitle : ancestors.map(\.notOptionalTitle).joined(separator: "->\n")
+        }
+        return ""
+    }
+
+    var shortenedAncesterPath: String {
+        if let first = ancestors.first, let last = ancestors.last {
+            return first === last ? first.notOptionalTitle : first.notOptionalTitle + "..." + last.notOptionalTitle
+        }
+        return ""
+    }
+
     var closedDates: [Date] {
         get {
             closedDatesObject as? [Date] ?? []

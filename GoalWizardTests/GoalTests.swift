@@ -19,7 +19,7 @@ extension Goal {
             if currentGoal.title == title {
                 return currentGoal
             } else {
-                queue.append(contentsOf: currentGoal.steps.goals)
+                queue.append(contentsOf: currentGoal.subGoals)
             }
         }
         return nil
@@ -56,7 +56,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
             hasAsync: RightNow(),
             completion: { error in
                 XCTAssertNil(error)
-                XCTAssertTrue(self.goal.steps.goals.count > 0)
+                XCTAssertTrue(self.goal.subGoals.count > 0)
             }
         )
         let savedGoals = Goal.context.goals
@@ -78,7 +78,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
             request: { _ in ErrorSubGoalMock() },
             hasAsync: RightNow(),
             completion: { _ in
-                XCTAssertEqual(self.goal.steps.goals.count, 0)
+                XCTAssertEqual(self.goal.subGoals.count, 0)
             }
         )
         let savedGoals = Goal.context.goals
@@ -131,6 +131,38 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
     func testThisFirst() {
         clearGoals()
+    }
+
+    func testGoalAncestors() {
+        let first: Goal = .start
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        second.add(sub: third)
+        XCTAssertEqual(
+            third.ancestors,
+            [first, second],
+            "third.ancestors.titles: \(third.ancestors.map(\.notOptionalTitle))"
+        )
+    }
+
+    func testAncestorStringOneElement() {
+        let first = Goal.start
+        first.title = "first"
+        var second = Goal.empty
+        second.title = "second"
+        first.add(sub: second)
+        XCTAssertEqual(second.fullAncestorPath, "first")
+        XCTAssertEqual(second.shortenedAncesterPath, "first")
+    }
+
+    func testAncestorStringEmpty() {
+        let first = Goal.start
+        XCTAssertEqual(first.fullAncestorPath, "")
+        XCTAssertEqual(first.shortenedAncesterPath, "")
     }
 
     func testClosedDates() {
@@ -211,7 +243,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let text2 = ""
         goal2.title = text2
         goal.add(sub: goal2)
-        XCTAssertEqual(goal.subGoalCount, 0, goal.steps.goals.first?.title ?? "nil")
+        XCTAssertEqual(goal.subGoalCount, 0, goal.subGoals.first?.title ?? "nil")
     }
 
     func testPreview() {
@@ -271,7 +303,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let second = Goal.empty
         second.notOptionalTitle = buffer2
         first.add(sub: second)
-        XCTAssertEqual(first.steps.goals.first?.title, buffer2)
+        XCTAssertEqual(first.subGoals.first?.title, buffer2)
         clearGoals()
     }
 
@@ -282,7 +314,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let second = Goal.empty
         second.title = buffer
         first.add(sub: second)
-        XCTAssertEqual(first.steps.goals.first?.title, second.title)
+        XCTAssertEqual(first.subGoals.first?.title, second.title)
         clearGoals()
     }
 
@@ -305,7 +337,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
             goal.title == buffer1
         }
         let bufferSet: Set<String> = [buffer2, buffer3]
-        let subGoalTitles: Set<String> = Set(firstFromContext?.steps.goals.map(\.notOptionalTitle) ?? [])
+        let subGoalTitles: Set<String> = Set(firstFromContext?.subGoals.map(\.notOptionalTitle) ?? [])
         XCTAssertEqual(bufferSet, subGoalTitles)
         clearGoals()
     }
@@ -314,8 +346,8 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let first = Goal.empty
         let buffer1 = String(describing: UUID())
         first.addSuBGoal(title: buffer1, estimatedTime: 3, importance: "1")
-        XCTAssertEqual(first.steps.goals.first?.title, buffer1)
-        XCTAssertEqual(first.steps.goals.first?.daysEstimate, 3)
+        XCTAssertEqual(first.subGoals.first?.title, buffer1)
+        XCTAssertEqual(first.subGoals.first?.daysEstimate, 3)
         clearGoals()
     }
 

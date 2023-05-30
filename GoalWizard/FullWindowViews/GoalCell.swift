@@ -8,8 +8,18 @@
 import SwiftUI
 import CommonExtensions
 
+enum PathPresentation {
+    case full
+    case partial
+}
+
 struct GoalCell: View {
     @Binding var step: Goal
+    @State var pathPresentation: PathPresentation? {
+        didSet {
+            print("set path to: \(pathPresentation)")
+        }
+    }
     let searchText: String
     let index: Int
     var pasteBoard: GoalPasteBoard
@@ -17,6 +27,33 @@ struct GoalCell: View {
     var body: some View {
         HStack { // <--- Do I need this?
             VStack {
+                if let presentation = pathPresentation, !step.fullAncestorPath.isEmpty {
+                    switch presentation {
+                    case .full:
+                        Button {
+                            pathPresentation = .partial
+                        } label: {
+                            HStack {
+                                Text(step.fullAncestorPath)
+                                    .font(.caption2)
+                                    .foregroundColor(Color.hierarchyPink)
+                                Spacer()
+                            }
+                        }
+                    case .partial:
+                        Button {
+                            pathPresentation = .full
+                        } label: {
+                            HStack {
+                                Text(step.shortenedAncesterPath)
+                                    .font(.caption2)
+                                    .foregroundColor(Color.hierarchyPink)
+                                Spacer()
+                            }
+                        }
+                    }
+                }
+
                 HStack {
                     if searchText.isEmpty {
                         Text("\(index + 1).").font(.title2)
@@ -73,6 +110,12 @@ struct GoalCell: View {
 
 struct GoalCell_Previews: PreviewProvider {
     static var previews: some View {
-        GoalCell(step: .constant(.start), searchText: "", index: 2, pasteBoard: GoalPasteBoard())
+        GoalCell(
+            step: .constant(.start),
+            pathPresentation: nil,
+            searchText: "",
+            index: 2,
+            pasteBoard: GoalPasteBoard()
+        )
     }
 }

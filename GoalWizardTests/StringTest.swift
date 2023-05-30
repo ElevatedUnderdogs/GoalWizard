@@ -12,6 +12,12 @@ import SwiftUI
 
 class StringTextCase: XCTestCase {
 
+    func testRemovedAllButFirstDecimal() {
+        XCTAssertEqual("...".removedAllButFirstDecimal, ".")
+        XCTAssertEqual("10.09".removedAllButFirstDecimal, "10.09")
+        XCTAssertEqual("95.34.6.4".removedAllButFirstDecimal, "95.3464")
+    }
+
     func testDecodingError() {
 
         struct TestCodable: Codable {

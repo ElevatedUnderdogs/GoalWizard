@@ -60,7 +60,7 @@ class NSManagedObjectContextTests: XCTestCase {
             goal: empty
         )
         XCTAssertEqual(empty.steps?.count, 1)
-        XCTAssertEqual(empty.steps.goals.first?.notOptionalTitle, "Goal 1")
+        XCTAssertEqual(empty.subGoals.first?.notOptionalTitle, "Goal 1")
     }
 }
 

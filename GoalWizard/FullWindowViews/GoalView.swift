@@ -8,7 +8,6 @@ import SwiftUI
 import CoreData
 import Callable
 import CommonExtensions
-import Foundation
 import Dispatch
 
 struct GoalView: View {
@@ -29,7 +28,7 @@ struct GoalView: View {
     }
 
     var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
-        goal.steps.goals.filteredSteps(with: searchText, flatten: flattened)
+        goal.subGoals.filteredSteps(with: searchText, flatten: flattened)
     }
 
     // Top section
@@ -45,7 +44,7 @@ struct GoalView: View {
     private func deleteGoalAtFirst(offsets: IndexSet, filteredGoals: [Goal]) {
         // dishonest function, says goals, but only grabs the first offset.
         let goalMatch: Goal? = offsets.map { filteredGoals[$0] }.first
-        let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
+        let stepIndicesTodelete = IndexSet(goal.subGoals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
         Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
     }
 
@@ -73,8 +72,8 @@ struct GoalView: View {
                                 flattened.toggle()
                             }) {
                                 VStack {
-                                    Image.expand
-                                    Text("Expand")
+                                    Image.tree
+                                    Text("Tree")
                                 }
                             }.buttonStyle(SkeuomorphicButtonStyle())
                         } else {
@@ -141,7 +140,7 @@ struct GoalView: View {
                         .fontWeight(.bold)
                         .padding(.top)
 
-                } else if goal.steps.goals.isEmpty {
+                } else if goal.subGoals.isEmpty {
                     HStack(alignment: .center) {
                         Text(goal.notOptionalTitle)
                             .font(.largeTitle)
@@ -229,6 +228,7 @@ struct GoalView: View {
                                 // Tap a goal cell in the incompleted section (needs a completed)
                                 GoalCell(
                                     step: .constant(step),
+                                    pathPresentation: flattened ? .partial : nil,
                                     searchText: searchText,
                                     index: index,
                                     // passed for navigation from the cell.
@@ -254,6 +254,7 @@ struct GoalView: View {
                                 // tap a goal cell in the completed section.
                                 GoalCell(
                                     step: .constant(step),
+                                    pathPresentation: flattened ? .partial : nil,
                                     searchText: searchText,
                                     index: index,
                                     pasteBoard: pasteBoard
