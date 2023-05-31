@@ -245,7 +245,6 @@ extension Goal {
     }
 }
 
-
 // Provided in this file because of fileprivate computed properties.
 extension [Goal] {
 

@@ -159,6 +159,62 @@ fatalError("These tests should only run on a simulator, not on a physical device
         XCTAssertEqual(second.shortenedAncesterPath, "first")
     }
 
+    func testGoalsFilter() {
+        let first: Goal = .empty
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        let second2: Goal = .empty
+        second2.title = "second2"
+        second2.importance = "5"
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        first.add(sub: third)
+        first.add(sub: second2)
+        let (incomplete, complete) = first.subGoals.filteredSteps(with: "second", flatten: true)
+        XCTAssertEqual(incomplete.map(\.notOptionalTitle), ["second2", "second"])
+        XCTAssertEqual(complete.map(\.notOptionalTitle), [])
+    }
+
+    func testGoalsFilternil() {
+        let first: Goal = .empty
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        second.importance = "5"
+        let second2: Goal = .empty
+        second2.title = "second2"
+        second2.importance = nil
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        first.add(sub: third)
+        first.add(sub: second2)
+        let (incomplete, complete) = first.subGoals.filteredSteps(with: "second", flatten: true)
+        XCTAssertEqual(incomplete.map(\.notOptionalTitle), ["second", "second2"])
+        XCTAssertEqual(complete.map(\.notOptionalTitle), [])
+    }
+
+    func testGoalsFilternil2() {
+        let first: Goal = .empty
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        second.importance = nil
+        let second2: Goal = .empty
+        second2.title = "second2"
+        second2.importance = "5"
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        first.add(sub: third)
+        first.add(sub: second2)
+        let (incomplete, complete) = first.subGoals.filteredSteps(with: "second", flatten: true)
+        XCTAssertEqual(incomplete.map(\.notOptionalTitle), ["second2", "second"])
+        XCTAssertEqual(complete.map(\.notOptionalTitle), [])
+    }
+
     func testAncestorStringEmpty() {
         let first = Goal.start
         XCTAssertEqual(first.fullAncestorPath, "")

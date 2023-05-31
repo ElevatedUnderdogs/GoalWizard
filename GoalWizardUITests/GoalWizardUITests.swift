@@ -7,6 +7,7 @@
 
 import XCTest
 
+// swiftlint: disable type_body_length
 final class GoalWizardUITests: XCTestCase {
 
     var app: XCUIApplication!
@@ -117,7 +118,7 @@ final class GoalWizardUITests: XCTestCase {
 
     func testEditTitleDays() {
         let longString = random4Char.joined()
-        returnAfterAdd(new: longString)
+        add(new: longString)
 
         let goalListCollectionView = app.collectionViews["Goal List"]
         goalListCollectionView.staticTexts[longString].tap()
@@ -146,7 +147,7 @@ final class GoalWizardUITests: XCTestCase {
 
     func testEditEstimatedDays() {
         let longString = random4Char.joined()
-        returnAfterAdd(new: longString)
+        add(new: longString)
 
         let firstEstimates = swipeableTexts.filter { $0.contains("Est") }
         XCTAssertGreaterThan(
@@ -167,7 +168,7 @@ final class GoalWizardUITests: XCTestCase {
 
     func testEditImportance() {
         let longString = random4Char.joined()
-        returnAfterAdd(new: longString)
+        add(new: longString)
 
         let firstEstimates = swipeableTexts.filter { $0.contains("Est") }
         XCTAssertGreaterThan(
@@ -185,8 +186,6 @@ final class GoalWizardUITests: XCTestCase {
         let seven = swipeableTexts.filter { $0.contains("7") }
         XCTAssertNotEqual(firstEstimates, seven)
     }
-
-
 
     // swiftlint: disable line_length
     // if there are no cells, then add one, if there are any, change the first.
@@ -307,11 +306,11 @@ final class GoalWizardUITests: XCTestCase {
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 10 {
             let first = random4Char.joined()
-            returnAfterAdd(new: first)
+            add(new: first)
             let second = random4Char.joined()
-            returnAfterAdd(new: second)
+            add(new: second)
             let third = random4Char.joined()
-            returnAfterAdd(new: third)
+            add(new: third)
             XCTAssertTrue(app.staticTexts[first].exists)
             XCTAssertTrue(app.staticTexts[second].exists)
             XCTAssertTrue(app.staticTexts[third].exists)
@@ -325,22 +324,22 @@ final class GoalWizardUITests: XCTestCase {
         }
     }
 
-    func returnAfterAdd(new: String) {
+    func add(new: String, returnAfter: Bool = true) {
         app.buttons["Add"].tap()
         app.textViews["TitleTextEditor"].tap()
         app.textViews["TitleTextEditor"].typeText(new)
-        app.buttons["AddGoalButton"].tap()
+        if returnAfter {
+            app.buttons["AddGoalButton"].tap()
+        }
     }
+    
 
     func testImportanceRating() {
-        
         let app = XCUIApplication()
         let addButtonButton = app.buttons["Add Button"]
         addButtonButton.tap()
-        
         let titletexteditorTextView = app.textViews["TitleTextEditor"]
         titletexteditorTextView.tap()
-        
         let addgoalbuttonButton = app.buttons["AddGoalButton"]
         addgoalbuttonButton.tap()
         addButtonButton.tap()
@@ -350,7 +349,6 @@ final class GoalWizardUITests: XCTestCase {
         importancetextfieldTextField.tap()
         importancetextfieldTextField.tap()
         addgoalbuttonButton.tap()
-        
     }
 
     /// When I fix the cell tap always navigating error, then this will need to be fixed. 
@@ -393,7 +391,52 @@ final class GoalWizardUITests: XCTestCase {
         }
     }
 
+    func tapBackButton() {
+        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+    }
 
+    /// Goes to new goal
+    func addGoalDepth(text: String) {
+        add(new: text)
+        app.staticTexts[text].tap()
+    }
+
+    func testEditMiddleGoal() {
+        let first = random4Char.joined()
+        let second = random4Char.joined()
+        let third = random4Char.joined()
+
+        addGoalDepth(text: first)
+        addGoalDepth(text: second)
+        addGoalDepth(text: third)
+        tapBackButton()
+        app.buttons["Edit"].tap()
+        XCTAssertTrue(swipeableTexts.contains(where: { $0.contains(second) }))
+    }
+
+    func testTapExpandFlattenCompleted() {
+        let first = random4Char.joined()
+        add(new: first)
+        let second = random4Char.joined()
+        add(new: second)
+        app.staticTexts[second].tap()
+        let third = random4Char.joined()
+        add(new: third)
+        app.collectionViews["Goal List"].staticTexts[third].tap()
+        app.images["circle"].tap()
+
+        tapBackButton()
+        tapBackButton()
+
+        app.buttons["Flattened button"].tap()
+
+        let goalListCollectionView = app.collectionViews["Goal List"]
+        goalListCollectionView.buttons["All Goals...\(second)"].tap()
+        tapBackButton()
+        XCTAssertTrue(goalListCollectionView.buttons["All Goals->\n\(second)"].exists)
+        app.buttons["Expand to tree"].tap()
+        XCTAssertTrue(app.collectionViews["Goal List"].staticTexts[second].exists)
+    }
 
     func testAddComplete3X() {
         let goalList = app.collectionViews["Goal List"]
@@ -476,3 +519,4 @@ final class GoalWizardUITests: XCTestCase {
     }
 }
 // swiftlint: enable line_length
+// swiftlint: enable type_body_length
