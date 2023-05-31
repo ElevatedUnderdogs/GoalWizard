@@ -8,7 +8,7 @@ import XCTest
 @testable import GoalWizard
 
 class URLTests: XCTestCase {
-    
+
     func testStaticURLs() {
         XCTAssertEqual(URL.davinci, URL(string: "https://api.openai.com/v1/engines/davinci/completions")!)
         XCTAssertEqual(URL.gpt35Turbo, URL(string: "https://api.openai.com/v1/chat/completions")!)

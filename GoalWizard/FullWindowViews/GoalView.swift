@@ -4,45 +4,51 @@
 //
 //  Created by Scott Lydon on 3/31/23.
 //
-
 import SwiftUI
 import CoreData
 import Callable
 import CommonExtensions
-import Foundation
 import Dispatch
 
 struct GoalView: View {
-    
+
     @ObservedObject var goal: Goal
     @State var showSearchView = false
+    @State var flattened = false
     @State var searchText: String = ""
-    @State var modifyState: ModifyState? = nil
+    @State var modifyState: ModifyState?
     @State var buttonState: ButtonState = .normal
-    @EnvironmentObject var pasteBoard: GoalPasteBoard
+    private(set) var pasteBoard: GoalPasteBoard
     @Environment(\.presentationMode) var presentationMode
 
+    // Add an initializer that accepts a Goal and a GoalPasteBoard
+    init(goal: Goal, pasteBoard: GoalPasteBoard) {
+        self.goal = goal
+        self.pasteBoard = pasteBoard
+    }
+
     var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
-        goal.steps.goals.filteredSteps(with: searchText)
+        goal.subGoals.filteredSteps(with: searchText, flatten: flattened)
     }
 
+    // Top section
     func delete(impcomplete offsets: IndexSet) {
-        deleteGoals(offsets: offsets, filteredGoals: filteredSteps.incomplete)
+        deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.incomplete)
     }
 
+    // bottom section
     func delete(complete offsets: IndexSet) {
-        deleteGoals(offsets: offsets, filteredGoals: filteredSteps.completed)
+        deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.completed)
     }
 
-    private func deleteGoals(offsets: IndexSet, filteredGoals: [Goal]) {
+    private func deleteGoalAtFirst(offsets: IndexSet, filteredGoals: [Goal]) {
+        // dishonest function, says goals, but only grabs the first offset.
         let goalMatch: Goal? = offsets.map { filteredGoals[$0] }.first
-        let stepIndicesTodelete = IndexSet(goal.steps.goals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
-        for index in stepIndicesTodelete {
-            assert((goal.steps?.object(at: index) as? Goal)?.title == goalMatch?.title)
-        }
+        let stepIndicesTodelete = IndexSet(goal.subGoals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
         Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
     }
 
+    // swiftlint: disable multiple_closures_with_trailing_closure
     var body: some View {
         VersionBasedNavigationStack {
             VStack {
@@ -54,16 +60,33 @@ struct GoalView: View {
                             // Tap home button.
                             print("home")
                         }) {
-                            Image(systemName: "house.fill")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .aspectRatio(contentMode: .fit)
-                                .accessibilityIdentifier("Home Button")
+                            Image.house
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
 #endif
                     }
                     Spacer()
+                    if let count = goal.steps?.count, count > 0 {
+                        if flattened {
+                            Button(action: {
+                                flattened.toggle()
+                            }) {
+                                VStack {
+                                    Image.tree
+                                    Text("Tree")
+                                }
+                            }.buttonStyle(SkeuomorphicButtonStyle())
+                        } else {
+                            Button(action: {
+                                flattened.toggle()
+                            }) {
+                                VStack {
+                                    Image.flattened
+                                    Text("Flatten")
+                                }
+                            }.buttonStyle(SkeuomorphicButtonStyle())
+                        }
+                    }
 
                     if let pasteGoal = pasteBoard.cutGoal {
                         Button(action: {
@@ -71,20 +94,19 @@ struct GoalView: View {
                             goal.add(sub: pasteGoal)
                             pasteBoard.cutGoal = nil
                         }) {
-
                             // paste mode.
                             HStack {
                                 VStack {
                                     Text("Paste").font(.footnote)
-                                    if let name = pasteBoard.cutGoal?.notOptionalTitle.components(separatedBy: " ").first {
+                                    if let name = pasteBoard
+                                        .cutGoal?
+                                        .notOptionalTitle
+                                        .components(separatedBy: " ")
+                                        .first {
                                         Text(name + "...").font(.footnote)
                                     }
                                 }
-                                Image(systemName: "doc.on.clipboard.fill")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .aspectRatio(contentMode: .fit)
-                                    .accessibilityIdentifier("Search Button")
+                                Image.paste
                             }
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
@@ -92,18 +114,10 @@ struct GoalView: View {
 
                         // cutmode == true and goal is not topGoal.
                         Button(action: {
-
-                            pasteBoard.cutGoal = goal
-                            goal.isUserMarkedForDeletion = true
-                            goal.parent = nil
+                            pasteBoard.cutGoal = goal.cutOut()
                             presentationMode.wrappedValue.dismiss()
-
                         }) {
-                            Image(systemName: "scissors.circle.fill")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .aspectRatio(contentMode: .fit)
-                                .accessibilityIdentifier("Search Button")
+                            Image.cut
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
                     }
@@ -111,23 +125,11 @@ struct GoalView: View {
                         // Tap the search view button.
                         showSearchView.toggle()
                     }) {
-                        Image(systemName: "magnifyingglass")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .aspectRatio(contentMode: .fit)
-                            .accessibilityIdentifier("Search Button")
+                        Image.search
                     }
                     .buttonStyle(SkeuomorphicButtonStyle())
 
-                    Button(action: {
-                        modifyState = .add
-                    }) {
-                        Image(systemName: "plus.circle.fill")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .aspectRatio(contentMode: .fit)
-                            .accessibilityIdentifier("Add Button")
-                    }
+                    Button(action: { modifyState = .add }) { Image.add }
                     .buttonStyle(SkeuomorphicButtonStyle())
                 }
                 .padding(.horizontal)
@@ -138,7 +140,7 @@ struct GoalView: View {
                         .fontWeight(.bold)
                         .padding(.top)
 
-                } else if goal.steps.goals.isEmpty {
+                } else if goal.subGoals.isEmpty {
                     HStack(alignment: .center) {
                         Text(goal.notOptionalTitle)
                             .font(.largeTitle)
@@ -154,42 +156,25 @@ struct GoalView: View {
                                 Goal.context.updateGoal(
                                     goal: goal,
                                     title: goal.notOptionalTitle,
-                                    estimatedTime: goal.daysEstimate
+                                    estimatedTime: goal.daysEstimate,
+                                    importance: goal.importance
                                 )
                             }
                         Spacer()
                             .frame(width: 20)
-                        Button(action: {
-                            modifyState = .edit
-                        }) {
-                            Image(systemName: "pencil.circle")
-                                .resizable()
-                                .frame(width: 24, height: 24)
-                                .aspectRatio(contentMode: .fit)
-                        }
+                        Button(action: { modifyState = .edit }) { Image.edit }
                         if buttonState == .normal {
                             // Make a ui test for this and record the response!.
                             Button(action: {
                                 buttonState = .loading
-                                goal.gptAddSubGoals { error in
+                                goal.gptAddSubGoals { _ in
                                     buttonState = .hidden
                                 }
                             }) {
 #if os(macOS)
-                                Image(systemName: "bolt.circle")
-                                    .resizable()
-                                    .scaledToFit()
-                                    .frame(width: 24, height: 24)
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.green)
-                                    .padding()
+                                Image.openaiBolt
 #else
-                                Image("goalWizardGenicon")
-                                    .resizable()
-                                    .cornerRadius(15)
-                                    .frame(width: 35, height: 30)
-                                    .aspectRatio(contentMode: .fit)
-                                    .foregroundColor(.green)
+                                Image.openaiWizard
 #endif
                             }
 #if os(macOS)
@@ -212,14 +197,7 @@ struct GoalView: View {
                                 .fontWeight(.bold)
                                 .padding(.top)
                             Spacer()
-                            Button(action: {
-                                modifyState = .edit
-                            }) {
-                                Image(systemName: "pencil.circle")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .aspectRatio(contentMode: .fit)
-                            }
+                            Button(action: { modifyState = .edit }) { Image.edit }
                             Spacer()
                                 .frame(width: 20)
                         }
@@ -228,7 +206,7 @@ struct GoalView: View {
                                 .frame(height: 20)
                                 .padding(.leading, 20)
                                 .padding(.trailing, 10)
-                            Text(goal.progressPercentage ?? "")
+                            Text(goal.notOptionalProgressPercentage)
                                 .padding(.trailing, 10)
                         }
                     }
@@ -248,11 +226,20 @@ struct GoalView: View {
                                     id: \.1.id
                             ) { index, step in
                                 // Tap a goal cell in the incompleted section (needs a completed)
-                                GoalCell(step: .constant(step), searchText: searchText, index: index)
-                                    .accessibilityIdentifier("goal_cell_\(index)")
+                                GoalCell(
+                                    step: .constant(step),
+                                    pathPresentation: flattened ? .partial : nil,
+                                    searchText: searchText,
+                                    index: index,
+                                    // passed for navigation from the cell.
+                                    pasteBoard: pasteBoard
+                                )
+                                .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
-                                // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
+                                // Might not be worth it, swipe to delete keeps
+                                // failing in unit tests. perhaps there is a
+                                // apple provided method for swiping the first cell to the left.
                                 delete(impcomplete: indexSet)
                             }
                         }
@@ -265,11 +252,19 @@ struct GoalView: View {
                                     id: \.1.id
                             ) { index, step in
                                 // tap a goal cell in the completed section.
-                                GoalCell(step: .constant(step), searchText: searchText, index: index)
-                                    .accessibilityIdentifier("goal_cell_\(index)")
+                                GoalCell(
+                                    step: .constant(step),
+                                    pathPresentation: flattened ? .partial : nil,
+                                    searchText: searchText,
+                                    index: index,
+                                    pasteBoard: pasteBoard
+                                )
+                                .accessibilityIdentifier("goal_cell_\(index)")
                             }
                             .onDelete { indexSet in
-                                // Might not be worth it, swipe to delete keeps failing in unit tests. perhaps there is a apple provided method for swiping the first cell to the left.
+                                // Might not be worth it, swipe to delete keeps
+                                // failing in unit tests. perhaps there is a apple
+                                // provided method for swiping the first cell to the left.
                                 delete(complete: indexSet)
                             }
                         }
@@ -303,12 +298,13 @@ struct GoalView: View {
             .frame(minWidth: 200, maxWidth: 250)
 #endif
         }
+        // swiftlint: enable multiple_closures_with_trailing_closure
     }
 }
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         // I can reach this with a GoalView ui test.
-        GoalView(goal: Goal.start)
+        GoalView(goal: Goal.start, pasteBoard: GoalPasteBoard())
     }
 }

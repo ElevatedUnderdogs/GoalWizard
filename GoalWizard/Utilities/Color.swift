@@ -19,6 +19,10 @@ extension Color {
         Color("systemGray6")
     }
 
+    static var hierarchyPink: Color {
+        Color(red: 255/255, green: 152/255, blue: 158/255)
+    }
+
     static var systemCompatibleTeal: Color {
 #if os(macOS)
         return Color(NSColor.systemTeal)

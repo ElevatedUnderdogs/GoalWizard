@@ -12,7 +12,6 @@ import CommonExtensions
 import Foundation
 import Dispatch
 
-
 enum ModifyState: Int, Identifiable {
     case edit, add
     var id: Int { rawValue }
@@ -24,7 +23,6 @@ struct GoalStruct: Codable {
     let daysEstimate: Int
     let steps: [GoalStruct]
 }
-
 
 struct OpenAIResponse<T: Codable>: Codable {
     let choices: [Choice<T>]
@@ -44,13 +42,8 @@ struct Choice<T: Codable>: Codable {
 struct Message<T: Codable>: Codable {
     let content: String
     let role: String
-
-    func decodedContent() throws -> T {
-        guard let data = content.data(using: .utf8) else {
-            // This is a difficult path to run, if there is an issue the whole struct should have failed to decode/initialize
-            throw OpenAIError.invalidResponse
-        }
-        return try JSONDecoder().decode(T.self, from: data)
+    var contentT: T? {
+        try? content.decodedContent()
     }
 }
 
@@ -112,10 +105,8 @@ struct Step: Codable {
     let subdaysEstimate: Int
 }
 
-
 enum ButtonState {
     case normal
     case loading
     case hidden
 }
-

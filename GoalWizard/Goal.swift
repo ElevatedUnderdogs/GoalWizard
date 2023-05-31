@@ -10,6 +10,51 @@ import CoreData
 
 extension Goal {
 
+    /// From most original ancestor to least.
+    var ancestors: [Goal] {
+        var result: [Goal] = []
+        var parent: Goal? = parent
+        while let notNilParent = parent {
+            result.append(notNilParent)
+            parent = notNilParent.parent
+        }
+        return result.reversed()
+    }
+
+    var fullAncestorPath: String {
+        if let first = ancestors.first, let last = ancestors.last {
+            return first === last ? first.notOptionalTitle : ancestors.map(\.notOptionalTitle).joined(separator: "->\n")
+        }
+        return ""
+    }
+
+    var shortenedAncesterPath: String {
+        if let first = ancestors.first, let last = ancestors.last {
+            return first === last ? first.notOptionalTitle : first.notOptionalTitle + "..." + last.notOptionalTitle
+        }
+        return ""
+    }
+
+    var closedDates: [Date] {
+        get {
+            closedDatesObject as? [Date] ?? []
+        }
+        set {
+            closedDatesObject = newValue as NSObject
+            willChangeValue(forKey: "closedDatesObject")
+        }
+    }
+
+    var completedDates: [Date] {
+        get {
+            completedDatesObject as? [Date] ?? []
+        }
+        set {
+            completedDatesObject = newValue as NSObject
+            willChangeValue(forKey: "completedDatesObject")
+        }
+    }
+
     static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
 
     var goalForRequest: String {
@@ -31,10 +76,22 @@ extension Goal {
         }
     }
 
+    /// The view is updating this when changing the estimates.
+    public var notOptionalEstimatedCompletionDate: String {
+        estimatedCompletionDate ?? "-"
+    }
+
+    /// The view is updating this when changing the estimates.
+    public var notOptionalProgressPercentage: String {
+        progressPercentage ?? "-"
+    }
+
     static var empty: Goal {
         let newGoal = Goal(context: Goal.context)
         newGoal.isUserMarkedForDeletion = false
         newGoal.timeStamp = Date()
+        newGoal.closedDatesObject = [Date]() as NSObject
+        newGoal.completedDatesObject = [Date]() as NSObject
         newGoal.estimatedCompletionDate = ""
         newGoal.id = UUID()
         newGoal.thisCompleted = false
@@ -52,22 +109,35 @@ extension Goal {
         steps.goals.count + steps.goals.reduce(0) { $0 + $1.subGoalCount }
     }
 
-    func addSuBGoal(title: String, estimatedTime: Int64) {
+    func addSuBGoal(
+        title: String,
+        estimatedTime: Int64,
+        importance: String
+    ) {
         Goal.context.createAndSaveGoal(
             title: title,
             estimatedTime: estimatedTime,
+            importance: importance,
             parent: self
         )
     }
 
+    func cutOut() -> Goal {
+        isUserMarkedForDeletion = true
+        updateProgressUpTheTree()
+        updateCompletionDateUpTheTree()
+        // You must update the tree before attaching from it!
+        parent = nil
+        Goal.context.saveHandleErrors()
+        return self
+    }
+
     func add(sub goal: Goal) {
-        guard goal.title != nil && goal.title != "" else {
-            return 
-        }
+        guard goal.title != nil && goal.title != "" else { return }
         goal.parent = self
-        // We can force assign the steps to nil and then add a step. 
-        steps = steps?.addElement(goal) ?? []
-        try! Goal.context.save()
+        // We can't force assign this to nil, this always defaults to empty set.
+        steps = steps!.addElement(goal)
+        Goal.context.saveHandleErrors()
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
     }
@@ -77,13 +147,14 @@ extension Goal {
         steps = steps?.addElements(subGoals)
         updateProgressUpTheTree()
         updateCompletionDateUpTheTree()
-        try! Goal.context.save()
+        Goal.context.saveHandleErrors()
     }
 
     static var start: Goal {
-        Goal.context.topGoal ?? Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
+        Goal.context.topGoal ??
+        Goal.context.createAndSaveGoal(title: "All Goals", isTopGoal: true)
     }
-    
+
     public override func didChangeValue(forKey key: String) {
         super.didChangeValue(forKey: key)
         if key == "daysEstimate" || key == "thisCompleted" {
@@ -110,11 +181,11 @@ extension Goal {
     }
 
     func updateProgressUpTheTree() {
-        var up: Goal = self
+        var upward: Goal = self
         updateProgressProperties()
-        while let next = up.parent {
-            up = next
-            up.updateProgressProperties()
+        while let next = upward.parent {
+            upward = next
+            upward.updateProgressProperties()
         }
     }
 
@@ -132,11 +203,11 @@ extension Goal {
     }
 
     func updateCompletionDateUpTheTree() {
-        var up: Goal = self
+        var upward: Goal = self
         updateCompletionDateProperties()
-        while let next = up.parent {
-            up = next
-            up.updateCompletionDateProperties()
+        while let next = upward.parent {
+            upward = next
+            upward.updateCompletionDateProperties()
         }
     }
 
@@ -146,27 +217,32 @@ extension Goal {
     ///   - hasAsync: <#hasAsync description#>
     ///   - completion: <#completion description#>
     func gptAddSubGoals(
-        request: (_ text: String) -> HasCallCodable = gptBuilder,
+        request: (_ text: String) -> HasCallCodable = URLRequest.gptBuilder,
         hasAsync: HasAsync = DispatchQueue.main,
         completion: @escaping ErrorAction
     ) {
         request(notOptionalTitle).callCodable(expressive: false) { (response: OpenAIResponse<Choices>?) in
             hasAsync.async { [weak self] in
-                // The decodedContent always succeeds because it was converted from data and back to it. 
-                let newGoals = (try? response?.choices.first?.message.decodedContent().goals ?? []) ?? []
+                // The decodedContent always succeeds because it was converted from data and back to it.
+                let newGoals: [Goal] = response?.choices.first?.message.contentT?.goals ?? []
                 self?.add(subGoals: newGoals)
                 completion(nil)
             }
         }
     }
-}
 
-fileprivate(set) var gptBuilder: (_ text: String) -> HasCallCodable = { goalTitle in
-    URLRequest.gpt35TurboChatRequest(
-        messages: .buildUserMessage(
-            content: .goalTreeFrom(goal: goalTitle)
-        )
-    )
+    /// Same as steps except cast to [Goal]
+    var subGoals: [Goal] {
+        steps.goals
+    }
+
+    var leaves: [Goal] {
+        isLeaf ? [self] : subGoals.flatMap(\.leaves)
+    }
+
+    var isLeaf: Bool {
+        steps.isEmpty != false
+    }
 }
 
 // Provided in this file because of fileprivate computed properties.
@@ -181,25 +257,39 @@ extension [Goal] {
     }
 
     var progress: Double {
-        // Set the total days to steps as 0, just 1 step with 0 estimatedDays force assign it, then read the progress from the list.
+        // Set the total days to steps as 0, just 1 step
+        // with 0 estimatedDays force assign it, then read the progress from the list.
         guard totalDays > 0 else { return 0 }
         return Double(totalDays - daysLeft) / Double(totalDays)
     }
 
-    func filteredSteps(with searchText: String) -> (incomplete: [Goal], completed: [Goal]) {
+    func filteredSteps(with searchText: String, flatten: Bool) -> (incomplete: [Goal], completed: [Goal]) {
         let filteredGoals: [Goal]
 
         if searchText.isEmpty {
-            filteredGoals = Array(self)
+            if flatten {
+                filteredGoals = Array(self).leaves
+            } else {
+                filteredGoals = Array(self)
+            }
         } else {
-            filteredGoals = filter { goal in
-                goal.title?.lowercased().contains(searchText.lowercased()) == true
+            if flatten {
+                filteredGoals = filter { goal in
+                    goal.title?.lowercased().contains(searchText.lowercased()) == true
+                }.leaves
+            } else {
+                filteredGoals = filter { goal in
+                    goal.title?.lowercased().contains(searchText.lowercased()) == true
+                }
             }
         }
 
         let incompleteGoals = filteredGoals
             .filter { $0.progress < 1 }
             .sorted { lhs, rhs -> Bool in
+                if lhs.importance != rhs.importance {
+                    return (lhs.importance?.decimal ?? 1) > (rhs.importance?.decimal ?? 1)
+                }
                 if lhs.progress == rhs.progress {
                     return lhs.daysLeft < rhs.daysLeft
                 }
@@ -208,5 +298,9 @@ extension [Goal] {
 
         let completedGoals = filteredGoals.filter { $0.progress == 1 }
         return (incomplete: incompleteGoals, completed: completedGoals)
+    }
+
+    var leaves: Self {
+        flatMap(\.leaves)
     }
 }

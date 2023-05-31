@@ -18,10 +18,11 @@ class CoreDataTests: XCTestCase {
 
     func testSaveState() {
         // Test for successful save
-    //    XCTAssertNoThrow(context.saveState())
+        // XCTAssertNoThrow(context.saveState())
 
         // Test for error handling
-        // Intentionally cause an error, e.g., by using an invalid object or configuration, and then test for the error type
+        // Intentionally cause an error, e.g., by using an
+        // invalid object or configuration, and then test for the error type
     }
 
     func testGoalTableLoad() {
@@ -72,7 +73,6 @@ class GoalTests2: XCTestCase {
         XCTAssertEqual(parentGoal.steps?.count, 1)
     }
 
-
     func testIsCompleted() {
 
         let goal = Goal.empty
@@ -92,7 +92,6 @@ class GoalArrayTests: XCTestCase {
     }
 }
 
-
 class FilteredStepsTests: XCTestCase {
     func testFilteredSteps() {
         let goal1 = Goal.empty
@@ -104,7 +103,7 @@ class FilteredStepsTests: XCTestCase {
         let goals: [Goal] = [goal1, goal2, goal3]
 
         let searchText = "Goal"
-        var filteredSteps = goals.filteredSteps(with: searchText)
+        var filteredSteps = goals.filteredSteps(with: searchText, flatten: false)
 
         XCTAssertEqual(filteredSteps.incomplete.count, 2)
         XCTAssertEqual(filteredSteps.completed.count, 0)
@@ -120,7 +119,7 @@ class FilteredStepsTests: XCTestCase {
         goal2.add(sub: goal4) // 2/3
 
         print(goal2.progress, goal1.progress)
-        filteredSteps = goals.filteredSteps(with: searchText)
+        filteredSteps = goals.filteredSteps(with: searchText, flatten: false)
         XCTAssertEqual(filteredSteps.incomplete.first, goal2)
         XCTAssertEqual(filteredSteps.incomplete.last, goal1)
     }

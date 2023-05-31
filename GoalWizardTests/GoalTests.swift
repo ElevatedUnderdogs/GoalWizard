@@ -8,6 +8,7 @@
 import XCTest
 @testable import GoalWizard
 import CoreData
+import SwiftUI
 
 extension Goal {
 
@@ -18,23 +19,22 @@ extension Goal {
             if currentGoal.title == title {
                 return currentGoal
             } else {
-                queue.append(contentsOf: currentGoal.steps.goals)
+                queue.append(contentsOf: currentGoal.subGoals)
             }
         }
         return nil
     }
 }
 
-
-
-
 class GoalTestsGptapi: XCTestCase {
     var goal: Goal!
 
     override func setUp() {
         super.setUp()
-#if !targetEnvironment(simulator)
+#if os(iOS)
+    #if !targetEnvironment(simulator)
 fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
 #endif
         clearGoals()
         goal = Goal.empty
@@ -51,10 +51,14 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
     func testGptAddSubGoalsSuccess() {
         let initialGoalCount = Goal.context.goals.count
-        goal.gptAddSubGoals(request: { _ in SubGoalMock() }, hasAsync: RightNow()) { error in
-            XCTAssertNil(error)
-            XCTAssertTrue(self.goal.steps.goals.count > 0)
-        }
+        goal.gptAddSubGoals(
+            request: { _ in SubGoalMock() },
+            hasAsync: RightNow(),
+            completion: { error in
+                XCTAssertNil(error)
+                XCTAssertTrue(self.goal.subGoals.count > 0)
+            }
+        )
         let savedGoals = Goal.context.goals
         // Check that the goal count has not changed
         XCTAssertNotEqual(savedGoals.count, initialGoalCount)
@@ -70,9 +74,13 @@ fatalError("These tests should only run on a simulator, not on a physical device
 
     func testGptAddSubGoalsFailure() {
         let initialGoalCount = Goal.context.goals.count
-        goal.gptAddSubGoals(request: { _ in ErrorSubGoalMock() }, hasAsync: RightNow()) { error in
-            XCTAssertEqual(self.goal.steps.goals.count, 0)
-        }
+        goal.gptAddSubGoals(
+            request: { _ in ErrorSubGoalMock() },
+            hasAsync: RightNow(),
+            completion: { _ in
+                XCTAssertEqual(self.goal.subGoals.count, 0)
+            }
+        )
         let savedGoals = Goal.context.goals
 
         // Check that the goal count has not changed
@@ -104,13 +112,15 @@ extension XCTestCase {
     }
 }
 
-
+// swiftlint: disable type_body_length
 final class GoalTests: XCTestCase {
 
     override class func setUp() {
         super.setUp()
-#if !targetEnvironment(simulator)
+#if os(iOS)
+    #if !targetEnvironment(simulator)
 fatalError("These tests should only run on a simulator, not on a physical device.")
+#endif
 #endif
     }
 
@@ -123,6 +133,165 @@ fatalError("These tests should only run on a simulator, not on a physical device
         clearGoals()
     }
 
+    func testGoalAncestors() {
+        let first: Goal = .start
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        second.add(sub: third)
+        XCTAssertEqual(
+            third.ancestors,
+            [first, second],
+            "third.ancestors.titles: \(third.ancestors.map(\.notOptionalTitle))"
+        )
+    }
+
+    func testAncestorStringOneElement() {
+        let first = Goal.start
+        first.title = "first"
+        var second = Goal.empty
+        second.title = "second"
+        first.add(sub: second)
+        XCTAssertEqual(second.fullAncestorPath, "first")
+        XCTAssertEqual(second.shortenedAncesterPath, "first")
+    }
+
+    func testGoalsFilter() {
+        let first: Goal = .empty
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        let second2: Goal = .empty
+        second2.title = "second2"
+        second2.importance = "5"
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        first.add(sub: third)
+        first.add(sub: second2)
+        let (incomplete, complete) = first.subGoals.filteredSteps(with: "second", flatten: true)
+        XCTAssertEqual(incomplete.map(\.notOptionalTitle), ["second2", "second"])
+        XCTAssertEqual(complete.map(\.notOptionalTitle), [])
+    }
+
+    func testGoalsFilternil() {
+        let first: Goal = .empty
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        second.importance = "5"
+        let second2: Goal = .empty
+        second2.title = "second2"
+        second2.importance = nil
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        first.add(sub: third)
+        first.add(sub: second2)
+        let (incomplete, complete) = first.subGoals.filteredSteps(with: "second", flatten: true)
+        XCTAssertEqual(incomplete.map(\.notOptionalTitle), ["second", "second2"])
+        XCTAssertEqual(complete.map(\.notOptionalTitle), [])
+    }
+
+    func testGoalsFilternil2() {
+        let first: Goal = .empty
+        first.title = "first"
+        let second: Goal = .empty
+        second.title = "second"
+        second.importance = nil
+        let second2: Goal = .empty
+        second2.title = "second2"
+        second2.importance = "5"
+        let third: Goal = .empty
+        third.title = "third"
+        first.add(sub: second)
+        first.add(sub: third)
+        first.add(sub: second2)
+        let (incomplete, complete) = first.subGoals.filteredSteps(with: "second", flatten: true)
+        XCTAssertEqual(incomplete.map(\.notOptionalTitle), ["second2", "second"])
+        XCTAssertEqual(complete.map(\.notOptionalTitle), [])
+    }
+
+    func testAncestorStringEmpty() {
+        let first = Goal.start
+        XCTAssertEqual(first.fullAncestorPath, "")
+        XCTAssertEqual(first.shortenedAncesterPath, "")
+    }
+
+    func testClosedDates() {
+        let testDates = [Date(), Date().addingTimeInterval(3600), Date().addingTimeInterval(7200)]
+        let goal: Goal = .start
+        goal.closedDates = testDates
+        XCTAssertEqual(goal.closedDates, testDates, "Closed dates should match what was set")
+    }
+
+    func testCompletedDates() {
+        let testDates = [Date(), Date().addingTimeInterval(3600), Date().addingTimeInterval(7200)]
+        let goal: Goal = .start
+        goal.completedDates = testDates
+        XCTAssertEqual(goal.completedDates, testDates, "Completed dates should match what was set")
+    }
+
+    func testEmptyDates() {
+        let goal = Goal.empty
+        goal.completedDatesObject = nil
+        goal.closedDatesObject = nil
+        XCTAssertEqual(goal.closedDates, [])
+        XCTAssertEqual(goal.completedDates, [])
+    }
+
+    func testNotOptionalEstimatedCompletionDate() {
+        let goal = Goal.empty
+         goal.estimatedCompletionDate = nil
+         XCTAssertEqual(goal.notOptionalEstimatedCompletionDate, "-")
+     }
+
+     func testNotOptionalProgressPercentage() {
+         let goal = Goal.empty
+         goal.progressPercentage = nil
+         XCTAssertEqual(goal.notOptionalProgressPercentage, "-")
+     }
+
+     func testAddSubGoalWithEmptyTitle() {
+         let goal = Goal.empty
+         let subGoal = Goal.empty
+         subGoal.title = ""
+         goal.add(sub: subGoal)
+         XCTAssertEqual(goal.steps?.count, 0)
+     }
+
+     func testAddSubGoalWithNilSteps() {
+         let goal = Goal.empty
+         let subGoal = Goal.empty
+         subGoal.title = "Sub Goal"
+         goal.steps = nil
+         goal.add(sub: subGoal)
+         XCTAssertEqual(goal.steps?.count, 1)
+     }
+
+     func testProgressWithZeroTotalDays() {
+         let goals = [Goal]()
+         XCTAssertEqual(goals.progress, 0)
+     }
+
+    func testCutOut() {
+        let parentGoal = Goal.start
+        let originalSubGoalCount = parentGoal.subGoalCount
+        let goal: Goal = .empty
+        goal.parent = parentGoal
+
+        XCTAssertEqual(parentGoal.subGoalCount, originalSubGoalCount + 1)
+        XCTAssertNotNil(goal.parent, "Parent goal should not be nil")
+        XCTAssertNoThrow(goal.cutOut(), "Cut out should not throw an error")
+
+        XCTAssertTrue(goal.isUserMarkedForDeletion, "Goal should be marked for deletion")
+        XCTAssertNil(goal.parent, "Parent goal should be nil")
+        XCTAssertEqual(parentGoal.subGoalCount, originalSubGoalCount)
+    }
+
     func testAddEmpty() {
         let goal: Goal = .empty
         goal.title = "Test123"
@@ -130,7 +299,24 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let text2 = ""
         goal2.title = text2
         goal.add(sub: goal2)
-        XCTAssertEqual(goal.subGoalCount, 0, goal.steps.goals.first?.title ?? "nil")
+        XCTAssertEqual(goal.subGoalCount, 0, goal.subGoals.first?.title ?? "nil")
+    }
+
+    func testPreview() {
+        _ = ContentView_Previews.previews
+
+    }
+
+    func testIsCompleted() {
+        let goal: Goal = .empty
+        let text1 = "Become attorney"
+        goal.title = text1
+        let goal2: Goal = .empty
+        let text2 = "Go to law school"
+        goal2.title = text2
+        goal.add(sub: goal2)
+        goal2.thisCompleted = true
+        XCTAssertTrue(goal.isCompleted)
     }
 
     func testGoalParents() {
@@ -173,7 +359,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let second = Goal.empty
         second.notOptionalTitle = buffer2
         first.add(sub: second)
-        XCTAssertEqual(first.steps.goals.first?.title, buffer2)
+        XCTAssertEqual(first.subGoals.first?.title, buffer2)
         clearGoals()
     }
 
@@ -184,7 +370,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
         let second = Goal.empty
         second.title = buffer
         first.add(sub: second)
-        XCTAssertEqual(first.steps.goals.first?.title, second.title)
+        XCTAssertEqual(first.subGoals.first?.title, second.title)
         clearGoals()
     }
 
@@ -207,18 +393,17 @@ fatalError("These tests should only run on a simulator, not on a physical device
             goal.title == buffer1
         }
         let bufferSet: Set<String> = [buffer2, buffer3]
-        let subGoalTitles: Set<String> = Set(firstFromContext?.steps.goals.map(\.notOptionalTitle) ?? [])
+        let subGoalTitles: Set<String> = Set(firstFromContext?.subGoals.map(\.notOptionalTitle) ?? [])
         XCTAssertEqual(bufferSet, subGoalTitles)
         clearGoals()
     }
 
-    
     func testAddSubGoalTitle() {
         let first = Goal.empty
         let buffer1 = String(describing: UUID())
-        first.addSuBGoal(title: buffer1, estimatedTime: 3)
-        XCTAssertEqual(first.steps.goals.first?.title, buffer1)
-        XCTAssertEqual(first.steps.goals.first?.daysEstimate, 3)
+        first.addSuBGoal(title: buffer1, estimatedTime: 3, importance: "1")
+        XCTAssertEqual(first.subGoals.first?.title, buffer1)
+        XCTAssertEqual(first.subGoals.first?.daysEstimate, 3)
         clearGoals()
     }
 
@@ -317,15 +502,13 @@ fatalError("These tests should only run on a simulator, not on a physical device
         wait(for: [expectation], timeout: 1)
     }
 }
-
+// swiftlint: enable type_body_length
+// swiftlint: disable file_length
 class GptBuilderTests: XCTestCase {
 
     func testGptBuilder() {
         let goalTitle = "Sample Goal"
-        guard let request = gptBuilder(goalTitle) as? URLRequest else {
-            XCTFail("The builder is not returning a URLRequest.")
-            return
-        }
+        let request = URLRequest.gptBuilder(goalTitle)
 
         XCTAssertEqual(request.url, URL.gpt35Turbo)
         XCTAssertEqual(request.httpMethod, "POST")
@@ -345,3 +528,4 @@ class GptBuilderTests: XCTestCase {
         XCTAssertNotNil(message)
     }
 }
+// swiftlint: enable file_length

@@ -13,15 +13,17 @@ struct AddGoalView: View {
     @ObservedObject var parentGoal: Goal
 
     // Simply read these two properties in a unit test.
-    @State private var title: String = ""
-    @State private var daysEstimate: String = ""
+    @State var title: String = ""
+    @State var daysEstimate: String = ""
+    @State var importance: String = ""
 
+    // swiftlint: disable multiple_closures_with_trailing_closure
     var body: some View {
         NavigationView {
             VStack {
-            #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
                 EmptyView()
-            #else
+#else
                 HStack {
                     Text("Add Goal")
                         .font(.headline)
@@ -32,79 +34,48 @@ struct AddGoalView: View {
                     }
                     .padding(.trailing)
                 }
-            #endif
-
-            #if os(macOS)
-                TextField("Type your goal", text: $title)
-                    .padding()
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    // This isn't word wrapping still
-                    .lineLimit(0)
-                    .accessibilityIdentifier("TitleTextField")
-            #else
-                VStack(alignment: .leading) {
-                    Text("Type your goal:")
-                        .foregroundColor(Color.gray)
-                    TextEditor(text: $title)
-                        .padding()
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                        // This isn't word wrapping still
-                        .lineLimit(0)
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .accessibilityIdentifier("TitleTextEditor")
-                }
-                #endif
-                TextField("Days estimate (Default is 1 day)", text: $daysEstimate)
-                    .padding()
-                    // Same as the background color. blends.
-                    .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                    .modifier(NumberKeyboardModifier())
-                    .accessibilityIdentifier("DaysEstimateTextField")
-                #if os(iOS)
-                    .overlay(
-                        RoundedRectangle(cornerRadius: 10)
-                            .stroke(Color.gray, lineWidth: 1)
+#endif
+                MultiPlatformTextEditor(
+                    title: $title,
+                    placeholder: "Type your goal",
+                    macOSAccessibility: "TitleTextField",
+                    iOSAccessibility: "TitleTextEditor"
+                )
+                NumberTextField(
+                    placeholder: "Days estimate (Default is 1 day)",
+                    text: $daysEstimate,
+                    accessibilityIdentifier: "DaysEstimateTextField"
+                )
+                NumberTextField(
+                    placeholder: "Importance/Priority (Default is 1 day)",
+                    text: $importance,
+                    accessibilityIdentifier: "ImportanceTextField",
+                    hasDecimals: true
+                )
+                MultiPlatformActionButton(
+                    title: "Add Goal",
+                    accessibilityId: "AddGoalButton"
+                ) {
+                    parentGoal.addSuBGoal(
+                        title: title,
+                        estimatedTime: Int64(daysEstimate) ?? 1,
+                        importance: importance.removedAllButFirstDecimal
                     )
-                #endif
-                Button(action: {
-                    parentGoal.addSuBGoal(title: title, estimatedTime: Int64(daysEstimate) ?? 1)
                     presentationMode.wrappedValue.dismiss()
-                }) {
-                #if os(iOS)
-                    Text("Add Goal")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("AddGoalButton")
-                #else
-                    Text("Add Goal")
-                        .font(.headline)
-                        .foregroundColor(.white)
-                        .padding()
-                        .frame(maxWidth: .infinity)
-                       // .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
-                        .accessibilityIdentifier("AddGoalButton")
-                    #endif
-                    
                 }
                 .padding(.top, 20)
-
                 Spacer()
             }
             .padding(.horizontal)
-        #if os(iOS) || os(tvOS)
+#if os(iOS) || os(tvOS)
             .navigationBarTitle("Add Goal", displayMode: .inline)
             .navigationBarItems(trailing: Button("Cancel") {
                 presentationMode.wrappedValue.dismiss()
             }.accessibilityIdentifier("CancelButton"))
-        #endif
+#endif
         }
     }
+    // swiftlint: enable multiple_closures_with_trailing_closure
 }
 
 struct AddGoalView_Previews: PreviewProvider {

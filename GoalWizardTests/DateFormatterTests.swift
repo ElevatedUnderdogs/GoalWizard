@@ -24,8 +24,17 @@ class DateFormatterTests: XCTestCase {
         let expectedOutput2 = "12/31/22"
         let expectedOutput3 = "1/1/21"
 
-        XCTAssertEqual(DateFormatter.monthDayYearString(from: testDate1), expectedOutput1, "Formatted date string should match expected output for testDate1")
-        XCTAssertEqual(DateFormatter.monthDayYearString(from: testDate2), expectedOutput2, "Formatted date string should match expected output for testDate2")
-        XCTAssertEqual(DateFormatter.monthDayYearString(from: testDate3), expectedOutput3, "Formatted date string should match expected output for testDate3")
+        XCTAssertEqual(
+            DateFormatter.monthDayYearString(from: testDate1),
+            expectedOutput1, "Formatted date string should match expected output for testDate1"
+        )
+        XCTAssertEqual(
+            DateFormatter.monthDayYearString(from: testDate2),
+            expectedOutput2, "Formatted date string should match expected output for testDate2"
+        )
+        XCTAssertEqual(
+            DateFormatter.monthDayYearString(from: testDate3),
+            expectedOutput3, "Formatted date string should match expected output for testDate3"
+        )
     }
 }

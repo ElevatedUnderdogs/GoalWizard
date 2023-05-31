@@ -23,6 +23,14 @@ extension URL {
 // URLRequest extension to create an OpenAI API request
 extension URLRequest {
 
+    static func gptBuilder(_ text: String) -> URLRequest {
+        URLRequest.gpt35TurboChatRequest(
+            messages: .buildUserMessage(
+                content: .goalTreeFrom(goal: text)
+            )
+        )
+    }
+
     static var models: URLRequest {
         // Set your API key here
         // file not tracked by git, saved also in keychain.
@@ -33,7 +41,6 @@ extension URLRequest {
         request.setValue("application/json", forHTTPHeaderField: "Content-Type")
         return request
     }
-
 
     static func openAIRequest(
         url: URL = .davinci,
@@ -108,7 +115,6 @@ extension URLRequest {
             return request
         }
 }
-
 
 // Extension to create messages for GPT-3.5 Turbo chat requests
 extension Array where Element == [String: String] {

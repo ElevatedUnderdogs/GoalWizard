@@ -11,15 +11,20 @@ import Vision
 @testable import GoalWizard
 import SwiftUI
 
-func takeSnapshot<V: View>(of view: V, size: CGSize = UIScreen.main.bounds.size) -> UIImage {
-     let controller = UIHostingController(rootView: view)
-     controller.view.bounds.size = size
-     UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
-     controller.view.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
-     let image = UIGraphicsGetImageFromCurrentImageContext()!
-     UIGraphicsEndImageContext()
-     return image
- }
+#if canImport(UIKit)
+func takeSnapshot<V: View>(
+    of view: V,
+    size: CGSize = UIScreen.main.bounds.size
+) -> UIImage {
+    let controller = UIHostingController(rootView: view)
+    controller.view.bounds.size = size
+    UIGraphicsBeginImageContextWithOptions(size, false, UIScreen.main.scale)
+    controller.view.drawHierarchy(in: controller.view.bounds, afterScreenUpdates: true)
+    let image = UIGraphicsGetImageFromCurrentImageContext()!
+    UIGraphicsEndImageContext()
+    return image
+}
+#endif
 
 class EditGoalViewTests: XCTestCase {
 
@@ -33,10 +38,9 @@ class EditGoalViewTests: XCTestCase {
         clearGoals()
     }
 
+#if canImport(UIKit)
     // For some reason the test was intermittently incorrectly picking up a macos image. 
     func testEditGoalViewSnapshotUsingOCR() {
-
-
         let goal = Goal.edit
         let editGoalView = EditGoalView(goal: goal)
         let snapshot = takeSnapshot(of: editGoalView)
@@ -63,15 +67,24 @@ class EditGoalViewTests: XCTestCase {
             }
         }
     }
+#endif
 
+    func testEdit() {
+        XCTAssertNoThrow(EditGoalView_Previews.previews)
+    }
 
+    func testExit() {
+        let editGoalView = EditGoalView(goal: .empty)
+        editGoalView.set(dayEstimate: "Cats")
+    }
 }
 
+#if canImport(UIKit)
 extension UIImage {
 
     func ocrText(completion: @escaping (String) -> Void) {
         let requestHandler = VNImageRequestHandler(cgImage: self.cgImage!, options: [:])
-        let textRecognitionRequest = VNRecognizeTextRequest { (request, error) in
+        let textRecognitionRequest = VNRecognizeTextRequest { (request, _) in
             guard let observations = request.results as? [VNRecognizedTextObservation] else {
                 return
             }
@@ -89,6 +102,7 @@ extension UIImage {
         try? requestHandler.perform([textRecognitionRequest])
     }
 }
+#endif
 
 fileprivate extension Goal {
 
@@ -102,7 +116,10 @@ fileprivate extension Goal {
         goal.progress = 0
         goal.progressPercentage = ""
         goal.steps = []
+        // its okay for tests. 
+        // swiftlint: disable disallow_topGoal_set_true
         goal.topGoal = true
+        // swiftlint: enable disallow_topGoal_set_true
         goal.updateProgressUpTheTree()
         goal.updateCompletionDateUpTheTree()
         return goal
