@@ -82,17 +82,25 @@ struct EditGoalView: View {
                     macOSAccessibility: "EditGoalTextField",
                     iOSAccessibility: "EditGoalTextField"
                 )
-                NumberTextField(
-                    placeholder: "",
-                    text: daysEstimateBinding,
-                    accessibilityIdentifier: "DaysEstimateTextField"
-                )
-                NumberTextField(
-                    placeholder: "Importance/Priority (Default is 1 day)",
-                    text: importanceBinding,
-                    accessibilityIdentifier: "ImportanceTextField",
-                    hasDecimals: true
-                )
+                HStack {
+                    Text("Days Estimate")
+                        .foregroundColor(.gray)
+                    NumberTextField(
+                        placeholder: "",
+                        text: daysEstimateBinding,
+                        accessibilityIdentifier: "DaysEstimateTextField"
+                    )
+                }
+                HStack {
+                    Text("Importance/Priority")
+                        .foregroundColor(.gray)
+                    NumberTextField(
+                        placeholder: "Importance/Priority (Default is 1 day)",
+                        text: importanceBinding,
+                        accessibilityIdentifier: "ImportanceTextField",
+                        hasDecimals: true
+                    )
+                }
                 MultiPlatformActionButton(
                     title: "Close (Saved)",
                     accessibilityId: "Edit Close Button",
