@@ -11,6 +11,7 @@
 		75111ADA2A11547C004441CB /* MultiPlatformActionButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75111AD92A11547C004441CB /* MultiPlatformActionButton.swift */; };
 		75111ADC2A115663004441CB /* NumberTextField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75111ADB2A115663004441CB /* NumberTextField.swift */; };
 		7513DE5829E8BC2300CB4468 /* MiscTestsForEdgeCases.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */; };
+		7520632B2A2D3AAB00B27384 /* CodableGoal.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7520632A2A2D3AAB00B27384 /* CodableGoal.swift */; };
 		75296A0229E8C45F00C0A06C /* CustomViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75296A0129E8C45F00C0A06C /* CustomViewTests.swift */; };
 		754663242A0F694C003366FB /* GreenGlowingText.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754663232A0F694C003366FB /* GreenGlowingText.swift */; };
 		754663262A0F6A9A003366FB /* XCUIElement.swift in Sources */ = {isa = PBXBuildFile; fileRef = 754663252A0F6A9A003366FB /* XCUIElement.swift */; };
@@ -82,6 +83,7 @@
 		75111AD92A11547C004441CB /* MultiPlatformActionButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MultiPlatformActionButton.swift; sourceTree = "<group>"; };
 		75111ADB2A115663004441CB /* NumberTextField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NumberTextField.swift; sourceTree = "<group>"; };
 		7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MiscTestsForEdgeCases.swift; sourceTree = "<group>"; };
+		7520632A2A2D3AAB00B27384 /* CodableGoal.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableGoal.swift; sourceTree = "<group>"; };
 		75296A0129E8C45F00C0A06C /* CustomViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CustomViewTests.swift; sourceTree = "<group>"; };
 		754663232A0F694C003366FB /* GreenGlowingText.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GreenGlowingText.swift; sourceTree = "<group>"; };
 		754663252A0F6A9A003366FB /* XCUIElement.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = XCUIElement.swift; sourceTree = "<group>"; };
@@ -161,6 +163,14 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		7520632C2A2D3AB300B27384 /* Migration */ = {
+			isa = PBXGroup;
+			children = (
+				7520632A2A2D3AAB00B27384 /* CodableGoal.swift */,
+			);
+			path = Migration;
+			sourceTree = "<group>";
+		};
 		75C0B0F529D7EEA900D886CA = {
 			isa = PBXGroup;
 			children = (
@@ -188,6 +198,7 @@
 				75DBE5CE29EC8F5D00EEBB83 /* Info.plist */,
 				75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */,
 				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
+				7520632C2A2D3AB300B27384 /* Migration */,
 				75C0B13E29D8C46F00D886CA /* FullWindowViews */,
 				75C0B1EE29DA3E0400D886CA /* Views */,
 				75C0B13D29D8C46500D886CA /* Utilities */,
@@ -465,6 +476,7 @@
 				75C0B13629D8BC1400D886CA /* SkeuomorphicButtonStyle.swift in Sources */,
 				75C0B1EB29DA08E000D886CA /* DateFormatter.swift in Sources */,
 				75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */,
+				7520632B2A2D3AAB00B27384 /* CodableGoal.swift in Sources */,
 				754663242A0F694C003366FB /* GreenGlowingText.swift in Sources */,
 				75111AD82A114814004441CB /* MultiPlatformTextField.swift in Sources */,
 				75C8B87729E3889900493D9C /* VersionBasedNavigationStack.swift in Sources */,
@@ -667,7 +679,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.6;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottlydon.GoalWizard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -707,7 +719,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 12.6;
-				MARKETING_VERSION = 1.0;
+				MARKETING_VERSION = 1.0.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottlydon.GoalWizard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
