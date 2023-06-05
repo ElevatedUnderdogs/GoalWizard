@@ -171,11 +171,7 @@ struct GoalView: View {
                                     buttonState = .hidden
                                 }
                             }) {
-#if os(macOS)
-                                Image.openaiBolt
-#else
                                 Image.openaiWizard
-#endif
                             }
 #if os(macOS)
                             .background(Color.clear)

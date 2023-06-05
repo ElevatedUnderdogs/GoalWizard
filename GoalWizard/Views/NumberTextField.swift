@@ -21,7 +21,9 @@ struct NumberTextField: View {
             set: { text = $0.removedAllButFirstDecimal }
         )
         TextField(placeholder, text: decimalText)
+#if os(iOS)
             .keyboardType(hasDecimals ? .decimalPad : .numberPad)
+#endif
             .padding()
             .background(RoundedRectangle(cornerRadius: 10)
                 .fill(Color.systemGray6 /*Same as the background color. blends.*/))

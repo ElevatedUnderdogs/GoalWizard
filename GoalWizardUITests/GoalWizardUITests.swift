@@ -7,6 +7,7 @@
 
 import XCTest
 
+// swiftlint: disable file_length
 // swiftlint: disable type_body_length
 final class GoalWizardUITests: XCTestCase {
 
@@ -187,7 +188,6 @@ final class GoalWizardUITests: XCTestCase {
         XCTAssertNotEqual(firstEstimates, seven)
     }
 
-    // swiftlint: disable line_length
     // if there are no cells, then add one, if there are any, change the first.
     func testAddEditGoal() {
         let goalList = app.collectionViews["Goal List"]
@@ -332,7 +332,6 @@ final class GoalWizardUITests: XCTestCase {
             app.buttons["AddGoalButton"].tap()
         }
     }
-    
 
     func testImportanceRating() {
         let app = XCUIApplication()
@@ -518,5 +517,5 @@ final class GoalWizardUITests: XCTestCase {
         }
     }
 }
-// swiftlint: enable line_length
 // swiftlint: enable type_body_length
+// swiftlint: enable file_length
