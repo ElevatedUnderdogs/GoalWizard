@@ -26,7 +26,8 @@ final class GoalViewTests: XCTestCase {
         self.clearGoals()
     }
 
-    func testDeleteGoalInView() {
+    /// Should delete subgoals with it.
+    func testDeleteGoalWithSubGoals() {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
@@ -41,9 +42,13 @@ final class GoalViewTests: XCTestCase {
         goal3.title = text3
         goal.add(sub: goal2)
         goal2.add(sub: goal3)
-        XCTAssertEqual(Set(Goal.context.goals.map(\.title)), Set([text1, text2, text3]))
-        goalView.delete(impcomplete: IndexSet([0]))
-        XCTAssertEqual(Goal.context.goals.map(\.title), [text1])
+        XCTAssertEqual(
+            Set(Goal.context.goals.map(\.title)),
+            Set([text1, text2, text3])
+        )
+        /// Deletes an incomplete subgoal of the start goal.
+        goalView.delete(impcomplete: [0])
+        XCTAssertEqual(Goal.context.goals.map(\.title), ["Become attorney"])
     }
 
     /// Tests adding subggoals, completing one, deleting the completed one, and delteing an incomplete goal.
@@ -51,11 +56,13 @@ final class GoalViewTests: XCTestCase {
         let goal: Goal = .start
         let text1 = "Become attorney"
         goal.title = text1
+        goal.importance = "3"
         let goalView = GoalView(goal: goal, pasteBoard: GoalPasteBoard())
 
         let goal2: Goal = .empty
         let text2 = "Go to law school"
         goal2.title = text2
+        goal2.importance = "2"
 
         let goal3: Goal = .empty
         let text3 = "Research law schools"
@@ -70,6 +77,8 @@ final class GoalViewTests: XCTestCase {
 
         goal4.thisCompleted = true
         XCTAssertEqual(goalView.filteredSteps.completed, [goal4])
+
+        // Should delete goal4 because that is the only one completed.
         goalView.delete(complete: [0])
         XCTAssertEqual(
             goalView.filteredSteps.completed,
@@ -152,38 +161,6 @@ final class GoalViewTests: XCTestCase {
         // Test that the goal in the GoalView is the same as the nonTopGoal you created
         XCTAssertEqual(goalView.model as? Goal, nonTopGoal)
     }
-
-    // Why isn't the modify state being set in unit tests!?
-
-//    func testGoalViewStateEdit() {
-//        // Set up your view model, observed objects, or any other required data
-//        // Initialize the GoalView with the necessary data
-//        let goalView = GoalView(goal: .empty)
-//
-//
-//
-//        // Set the state to edit
-//        goalView.modifyState = .edit
-//
-//        // Test that the state is indeed edit
-//        XCTAssertEqual(goalView.modifyState, .edit)
-//        let _ = goalView.body
-//    }
-//
-//
-//    func testShowSearchView() {
-//        // Set up your view model, observed objects, or any other required data
-//        // Initialize the GoalView with the necessary data
-//        let goalView = GoalView(goal: .empty)
-//
-//        // Set the showSearchView state to true
-//        goalView.showSearchView.toggle()
-//
-//
-//        // Test that the showSearchView state is indeed true
-//        XCTAssertTrue(goalView.showSearchView)
-//        let _ = goalView.body
-//    }
 }
 
 protocol TestableView {

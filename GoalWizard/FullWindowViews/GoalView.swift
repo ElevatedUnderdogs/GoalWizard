@@ -59,7 +59,7 @@ struct GoalView: View {
 #endif
                     }
                     Spacer()
-                    if let count = goal.steps?.count, count > 0 {
+                    if goal.stepCount > 0 {
                         if flattened {
                             Button(action: {
                                 flattened.toggle()

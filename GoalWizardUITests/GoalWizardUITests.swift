@@ -282,7 +282,8 @@ final class GoalWizardUITests: XCTestCase {
             app.buttons["AddGoalButton"].tap()
             let goalListCollectionView = app.collectionViews["Goal List"]
             goalListCollectionView.staticTexts[eatMoreVegetables].tap()
-            app.buttons["goalWizardGenicon"].tap()
+           // save your api calls!
+            // app.buttons["goalWizardGenicon"].tap()
             goalListCollectionView.staticTexts["Research vegetable options"].tap()
             goalListCollectionView.staticTexts["Look up different types of vegetables"].tap()
         }

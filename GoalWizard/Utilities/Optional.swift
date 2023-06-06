@@ -17,6 +17,13 @@ extension Optional<NSSet> {
     }
 }
 
+extension NSSet {
+
+    var goals: [Goal] {
+        (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion } ?? []
+    }
+}
+
 public extension Optional where Wrapped: ExpressibleByArrayLiteral, Wrapped: Equatable {
     var isEmpty: Bool {
         self == [] || self == nil

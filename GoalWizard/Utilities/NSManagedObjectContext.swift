@@ -63,16 +63,19 @@ extension NSManagedObjectContext {
         do {
             try save()
         } catch {
-            print((error as? NSError)?.userInfo)
-            fatalError(error.localizedDescription)
+            #if DEBUG
+            print((error as? NSError)?.userInfo as Any)
+            #endif
         }
     }
 
     func deleteGoal(goals: [Goal]) {
-        goals.forEach { $0.isUserMarkedForDeletion = true }
-        saveHandleErrors()
-        goals.first?.updateProgressUpTheTree()
-        goals.first?.updateCompletionDateUpTheTree()
+        goals.forEach {
+            deleteGoal(goal: $0)
+            $0.updateProgressUpTheTree()
+            $0.updateCompletionDateUpTheTree()
+            saveHandleErrors()
+        }
     }
 
     func deleteGoal(goal: Goal) {

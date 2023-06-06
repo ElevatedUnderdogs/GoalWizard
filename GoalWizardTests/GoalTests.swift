@@ -260,7 +260,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
          let subGoal = Goal.empty
          subGoal.title = ""
          goal.add(sub: subGoal)
-         XCTAssertEqual(goal.steps?.count, 0)
+         XCTAssertEqual(goal.stepCount, 0)
      }
 
      func testAddSubGoalWithNilSteps() {
@@ -269,7 +269,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
          subGoal.title = "Sub Goal"
          goal.steps = nil
          goal.add(sub: subGoal)
-         XCTAssertEqual(goal.steps?.count, 1)
+         XCTAssertEqual(goal.stepCount, 1)
      }
 
      func testProgressWithZeroTotalDays() {

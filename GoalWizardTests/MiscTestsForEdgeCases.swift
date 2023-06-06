@@ -70,7 +70,7 @@ class GoalTests2: XCTestCase {
         subGoal.title = "SubGoal"
 
         parentGoal.add(sub: subGoal)
-        XCTAssertEqual(parentGoal.steps?.count, 1)
+        XCTAssertEqual(parentGoal.stepCount, 1)
     }
 
     func testIsCompleted() {

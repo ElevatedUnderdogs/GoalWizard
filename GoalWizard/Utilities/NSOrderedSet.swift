@@ -23,13 +23,4 @@ extension NSSet {
         mutableSet.addObjects(from: elements)
         return NSSet(set: mutableSet)
     }
-
-    /// Fails when the elements do not conform to Hashable.
-    var mutableSet: NSMutableSet {
-        NSMutableSet(set: self)
-    }
-
-    var mutableOrderedSet: NSMutableOrderedSet {
-        NSMutableOrderedSet(array: allObjects)
-    }
 }
