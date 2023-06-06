@@ -141,38 +141,31 @@ extension Goal {
     }
 }
 
+func loadDataFromFile(filename: String = "goal_migration") -> Goal? {
+    let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
+    if let url = urls.first?.appendingPathComponent(filename) {
+        do {
+            let data = try Data(contentsOf: url)
+            let decoder = JSONDecoder()
+            let goals = try decoder.decode([CodableGoal].self, from: data)
+            let goalTree = try goals.goalTree()
+            print(goalTree?.notOptionalTitle as Any)
+            print(goalTree?.subGoalCount as Any)
+            return goalTree
+        } catch {
+            print("Error reading file: \(error)")
+            return nil
+        }
+    }
+    return nil
+}
 
 func saveAndPrintMigration() {
-    func loadDataFromFile(filename: String) -> [CodableGoal]? {
-        let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
-        if let url = urls.first?.appendingPathComponent(filename) {
-            do {
-                let data = try Data(contentsOf: url)
-                let decoder = JSONDecoder()
-                let goals = try decoder.decode([CodableGoal].self, from: data)
-                return goals
-            } catch {
-                print("Error reading file: \(error)")
-                return nil
-            }
-        }
-        return nil
-    }
-
     do {
         let urls = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)
         guard let url = urls.first?.appendingPathComponent("goal_migration") else { return }
         let allCodableGoals = try Goal.context.allCodableGoals()
-        try allCodableGoals.jsonString?.saveTo(path: url)
-        let loaded = loadDataFromFile(filename: "goal_migration")
-        assert(allCodableGoals.count == loaded!.count)
-        loaded?.forEach {
-            dump($0)
-        }
-        let goalTree = try loaded?.goalTree()
-        print(goalTree?.notOptionalTitle as Any)
-        print(goalTree?.subGoalCount)
-        print("all goals retrieved: \(loaded!.count)")
+        allCodableGoals.jsonString?.saveTo(path: url)
     } catch {
         print(error.localizedDescription)
     }
