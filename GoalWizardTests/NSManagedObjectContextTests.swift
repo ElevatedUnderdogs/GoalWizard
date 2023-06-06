@@ -83,7 +83,7 @@ class NSManagedObjectContextTests: XCTestCase {
          mutableSteps.removeObject(at: index)
      }
 
-     goal.steps = NSOrderedSet(orderedSet: mutableSteps)
+     goal.steps = NSSet(orderedSet: mutableSteps)
      saveHandleErrors()
      goal.updateProgressUpTheTree()
      goal.updateCompletionDateUpTheTree()

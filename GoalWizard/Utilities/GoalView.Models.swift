@@ -85,7 +85,7 @@ extension Choices {
                 subGoal.parent = goal
                 subGoals.append(subGoal)
             }
-            goal.steps = NSOrderedSet(array: subGoals)
+            goal.steps = NSSet(array: subGoals)
             result.append(goal)
         }
         return result

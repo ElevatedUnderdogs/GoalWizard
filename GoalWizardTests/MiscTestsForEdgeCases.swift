@@ -59,7 +59,7 @@ class GoalTests2: XCTestCase {
         let subGoal2 = Goal.empty
         subGoal2.title = "sub goal 2"
 
-        parentGoal.steps = NSOrderedSet(array: [subGoal1, subGoal2])
+        parentGoal.steps = NSSet(array: [subGoal1, subGoal2])
         XCTAssertEqual(parentGoal.subGoalCount, 2)
     }
 
