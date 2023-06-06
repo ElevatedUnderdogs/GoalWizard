@@ -63,31 +63,19 @@ extension NSManagedObjectContext {
         do {
             try save()
         } catch {
+            #if DEBUG
+            print((error as? NSError)?.userInfo as Any)
+            #endif
         }
     }
 
-    func deleteGoal(atOffsets offsets: IndexSet, goal: Goal) {
-        // This always succeeds, difficult to test.
-
-        // steps automatically sets to empty set
-        // can't turn it nil for the life of me.
-        let mutableSteps = goal.steps!.mutableOrderedSet
-        // it is better to delete from the back to front so that the indices don't shift while deleting.
-        for index in offsets.sorted(by: >) {
-            // Ensure the index is within the range of mutableSteps
-            guard index >= 0, index < mutableSteps.count,
-                    let subGoal = mutableSteps.object(at: index) as? Goal else {
-                continue
-            }
-            print(subGoal.title as Any)
-            deleteGoal(goal: subGoal)
-            mutableSteps.removeObject(at: index)
+    func deleteGoal(goals: [Goal]) {
+        goals.forEach {
+            deleteGoal(goal: $0)
+            $0.updateProgressUpTheTree()
+            $0.updateCompletionDateUpTheTree()
+            saveHandleErrors()
         }
-
-        goal.steps = NSOrderedSet(orderedSet: mutableSteps)
-        saveHandleErrors()
-        goal.updateProgressUpTheTree()
-        goal.updateCompletionDateUpTheTree()
     }
 
     func deleteGoal(goal: Goal) {

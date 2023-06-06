@@ -33,19 +33,12 @@ struct GoalView: View {
 
     // Top section
     func delete(impcomplete offsets: IndexSet) {
-        deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.incomplete)
+        Goal.context.deleteGoal(goals: offsets.map { filteredSteps.incomplete[$0] })
     }
 
     // bottom section
     func delete(complete offsets: IndexSet) {
-        deleteGoalAtFirst(offsets: offsets, filteredGoals: filteredSteps.completed)
-    }
-
-    private func deleteGoalAtFirst(offsets: IndexSet, filteredGoals: [Goal]) {
-        // dishonest function, says goals, but only grabs the first offset.
-        let goalMatch: Goal? = offsets.map { filteredGoals[$0] }.first
-        let stepIndicesTodelete = IndexSet(goal.subGoals.enumerated().filter { $0.1 == goalMatch }.map(\.offset))
-        Goal.context.deleteGoal(atOffsets: stepIndicesTodelete, goal: goal)
+        Goal.context.deleteGoal(goals: offsets.map { filteredSteps.completed[$0] })
     }
 
     // swiftlint: disable multiple_closures_with_trailing_closure
@@ -66,7 +59,7 @@ struct GoalView: View {
 #endif
                     }
                     Spacer()
-                    if let count = goal.steps?.count, count > 0 {
+                    if goal.stepCount > 0 {
                         if flattened {
                             Button(action: {
                                 flattened.toggle()
@@ -171,11 +164,7 @@ struct GoalView: View {
                                     buttonState = .hidden
                                 }
                             }) {
-#if os(macOS)
-                                Image.openaiBolt
-#else
                                 Image.openaiWizard
-#endif
                             }
 #if os(macOS)
                             .background(Color.clear)
@@ -236,12 +225,7 @@ struct GoalView: View {
                                 )
                                 .accessibilityIdentifier("goal_cell_\(index)")
                             }
-                            .onDelete { indexSet in
-                                // Might not be worth it, swipe to delete keeps
-                                // failing in unit tests. perhaps there is a
-                                // apple provided method for swiping the first cell to the left.
-                                delete(impcomplete: indexSet)
-                            }
+                            .onDelete(perform: delete(impcomplete:))
                         }
                     }
 
@@ -261,12 +245,7 @@ struct GoalView: View {
                                 )
                                 .accessibilityIdentifier("goal_cell_\(index)")
                             }
-                            .onDelete { indexSet in
-                                // Might not be worth it, swipe to delete keeps
-                                // failing in unit tests. perhaps there is a apple
-                                // provided method for swiping the first cell to the left.
-                                delete(complete: indexSet)
-                            }
+                            .onDelete(perform: delete(complete:))
                         }
                     }
                 }

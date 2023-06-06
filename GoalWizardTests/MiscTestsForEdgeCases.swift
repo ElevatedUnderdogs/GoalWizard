@@ -26,7 +26,7 @@ class CoreDataTests: XCTestCase {
     }
 
     func testGoalTableLoad() {
-        let container = NSPersistentContainer.goalTable
+        let container = NSPersistentCloudKitContainer.goalTable
         XCTAssertNotNil(container)
         XCTAssertEqual(container.name, "Goal")
     }
@@ -59,7 +59,7 @@ class GoalTests2: XCTestCase {
         let subGoal2 = Goal.empty
         subGoal2.title = "sub goal 2"
 
-        parentGoal.steps = NSOrderedSet(array: [subGoal1, subGoal2])
+        parentGoal.steps = NSSet(array: [subGoal1, subGoal2])
         XCTAssertEqual(parentGoal.subGoalCount, 2)
     }
 
@@ -70,7 +70,7 @@ class GoalTests2: XCTestCase {
         subGoal.title = "SubGoal"
 
         parentGoal.add(sub: subGoal)
-        XCTAssertEqual(parentGoal.steps?.count, 1)
+        XCTAssertEqual(parentGoal.stepCount, 1)
     }
 
     func testIsCompleted() {

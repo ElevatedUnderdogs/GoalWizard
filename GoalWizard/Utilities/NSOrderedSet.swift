@@ -1,5 +1,5 @@
 //
-//  NSOrderedSet.swift
+//  NSSet.swift
 //  GoalWizard
 //
 //  Created by Scott Lydon on 4/4/23.
@@ -9,24 +9,18 @@ import Foundation
 import Combine
 import CoreData
 
-extension NSOrderedSet {
+extension NSSet {
 
     /// Do not use: @discardableResult, because you need to reassign the set.
-    func addElement(_ element: Any) -> NSOrderedSet {
-        let mutableSet = mutableOrderedSet
+    func addElement(_ element: Any) -> NSSet {
+        let mutableSet = NSMutableSet(set: self)
         mutableSet.add(element)
-        return NSOrderedSet(orderedSet: mutableSet)
+        return NSSet(set: mutableSet)
     }
 
-    func addElements(_ elements: [Any]) -> NSOrderedSet {
-        let mutableSet = mutableOrderedSet
+    func addElements(_ elements: [Any]) -> NSSet {
+        let mutableSet = NSMutableSet(set: self)
         mutableSet.addObjects(from: elements)
-        return NSOrderedSet(orderedSet: mutableSet)
-    }
-}
-
-extension NSOrderedSet {
-    var mutableOrderedSet: NSMutableOrderedSet {
-        NSMutableOrderedSet(orderedSet: self)
+        return NSSet(set: mutableSet)
     }
 }

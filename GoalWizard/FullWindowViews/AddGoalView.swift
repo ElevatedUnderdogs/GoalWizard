@@ -17,7 +17,6 @@ struct AddGoalView: View {
     @State var daysEstimate: String = ""
     @State var importance: String = ""
 
-    // swiftlint: disable multiple_closures_with_trailing_closure
     var body: some View {
         NavigationView {
             VStack {
@@ -41,17 +40,25 @@ struct AddGoalView: View {
                     macOSAccessibility: "TitleTextField",
                     iOSAccessibility: "TitleTextEditor"
                 )
-                NumberTextField(
-                    placeholder: "Days estimate (Default is 1 day)",
-                    text: $daysEstimate,
-                    accessibilityIdentifier: "DaysEstimateTextField"
-                )
-                NumberTextField(
-                    placeholder: "Importance/Priority (Default is 1 day)",
-                    text: $importance,
-                    accessibilityIdentifier: "ImportanceTextField",
-                    hasDecimals: true
-                )
+                HStack {
+                    Text("Days Estimate")
+                        .foregroundColor(.gray)
+                    NumberTextField(
+                        placeholder: "(Default is 1 day)",
+                        text: $daysEstimate,
+                        accessibilityIdentifier: "DaysEstimateTextField"
+                    )
+                }
+                HStack {
+                    Text("Importance/Priority")
+                        .foregroundColor(.gray)
+                    NumberTextField(
+                        placeholder: "(Default is 1 day)",
+                        text: $importance,
+                        accessibilityIdentifier: "ImportanceTextField",
+                        hasDecimals: true
+                    )
+                }
                 MultiPlatformActionButton(
                     title: "Add Goal",
                     accessibilityId: "AddGoalButton"
@@ -75,7 +82,6 @@ struct AddGoalView: View {
 #endif
         }
     }
-    // swiftlint: enable multiple_closures_with_trailing_closure
 }
 
 struct AddGoalView_Previews: PreviewProvider {

@@ -10,6 +10,10 @@ import CoreData
 
 extension Goal {
 
+    var stepCount: Int {
+        steps?.goals.count ?? 0
+    }
+
     /// From most original ancestor to least.
     var ancestors: [Goal] {
         var result: [Goal] = []
@@ -55,7 +59,7 @@ extension Goal {
         }
     }
 
-    static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
+    static private(set) var context: NSManagedObjectContext = NSPersistentCloudKitContainer.goalTable.viewContext
 
     var goalForRequest: String {
         var result: String = notOptionalTitle

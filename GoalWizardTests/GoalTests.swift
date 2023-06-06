@@ -103,8 +103,8 @@ extension XCTestCase {
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         Goal.context.goals.forEach { Goal.context.delete($0) }
         do {
-            try NSPersistentContainer.goalTable.viewContext.execute(deleteRequest)
-            try NSPersistentContainer.goalTable.viewContext.save()
+            try NSPersistentCloudKitContainer.goalTable.viewContext.execute(deleteRequest)
+            try NSPersistentCloudKitContainer.goalTable.viewContext.save()
         } catch {
             print("Error deleting all goals: \(error.localizedDescription)")
         }
@@ -260,7 +260,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
          let subGoal = Goal.empty
          subGoal.title = ""
          goal.add(sub: subGoal)
-         XCTAssertEqual(goal.steps?.count, 0)
+         XCTAssertEqual(goal.stepCount, 0)
      }
 
      func testAddSubGoalWithNilSteps() {
@@ -269,7 +269,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
          subGoal.title = "Sub Goal"
          goal.steps = nil
          goal.add(sub: subGoal)
-         XCTAssertEqual(goal.steps?.count, 1)
+         XCTAssertEqual(goal.stepCount, 1)
      }
 
      func testProgressWithZeroTotalDays() {

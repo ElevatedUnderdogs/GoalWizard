@@ -1,5 +1,5 @@
 //
-//  Optional.NSOrderedSet.swift
+//  Optional.NSSet.swift
 //  GoalWizard
 //
 //  Created by Scott Lydon on 4/4/23.
@@ -9,11 +9,18 @@ import Foundation
 import Combine
 import CoreData
 
-extension Optional<NSOrderedSet> {
+extension Optional<NSSet> {
 
     var goals: [Goal] {
         guard let self else { return [] }
         return (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion} ?? []
+    }
+}
+
+extension NSSet {
+
+    var goals: [Goal] {
+        (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion } ?? []
     }
 }
 

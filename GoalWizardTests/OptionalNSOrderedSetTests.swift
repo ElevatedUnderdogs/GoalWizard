@@ -1,5 +1,5 @@
 //
-//  OptionalNSOrderedSetTests.swift
+//  OptionalNSSetTests.swift
 //  GoalWizardTests
 //
 //  Created by Scott Lydon on 4/13/23.
@@ -8,7 +8,7 @@ import XCTest
 @testable import GoalWizard
 import CoreData
 
-class OptionalNSOrderedSetTests: XCTestCase {
+class OptionalNSSetTests: XCTestCase {
 
     override func setUp() {
         super.setUp()
@@ -21,7 +21,7 @@ class OptionalNSOrderedSetTests: XCTestCase {
     }
 
     func testGoals_whenOptionalIsNil() {
-        let orderedSet: NSOrderedSet? = nil
+        let orderedSet: NSSet? = nil
         let goals = orderedSet.goals
         XCTAssertTrue(goals.isEmpty)
     }
@@ -30,7 +30,7 @@ class OptionalNSOrderedSetTests: XCTestCase {
 
     func testFailedCastToGoalArray() {
         let customObject = CustomObject()
-        let set: NSOrderedSet? = NSOrderedSet(object: customObject)
+        let set: NSSet? = NSSet(object: customObject)
 
         let result: [Goal] = set.goals
 
