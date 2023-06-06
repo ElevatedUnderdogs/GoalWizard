@@ -23,4 +23,18 @@ extension NSSet {
         mutableSet.addObjects(from: elements)
         return NSSet(set: mutableSet)
     }
+
+    func union(_ elements: NSSet) -> NSSet? {
+        let mutableSet = NSMutableSet(set: self)
+        mutableSet.union(elements.hashableSet)
+        return NSSet(set: mutableSet)
+    }
+
+    var hashableSet: Set<AnyHashable> {
+        self as? Set<AnyHashable> ?? []
+    }
+
+    var mutableSet: NSMutableSet {
+        NSMutableSet(set: self)
+    }
 }
