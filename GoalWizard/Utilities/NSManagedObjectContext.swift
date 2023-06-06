@@ -9,6 +9,22 @@ import CoreData
 
 extension NSManagedObjectContext {
 
+    func mergeTopGoals(
+        topGoals: [Goal] = Goal.context.allGoals.filter(\.topGoal)
+    ) {
+        guard let firstNotMarked = topGoals.filter { !$0.isUserMarkedForDeletion }.first else {
+            return
+        }
+
+        for topGoal in topGoals where topGoal != firstNotMarked {
+            let topGoalSteps = topGoal.steps ?? []
+            let firstTopSteps = firstNotMarked.steps ?? []
+            firstNotMarked.steps = topGoalSteps.union(firstTopSteps)
+            Goal.context.deleteGoal(goals: [topGoal])
+        }
+        saveHandleErrors()
+    }
+
     var topGoal: Goal? {
         // Can't extract this into an extension because objective c can't
         // access associated generics in extensions.
