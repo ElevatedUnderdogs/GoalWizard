@@ -55,7 +55,7 @@ extension Goal {
         }
     }
 
-    static private(set) var context: NSManagedObjectContext = NSPersistentContainer.goalTable.viewContext
+    static private(set) var context: NSManagedObjectContext = NSPersistentCloudKitContainer.goalTable.viewContext
 
     var goalForRequest: String {
         var result: String = notOptionalTitle

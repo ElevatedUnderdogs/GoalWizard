@@ -26,7 +26,7 @@ class CoreDataTests: XCTestCase {
     }
 
     func testGoalTableLoad() {
-        let container = NSPersistentContainer.goalTable
+        let container = NSPersistentCloudKitContainer.goalTable
         XCTAssertNotNil(container)
         XCTAssertEqual(container.name, "Goal")
     }

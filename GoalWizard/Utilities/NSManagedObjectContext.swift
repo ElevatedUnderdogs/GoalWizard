@@ -63,6 +63,8 @@ extension NSManagedObjectContext {
         do {
             try save()
         } catch {
+            print((error as? NSError)?.userInfo)
+            fatalError(error.localizedDescription)
         }
     }
 

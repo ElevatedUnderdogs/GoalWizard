@@ -103,8 +103,8 @@ extension XCTestCase {
         let deleteRequest = NSBatchDeleteRequest(fetchRequest: fetchRequest)
         Goal.context.goals.forEach { Goal.context.delete($0) }
         do {
-            try NSPersistentContainer.goalTable.viewContext.execute(deleteRequest)
-            try NSPersistentContainer.goalTable.viewContext.save()
+            try NSPersistentCloudKitContainer.goalTable.viewContext.execute(deleteRequest)
+            try NSPersistentCloudKitContainer.goalTable.viewContext.save()
         } catch {
             print("Error deleting all goals: \(error.localizedDescription)")
         }
