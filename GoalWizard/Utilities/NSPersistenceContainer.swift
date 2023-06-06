@@ -19,12 +19,21 @@ extension NSPersistentCloudKitContainer {
         exposeError: (((any Error)?) -> Void)? = nil
     ) -> NSPersistentCloudKitContainer {
         let container = NSPersistentCloudKitContainer(name: name)
+        guard let description = container.persistentStoreDescriptions.first else {
+            fatalError("No Descriptions found")
+        }
+        description.setOption(true as NSNumber, forKey: NSPersistentHistoryTrackingKey)
+        description.setOption(true as NSNumber, forKey: NSPersistentStoreRemoteChangeNotificationPostOptionKey)
+
         container.loadPersistentStores { _, error in
             if let nsError = error as? NSError {
                 fatalError("Unresolved error \(nsError), \(nsError.userInfo)")
             }
             exposeError?(error)
         }
+
+        container.viewContext.automaticallyMergesChangesFromParent = true
+        container.viewContext.mergePolicy = NSMergeByPropertyObjectTrumpMergePolicy
         return container
     }
 }
