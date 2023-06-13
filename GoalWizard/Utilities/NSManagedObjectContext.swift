@@ -31,7 +31,7 @@ extension NSManagedObjectContext {
         // Don't need to check for multiple because swiftlint rule protects.
         // Difficult to trigger, app crashes instead of throwing an error when attempting, not worth it for tests.
         // swiftlint: disable force_try
-        try! fetch(.topGoalRequest).first
+        try! fetch(.topGoalRequest).filter { !$0.isUserMarkedForDeletion }.first
         // swiftlint: enable force_try
     }
 

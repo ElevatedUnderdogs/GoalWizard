@@ -15,12 +15,21 @@ extension Optional<NSSet> {
         guard let self else { return [] }
         return (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion} ?? []
     }
+
+    var goalsMarkedForDeletion: [Goal] {
+        guard let self else { return [] }
+        return (self.array as? [Goal])?.filter(\.isUserMarkedForDeletion) ?? []
+    }
 }
 
 extension NSSet {
 
     var goals: [Goal] {
         (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion } ?? []
+    }
+
+    var goalsMarkedForDeletion: [Goal] {
+        (self.array as? [Goal])?.filter(\.isUserMarkedForDeletion) ?? []
     }
 }
 
