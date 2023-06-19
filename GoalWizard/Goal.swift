@@ -10,6 +10,15 @@ import CoreData
 
 extension Goal {
 
+    var completedText: String {
+        totalCompletedSteps == 0 ? "Completed: 0" :
+        "Completed: \(totalCompletedSteps) goal\(totalCompletedSteps > 1 ? "s" : "" )"
+    }
+
+    var totalCompletedSteps: Int {
+        leaves.filter(\.isCompleted).count
+    }
+
     var stepCount: Int {
         steps?.goals.count ?? 0
     }

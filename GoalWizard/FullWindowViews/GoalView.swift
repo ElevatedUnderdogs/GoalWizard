@@ -129,7 +129,6 @@ struct GoalView: View {
                         Image.search
                     }
                     .buttonStyle(SkeuomorphicButtonStyle())
-
                     Button(action: { modifyState = .add }) { Image.add }
                     .buttonStyle(SkeuomorphicButtonStyle())
                 }
@@ -140,7 +139,8 @@ struct GoalView: View {
                         .font(.largeTitle)
                         .fontWeight(.bold)
                         .padding(.top)
-
+                    GreenGlowingText(text: goal.completedText)
+                        .font(Font.caption2)
                 } else if goal.subGoals.isEmpty {
                     HStack(alignment: .center) {
                         Text(goal.notOptionalTitle)
@@ -197,6 +197,13 @@ struct GoalView: View {
                             Button(action: { modifyState = .edit }) { Image.edit }
                             Spacer()
                                 .frame(width: 20)
+                        }
+                        HStack {
+                            Spacer()
+                                .frame(width: 20)
+                            GreenGlowingText(text: goal.completedText)
+                                .font(Font.caption2)
+                            Spacer()
                         }
                         HStack {
                             ProgressBar(value: goal.progress)
