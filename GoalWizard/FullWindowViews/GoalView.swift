@@ -10,6 +10,14 @@ import Callable
 import CommonExtensions
 import Dispatch
 
+var isDebug: Bool {
+    var result = false
+#if DEBUG
+    result = true
+#endif
+    return result
+}
+
 struct GoalView: View {
 
     @ObservedObject var goal: Goal
@@ -46,7 +54,7 @@ struct GoalView: View {
         VersionBasedNavigationStack {
             VStack {
                 HStack {
-                    if !goal.topGoal {
+                    if !goal.topGoal && isDebug {
 #if os(macOS)
 #else
                         Button(action: {
@@ -156,7 +164,7 @@ struct GoalView: View {
                         Spacer()
                             .frame(width: 20)
                         Button(action: { modifyState = .edit }) { Image.edit }
-                        if buttonState == .normal {
+                        if buttonState == .normal && isDebug {
                             // Make a ui test for this and record the response!.
                             Button(action: {
                                 buttonState = .loading
@@ -280,6 +288,7 @@ struct GoalView: View {
         // swiftlint: enable multiple_closures_with_trailing_closure
     }
 }
+var didIt: Bool = false
 
 struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
