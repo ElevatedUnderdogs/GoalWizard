@@ -23,23 +23,12 @@
 		</dict>
 		<key>CFBundlePrimaryIcon</key>
 		<dict>
-            <key>CFBundleIconFiles</key>
-            <array>
-                <string>AppIcon</string>
-            </array>
-            <key>UIPrerenderedIcon</key>
-            <false/>
-		</dict>
-		<key>UINewsstandIcon</key>
-		<dict>
 			<key>CFBundleIconFiles</key>
 			<array>
-				<string></string>
+				<string>AppIcon</string>
 			</array>
-			<key>UINewsstandBindingEdge</key>
-			<string>UINewsstandBindingEdgeLeft</string>
-			<key>UINewsstandBindingType</key>
-			<string>UINewsstandBindingTypeMagazine</string>
+			<key>UIPrerenderedIcon</key>
+			<false/>
 		</dict>
 	</dict>
 	<key>UIBackgroundModes</key>
