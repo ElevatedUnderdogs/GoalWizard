@@ -23,7 +23,7 @@ struct MultiPlatformActionButton: View {
                 .background(RoundedRectangle(cornerRadius: 10).fill(Color(.systemBlue)))
                 .accessibilityIdentifier(accessibilityId)
        #else
-            Text("Add Goal")
+            Text(title)
                 .font(.headline)
                 .foregroundColor(.white)
                 .padding()
