@@ -25,7 +25,7 @@ struct GoalCell: View {
     var pasteBoard: GoalPasteBoard
 
     var body: some View {
-        HStack { // <--- Do I need this?
+        HStack { // For accessibility
             VStack {
                 if let presentation = pathPresentation, !step.fullAncestorPath.isEmpty {
                     switch presentation {
@@ -70,10 +70,14 @@ struct GoalCell: View {
                 }
                 Spacer().frame(height: 10)
                 HStack(alignment: .top) {
-                    Text("\(step.subGoalCount) sub-goals")
-                        .font(.caption2)
-                        .foregroundColor(Color.systemCompatibleTeal)
-                    Spacer()
+                    let showSubGoals = !(nil != pathPresentation && !step.fullAncestorPath.isEmpty)
+                    if showSubGoals {
+                        Text("\(step.subGoalCount) sub-goals")
+                            .font(.caption2)
+                            .foregroundColor(Color.systemCompatibleTeal)
+                        Spacer()
+                    }
+
                     if step.isCompleted {
                         Image(systemName: "checkmark")
                             .resizable()
@@ -84,6 +88,9 @@ struct GoalCell: View {
                         Text("Est: " + step.notOptionalEstimatedCompletionDate)
                             .font(.caption2)
                             .foregroundColor(Color.systemCompatibleTeal)
+                    }
+                    if !showSubGoals {
+                        Spacer()
                     }
                 }
                 if let importance = step.importance?.decimal,
