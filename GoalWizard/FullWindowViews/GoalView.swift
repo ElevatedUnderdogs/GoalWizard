@@ -222,6 +222,16 @@ struct GoalView: View {
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                         .accessibilityIdentifier("Search TextField")
                 }
+                if filteredSteps.incomplete.isEmpty && filteredSteps.completed.isEmpty && goal.topGoal {
+                    Button(action: { modifyState = .add }) {
+                        HStack {
+                            Image.add
+                            Text("Add a goal!")
+                        }
+                    }
+                    .buttonStyle(SkeuomorphicButtonStyle())
+                    .padding()
+                }
                 List {
                     if !filteredSteps.incomplete.isEmpty {
                         Section(header: Text("Incomplete")) {
