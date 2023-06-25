@@ -71,6 +71,7 @@ struct GoalView: View {
                         if flattened {
                             Button(action: {
                                 flattened.toggle()
+                                UIApplication.matchIconToMode()
                             }) {
                                 VStack {
                                     Image.tree
@@ -80,6 +81,7 @@ struct GoalView: View {
                         } else {
                             Button(action: {
                                 flattened.toggle()
+                                UIApplication.matchIconToMode()
                             }) {
                                 VStack {
                                     Image.flattened
@@ -94,6 +96,7 @@ struct GoalView: View {
                             pasteGoal.isUserMarkedForDeletion = false
                             goal.add(sub: pasteGoal)
                             pasteBoard.cutGoal = nil
+                            UIApplication.matchIconToMode()
                         }) {
                             // paste mode.
                             HStack {
@@ -117,6 +120,7 @@ struct GoalView: View {
                         Button(action: {
                             pasteBoard.cutGoal = goal.cutOut()
                             presentationMode.wrappedValue.dismiss()
+                            UIApplication.matchIconToMode()
                         }) {
                             Image.cut
                         }
@@ -125,6 +129,7 @@ struct GoalView: View {
                     Button(action: {
                         // Tap the search view button.
                         showSearchView.toggle()
+                        UIApplication.matchIconToMode()
                     }) {
                         Image.search
                     }
@@ -171,6 +176,7 @@ struct GoalView: View {
                                 goal.gptAddSubGoals { _ in
                                     buttonState = .hidden
                                 }
+                                UIApplication.matchIconToMode()
                             }) {
                                 Image.openaiWizard
                             }

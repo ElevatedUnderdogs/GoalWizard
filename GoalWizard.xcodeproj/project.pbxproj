@@ -20,6 +20,7 @@
 		7546B0D929E7395500524F3C /* EditViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0D829E7395500524F3C /* EditViewTests.swift */; };
 		7546B0DB29E7401A00524F3C /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DA29E7401A00524F3C /* URLTests.swift */; };
 		7546B0DD29E7421900524F3C /* RadioButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DC29E7421900524F3C /* RadioButtonTests.swift */; };
+		7560E8D22A48CB5B0041126D /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7560E8D12A48CB5B0041126D /* UIApplication.swift */; };
 		7566A75D2A0F3794001FEF0E /* NSManagedObjectContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A75C2A0F3794001FEF0E /* NSManagedObjectContextTests.swift */; };
 		7566A75F2A0F4FAA001FEF0E /* NSFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */; };
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
@@ -91,6 +92,7 @@
 		7546B0D829E7395500524F3C /* EditViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = EditViewTests.swift; sourceTree = "<group>"; };
 		7546B0DA29E7401A00524F3C /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
 		7546B0DC29E7421900524F3C /* RadioButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonTests.swift; sourceTree = "<group>"; };
+		7560E8D12A48CB5B0041126D /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
 		7566A75C2A0F3794001FEF0E /* NSManagedObjectContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextTests.swift; sourceTree = "<group>"; };
 		7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFetchRequest.swift; sourceTree = "<group>"; };
 		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
@@ -266,6 +268,7 @@
 				75C8B7F229DE91CF00493D9C /* Secrets.swift */,
 				75C8B88029E3FBF400493D9C /* TestableHelpers.swift */,
 				75C8B7F429DE932B00493D9C /* URLRequest.swift */,
+				7560E8D12A48CB5B0041126D /* UIApplication.swift */,
 				75C8B7F929DEA54500493D9C /* String.swift */,
 			);
 			path = Utilities;
@@ -481,6 +484,7 @@
 				75111AD82A114814004441CB /* MultiPlatformTextField.swift in Sources */,
 				75C8B87729E3889900493D9C /* VersionBasedNavigationStack.swift in Sources */,
 				75C0B13A29D8BEE200D886CA /* Color.swift in Sources */,
+				7560E8D22A48CB5B0041126D /* UIApplication.swift in Sources */,
 				75C8B7EB29DCF8A200493D9C /* Optional.swift in Sources */,
 				75C8B7F529DE932B00493D9C /* URLRequest.swift in Sources */,
 				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
@@ -680,7 +684,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottlydon.GoalWizard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -723,7 +727,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.0.4;
+				MARKETING_VERSION = 1.1.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottlydon.GoalWizard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
