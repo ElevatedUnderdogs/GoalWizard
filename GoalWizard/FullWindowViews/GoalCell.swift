@@ -79,11 +79,16 @@ struct GoalCell: View {
                     }
 
                     if step.isCompleted {
-                        Image(systemName: "checkmark")
-                            .resizable()
-                            .scaledToFit()
-                            .frame(width: 10, height: 10)
-                            .foregroundColor(.green)
+                        HStack {
+                            Text(step.lastDateCompletedText)
+                                .font(.caption2)
+                                .foregroundColor(.green)
+                            Image(systemName: "checkmark")
+                                .resizable()
+                                .scaledToFit()
+                                .frame(width: 10, height: 10)
+                                .foregroundColor(.green)
+                        }
                     } else {
                         Text("Est: " + step.notOptionalEstimatedCompletionDate)
                             .font(.caption2)

@@ -180,6 +180,9 @@ struct GoalView: View {
                                     .frame(width: 24, height: 24)
                                     .onTapGesture {
                                         goal.thisCompleted.toggle()
+                                        if goal.thisCompleted {
+                                            goal.completedDates.appendIfUnique(Date())
+                                        }
                                         Goal.context.updateGoal(
                                             goal: goal,
                                             title: goal.notOptionalTitle,

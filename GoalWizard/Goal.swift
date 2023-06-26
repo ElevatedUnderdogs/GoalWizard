@@ -58,6 +58,20 @@ extension Goal {
         }
     }
 
+    var lastDateCompletedText: String {
+        // if there is only one leaf, then
+        if leaves.count == 1, let leaf = leaves.first {
+            return leaf.thisLastDateCompletedText
+        } else if leaves.count > 1 {
+            return "Mixed"
+        }
+        return thisLastDateCompletedText
+    }
+
+    private var thisLastDateCompletedText: String {
+        completedDates.last.map { DateFormatter.monthDayYearString(from: $0) } ?? ""
+    }
+
     var completedDates: [Date] {
         get {
             completedDatesObject as? [Date] ?? []
