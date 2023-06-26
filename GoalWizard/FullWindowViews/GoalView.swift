@@ -159,16 +159,13 @@ struct GoalView: View {
                 List {
                     if goal.topGoal {
                         Section(
-                            header: VStack(
-                                content: {
-                                    Text(goal.notOptionalTitle)
-                                        .font(.largeTitle)
-                                        .fontWeight(.bold)
-                                        .padding(.top)
-                                    GreenGlowingText(text: goal.completedText)
-                                        .font(Font.caption2)
-                                }
-                            )
+                            header: VStack {
+                                Text(goal.notOptionalTitle)
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                GreenGlowingText(text: goal.completedText)
+                                    .font(Font.caption2)
+                            }
                         ) {}
                     } else if goal.subGoals.isEmpty {
                         Section(
@@ -176,7 +173,6 @@ struct GoalView: View {
                                 Text(goal.notOptionalTitle)
                                     .font(.largeTitle)
                                     .fontWeight(.bold)
-                                    .padding(.top)
                                 Spacer()
                                     .frame(width: 20)
                                 Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
