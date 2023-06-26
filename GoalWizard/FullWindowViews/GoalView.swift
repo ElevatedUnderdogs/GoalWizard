@@ -139,88 +139,6 @@ struct GoalView: View {
                 }
                 .padding(.horizontal)
 
-                if goal.topGoal {
-                    Text(goal.notOptionalTitle)
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.top)
-                    GreenGlowingText(text: goal.completedText)
-                        .font(Font.caption2)
-                } else if goal.subGoals.isEmpty {
-                    HStack(alignment: .center) {
-                        Text(goal.notOptionalTitle)
-                            .font(.largeTitle)
-                            .fontWeight(.bold)
-                            .padding(.top)
-                        Spacer()
-                            .frame(width: 20)
-                        Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
-                            .resizable()
-                            .frame(width: 24, height: 24)
-                            .onTapGesture {
-                                goal.thisCompleted.toggle()
-                                Goal.context.updateGoal(
-                                    goal: goal,
-                                    title: goal.notOptionalTitle,
-                                    estimatedTime: goal.daysEstimate,
-                                    importance: goal.importance
-                                )
-                            }
-                        Spacer()
-                            .frame(width: 20)
-                        Button(action: { modifyState = .edit }) { Image.edit }
-                        if buttonState == .normal && isDebug {
-                            // Make a ui test for this and record the response!.
-                            Button(action: {
-                                buttonState = .loading
-                                goal.gptAddSubGoals { _ in
-                                    buttonState = .hidden
-                                }
-                                UIApplication.matchIconToMode()
-                            }) {
-                                Image.openaiWizard
-                            }
-#if os(macOS)
-                            .background(Color.clear)
-                            .clipShape(Circle())
-                            .frame(width: 100, height: 100)
-#endif
-                        } else if buttonState == .loading {
-                            ProgressView()
-                        }
-                    }
-                } else {
-                    // In a UI Test go to a step Goal View then add a step goal
-                    VStack {
-                        HStack {
-                            Spacer()
-                                .frame(width: 20)
-                            Text(goal.notOptionalTitle)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                                .padding(.top)
-                            Spacer()
-                            Button(action: { modifyState = .edit }) { Image.edit }
-                            Spacer()
-                                .frame(width: 20)
-                        }
-                        HStack {
-                            Spacer()
-                                .frame(width: 20)
-                            GreenGlowingText(text: goal.completedText)
-                                .font(Font.caption2)
-                            Spacer()
-                        }
-                        HStack {
-                            ProgressBar(value: goal.progress)
-                                .frame(height: 20)
-                                .padding(.leading, 20)
-                                .padding(.trailing, 10)
-                            Text(goal.notOptionalProgressPercentage)
-                                .padding(.trailing, 10)
-                        }
-                    }
-                }
                 if showSearchView {
                     // We can reach this by tapping the search button.
                     TextField("Search", text: $searchText)
@@ -239,6 +157,94 @@ struct GoalView: View {
                     .padding()
                 }
                 List {
+                    if goal.topGoal {
+                        Section(
+                            header: VStack(
+                                content: {
+                                    Text(goal.notOptionalTitle)
+                                        .font(.largeTitle)
+                                        .fontWeight(.bold)
+                                        .padding(.top)
+                                    GreenGlowingText(text: goal.completedText)
+                                        .font(Font.caption2)
+                                }
+                            )
+                        ) {}
+                    } else if goal.subGoals.isEmpty {
+                        Section(
+                            header: HStack(alignment: .center) {
+                                Text(goal.notOptionalTitle)
+                                    .font(.largeTitle)
+                                    .fontWeight(.bold)
+                                    .padding(.top)
+                                Spacer()
+                                    .frame(width: 20)
+                                Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
+                                    .resizable()
+                                    .frame(width: 24, height: 24)
+                                    .onTapGesture {
+                                        goal.thisCompleted.toggle()
+                                        Goal.context.updateGoal(
+                                            goal: goal,
+                                            title: goal.notOptionalTitle,
+                                            estimatedTime: goal.daysEstimate,
+                                            importance: goal.importance
+                                        )
+                                    }
+                                Spacer()
+                                    .frame(width: 20)
+                                Button(action: { modifyState = .edit }) { Image.edit }
+                                if buttonState == .normal && isDebug {
+                                    // Make a ui test for this and record the response!.
+                                    Button(action: {
+                                        buttonState = .loading
+                                        goal.gptAddSubGoals { _ in
+                                            buttonState = .hidden
+                                        }
+                                        UIApplication.matchIconToMode()
+                                    }) {
+                                        Image.openaiWizard
+                                    }
+#if os(macOS)
+                                    .background(Color.clear)
+                                    .clipShape(Circle())
+                                    .frame(width: 100, height: 100)
+#endif
+                                } else if buttonState == .loading {
+                                    ProgressView()
+                                }
+                            }
+                        ) {}
+
+                    } else {
+                        // In a UI Test go to a step Goal View then add a step goal
+                        Section(
+                            header: VStack(spacing: 9) {
+                                HStack {
+                                    Text(goal.notOptionalTitle)
+                                        .font(.largeTitle)
+                                        .fontWeight(.bold)
+                                    Spacer()
+                                    Button(action: { modifyState = .edit }) { Image.edit }
+                                    Spacer()
+                                        .frame(width: 10)
+                                }
+                                HStack {
+                                    GreenGlowingText(text: goal.completedText)
+                                        .font(Font.caption2)
+                                    Spacer()
+                                }
+                                HStack {
+                                    ProgressBar(value: goal.progress)
+                                        .frame(height: 20)
+                                        .padding(.trailing, 10)
+                                    Text(goal.notOptionalProgressPercentage)
+                                        .padding(.trailing, 10)
+                                }
+                            }
+                        ) {}
+                    }
+
                     if !filteredSteps.incomplete.isEmpty {
                         Section(header: Text("Incomplete")) {
                             ForEach(Array(
@@ -280,7 +286,6 @@ struct GoalView: View {
                         }
                     }
                 }
-                .padding(.top)
                 .accessibilityIdentifier("Goal List")
                 Spacer()
             }
