@@ -1,0 +1,22 @@
+name: iOS Application Tests
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  test:
+
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v2
+
+    - name: Set Xcode version
+      run: sudo xcode-select --switch /Applications/Xcode_13.app
+
+    - name: Run Unit and UI Tests
+      run: xcodebuild test -project GoalWizard.xcodeproj -scheme GoalWizard -destination 'platform=iOS Simulator,name=iPhone 13,OS=15.0'
+
