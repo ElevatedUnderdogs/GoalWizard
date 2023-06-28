@@ -21,6 +21,7 @@
 		7546B0DB29E7401A00524F3C /* URLTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DA29E7401A00524F3C /* URLTests.swift */; };
 		7546B0DD29E7421900524F3C /* RadioButtonTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7546B0DC29E7421900524F3C /* RadioButtonTests.swift */; };
 		7560E8D22A48CB5B0041126D /* UIApplication.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7560E8D12A48CB5B0041126D /* UIApplication.swift */; };
+		7560E8D42A4BD54B0041126D /* PressDownButton.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7560E8D32A4BD54B0041126D /* PressDownButton.swift */; };
 		7566A75D2A0F3794001FEF0E /* NSManagedObjectContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A75C2A0F3794001FEF0E /* NSManagedObjectContextTests.swift */; };
 		7566A75F2A0F4FAA001FEF0E /* NSFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */; };
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
@@ -93,6 +94,7 @@
 		7546B0DA29E7401A00524F3C /* URLTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = URLTests.swift; sourceTree = "<group>"; };
 		7546B0DC29E7421900524F3C /* RadioButtonTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = RadioButtonTests.swift; sourceTree = "<group>"; };
 		7560E8D12A48CB5B0041126D /* UIApplication.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UIApplication.swift; sourceTree = "<group>"; };
+		7560E8D32A4BD54B0041126D /* PressDownButton.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PressDownButton.swift; sourceTree = "<group>"; };
 		7566A75C2A0F3794001FEF0E /* NSManagedObjectContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextTests.swift; sourceTree = "<group>"; };
 		7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFetchRequest.swift; sourceTree = "<group>"; };
 		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
@@ -294,6 +296,7 @@
 				754663232A0F694C003366FB /* GreenGlowingText.swift */,
 				75C0B13F29D9223400D886CA /* ProgressBar.swift */,
 				75C8B87629E3889900493D9C /* VersionBasedNavigationStack.swift */,
+				7560E8D32A4BD54B0041126D /* PressDownButton.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -491,6 +494,7 @@
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
 				75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */,
 				75111ADA2A11547C004441CB /* MultiPlatformActionButton.swift in Sources */,
+				7560E8D42A4BD54B0041126D /* PressDownButton.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

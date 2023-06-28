@@ -118,32 +118,18 @@ struct GoalView: View {
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
                     } else if !goal.topGoal {
-
-                        // cutmode == true and goal is not topGoal.
-                        Button(action: {
+                        PressDownButton {
                             pasteBoard.cutGoal = goal.cutOut()
                             presentationMode.wrappedValue.dismiss()
                             UIApplication.matchIconToMode()
-                        }) {
+                        } onPress: {
+                            isCutButtonTouchdown = true
+                        } onRelease: {
+                            isCutButtonTouchdown = false
+                        } content: {
                             Image.cut
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
-                        .simultaneousGesture(
-                            DragGesture(minimumDistance: 0)
-                                .onChanged { _ in
-                                    print("All on changed.")
-                                    if !isCutButtonTouchdown {
-                                        print("press")
-                                        isCutButtonTouchdown = true
-                                    }
-                                }
-                                .onEnded { _ in
-                                    if isCutButtonTouchdown {
-                                        print("Ended")
-                                        isCutButtonTouchdown = false
-                                    }
-                                }
-                        )
                     }
                     Button(action: {
                         // Tap the search view button.
@@ -357,46 +343,5 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         // I can reach this with a GoalView ui test.
         GoalView(goal: Goal.start, pasteBoard: GoalPasteBoard())
-    }
-}
-
-struct PressDownButton<Content: View>: View {
-    let action: () -> Void
-    let content: () -> Content
-    let onPress: () -> Void
-    let onRelease: () -> Void
-    @State private var pressCount: Int = 0
-
-    init(
-        action: @escaping () -> Void,
-        onPress: @escaping () -> Void,
-        onRelease: @escaping () -> Void,
-        @ViewBuilder content: @escaping () -> Content
-    ) {
-        self.action = action
-        self.content = content
-        self.onPress = onPress
-        self.onRelease = onRelease
-    }
-
-    var body: some View {
-        Button(action: action) {
-            content()
-        }
-        .simultaneousGesture(
-            DragGesture(minimumDistance: 0)
-                .onChanged { _ in
-                    pressCount += 1
-                    if pressCount > 2 {
-                        onPress()
-                    }
-                }
-                .onEnded { _ in
-                    if pressCount > 2 {
-                        onRelease()
-                    }
-                    pressCount = 0
-                }
-        )
     }
 }
