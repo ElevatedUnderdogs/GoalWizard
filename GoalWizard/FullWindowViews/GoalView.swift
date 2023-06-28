@@ -26,8 +26,11 @@ struct GoalView: View {
     @State var searchText: String = ""
     @State var modifyState: ModifyState?
     @State var buttonState: ButtonState = .normal
+    @State var isCutButtonTouchdown: Bool = false
     private(set) var pasteBoard: GoalPasteBoard
     @Environment(\.presentationMode) var presentationMode
+
+    @GestureState private var isTapped = false
 
     // Add an initializer that accepts a Goal and a GoalPasteBoard
     init(goal: Goal, pasteBoard: GoalPasteBoard) {
@@ -125,6 +128,22 @@ struct GoalView: View {
                             Image.cut
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
+                        .simultaneousGesture(
+                            DragGesture(minimumDistance: 0)
+                                .onChanged { _ in
+                                    print("All on changed.")
+                                    if !isCutButtonTouchdown {
+                                        print("press")
+                                        isCutButtonTouchdown = true
+                                    }
+                                }
+                                .onEnded { _ in
+                                    if isCutButtonTouchdown {
+                                        print("Ended")
+                                        isCutButtonTouchdown = false
+                                    }
+                                }
+                        )
                     }
                     Button(action: {
                         // Tap the search view button.
@@ -141,23 +160,24 @@ struct GoalView: View {
 
                 if showSearchView {
                     // We can reach this by tapping the search button.
-                    TextField("Search", text: $searchText)
+                    TextField("Search \(goal.notOptionalTitle) steps", text: $searchText)
                         .padding()
+                        .overlay(
+                            RoundedRectangle(cornerRadius: 10)
+                                .stroke(Color.gray, lineWidth: 1)
+                        )
+                        .padding(.leading, 20)
+                        .padding(.trailing, 20)
                         .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
                         .accessibilityIdentifier("Search TextField")
                 }
-                if filteredSteps.incomplete.isEmpty && filteredSteps.completed.isEmpty && goal.topGoal {
-                    Button(action: { modifyState = .add }) {
-                        HStack {
-                            Image.add
-                            Text("Add a goal!")
-                        }
-                    }
-                    .buttonStyle(SkeuomorphicButtonStyle())
-                    .padding()
+
+                if isCutButtonTouchdown {
+                    Text(goal.cutInstructions)
                 }
+                // MARK: - Table/List
                 List {
-                    if goal.topGoal {
+                    if goal.topGoal && !showSearchView {
                         Section(
                             header: VStack {
                                 Text(goal.notOptionalTitle)
@@ -167,7 +187,7 @@ struct GoalView: View {
                                     .font(Font.caption2)
                             }
                         ) {}
-                    } else if goal.subGoals.isEmpty {
+                    } else if goal.subGoals.isEmpty && !showSearchView {
                         Section(
                             header: HStack(alignment: .center) {
                                 Text(goal.notOptionalTitle)
@@ -215,7 +235,7 @@ struct GoalView: View {
                             }
                         ) {}
 
-                    } else {
+                    } else if !showSearchView {
                         // In a UI Test go to a step Goal View then add a step goal
                         Section(
                             header: VStack(spacing: 9) {
@@ -243,7 +263,16 @@ struct GoalView: View {
                             }
                         ) {}
                     }
-
+                    if filteredSteps.incomplete.isEmpty && filteredSteps.completed.isEmpty && goal.topGoal {
+                        Button(action: { modifyState = .add }) {
+                            HStack {
+                                Image.add
+                                Text("Add a goal!")
+                            }
+                        }
+                        .buttonStyle(SkeuomorphicButtonStyle())
+                        .padding()
+                    }
                     if !filteredSteps.incomplete.isEmpty {
                         Section(header: Text("Incomplete")) {
                             ForEach(Array(
@@ -285,8 +314,15 @@ struct GoalView: View {
                         }
                     }
                 }
+                .overlay(isCutButtonTouchdown ?
+                    RoundedRectangle(cornerRadius: 10)
+                    .stroke(Color.gray, lineWidth: 2) : nil
+                )
                 .accessibilityIdentifier("Goal List")
                 Spacer()
+
+                // MARK: Horizontal Scroll view for buttons.
+
             }
 #if os(iOS)
             .navigationBarTitle("", displayMode: .inline)
@@ -321,5 +357,46 @@ struct ContentView_Previews: PreviewProvider {
     static var previews: some View {
         // I can reach this with a GoalView ui test.
         GoalView(goal: Goal.start, pasteBoard: GoalPasteBoard())
+    }
+}
+
+struct PressDownButton<Content: View>: View {
+    let action: () -> Void
+    let content: () -> Content
+    let onPress: () -> Void
+    let onRelease: () -> Void
+    @State private var pressCount: Int = 0
+
+    init(
+        action: @escaping () -> Void,
+        onPress: @escaping () -> Void,
+        onRelease: @escaping () -> Void,
+        @ViewBuilder content: @escaping () -> Content
+    ) {
+        self.action = action
+        self.content = content
+        self.onPress = onPress
+        self.onRelease = onRelease
+    }
+
+    var body: some View {
+        Button(action: action) {
+            content()
+        }
+        .simultaneousGesture(
+            DragGesture(minimumDistance: 0)
+                .onChanged { _ in
+                    pressCount += 1
+                    if pressCount > 2 {
+                        onPress()
+                    }
+                }
+                .onEnded { _ in
+                    if pressCount > 2 {
+                        onRelease()
+                    }
+                    pressCount = 0
+                }
+        )
     }
 }

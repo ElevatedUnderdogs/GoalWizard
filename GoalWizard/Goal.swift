@@ -10,6 +10,10 @@ import CoreData
 
 extension Goal {
 
+    var cutInstructions: String {
+        "Cut this goal \(subGoals.isEmpty ? "" : "and sub goals") and then you can paste it where you like."
+    }
+
     var completedText: String {
         totalCompletedSteps == 0 ? "Completed: 0" :
         "Completed: \(totalCompletedSteps) goal\(totalCompletedSteps > 1 ? "s" : "" )"
