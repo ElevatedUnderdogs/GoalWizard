@@ -274,6 +274,18 @@ extension Goal {
     var isLeaf: Bool {
         steps.isEmpty != false
     }
+
+    func generateSubGoalCopyText() -> String {
+        let sortedGoals = steps?.goals.filteredSteps(with: "", flatten: true).incomplete ?? []
+        var result = ""
+        for (index, goal) in sortedGoals.enumerated() {
+            let goalName = goal.title ?? ""
+            let goalImportance = goal.importance ?? ""
+            let parentChain = goal.ancestors.map { $0.title ?? "" }.joined(separator: " > ")
+            result += "\(index+1). \(goalName)\n    Importance: \(goalImportance)\n    Parent chain: \(parentChain)\n"
+        }
+        return result
+    }
 }
 
 // Provided in this file because of fileprivate computed properties.
