@@ -27,6 +27,7 @@ struct GoalView: View {
     @State var modifyState: ModifyState?
     @State var buttonState: ButtonState = .normal
     @State var isCutButtonTouchdown: Bool = false
+    @State private var showCopiedMessage = false
     private(set) var pasteBoard: GoalPasteBoard
     @Environment(\.presentationMode) var presentationMode
 
@@ -102,7 +103,8 @@ struct GoalView: View {
                             UIApplication.matchIconToMode()
                         }) {
                             // paste mode.
-                            HStack {
+                            VStack {
+                                Image.paste
                                 VStack {
                                     Text("Paste").font(.footnote)
                                     if let name = pasteBoard
@@ -110,10 +112,10 @@ struct GoalView: View {
                                         .notOptionalTitle
                                         .components(separatedBy: " ")
                                         .first {
-                                        Text(name + "...").font(.footnote)
+                                        Text(name.count > 5 ? (String(name.prefix(5)) + "...") : name)
+                                            .font(.footnote)
                                     }
                                 }
-                                Image.paste
                             }
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
@@ -260,7 +262,26 @@ struct GoalView: View {
                         .padding()
                     }
                     if !filteredSteps.incomplete.isEmpty {
-                        Section(header: Text("Incomplete")) {
+                        Section(
+                            header: HStack {
+                                Button(action: {
+                                    // Handle tap action here
+                                    print("Incomplete section tapped!")
+                                    self.showCopiedMessage = true
+                                    UIPasteboard.general.string = goal.generateSubGoalCopyText()
+                                    DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {
+                                        self.showCopiedMessage = false
+                                    }
+                                }) {
+                                    Text("Incomplete")
+                                        .font(.headline)
+                                        .foregroundColor(.gray)
+                                }
+                                if showCopiedMessage {
+                                    GreenGlowingText(text: "Copied")
+                                }
+                            }
+                        ) {
                             ForEach(Array(
                                 filteredSteps.incomplete.enumerated()),
                                     id: \.1.id
