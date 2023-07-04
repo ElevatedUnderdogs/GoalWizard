@@ -51,7 +51,7 @@ class EditGoalViewTests: XCTestCase {
                 expectation.fulfill()
                 return
             }
-            print(recognizedText)
+            debugPrint(recognizedText)
 
             // Add your assertions here based on the recognized text
             // Example:
@@ -92,8 +92,8 @@ extension UIImage {
                 return observation.topCandidates(1).first?.string
             }.joined(separator: " ")
 
-            print(recognizedText)
-            print(recognizedText)
+            debugPrint(recognizedText)
+            debugPrint(recognizedText)
             completion(recognizedText)
         }
 

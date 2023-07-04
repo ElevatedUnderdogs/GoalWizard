@@ -44,7 +44,7 @@ struct PressDownButton<Content: View>: View {
         .simultaneousGesture(
             DragGesture(minimumDistance: 0)
                 .onChanged { _ in
-                    print("on change")
+                    debugPrint("on change")
                     pressCount += 1
                     if pressCount > 2 {
                         onPress()

@@ -7,6 +7,12 @@
 
 import Foundation
 
+extension Date {
+    var typical: String {
+        DateFormatter.monthDayDayOfWeekString(from: self)
+    }
+}
+
 extension DateFormatter {
 
     /// "EEE", for example: Mon'

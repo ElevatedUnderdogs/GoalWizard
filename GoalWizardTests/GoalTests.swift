@@ -106,7 +106,7 @@ extension XCTestCase {
             try NSPersistentCloudKitContainer.goalTable.viewContext.execute(deleteRequest)
             try NSPersistentCloudKitContainer.goalTable.viewContext.save()
         } catch {
-            print("Error deleting all goals: \(error.localizedDescription)")
+            debugPrint("Error deleting all goals: \(error.localizedDescription)")
         }
         XCTAssertEqual(0, Goal.context.goals.count, "ERROR MESSAGE: " + Goal.context.goals.first!.title! + "<")
     }
@@ -446,7 +446,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
                 action(choices as? T)
             case .failure(let error):
                 action(nil)
-                print(error.localizedDescription)
+                debugPrint(error.localizedDescription)
             case .none:
                 action(nil)
             }

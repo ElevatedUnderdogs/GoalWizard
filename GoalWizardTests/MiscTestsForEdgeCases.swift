@@ -118,7 +118,7 @@ class FilteredStepsTests: XCTestCase {
         goal4.title = "Watermellon"
         goal2.add(sub: goal4) // 2/3
 
-        print(goal2.progress, goal1.progress)
+        debugPrint(goal2.progress, goal1.progress)
         filteredSteps = goals.filteredSteps(with: searchText, flatten: false)
         XCTAssertEqual(filteredSteps.incomplete.first, goal2)
         XCTAssertEqual(filteredSteps.incomplete.last, goal1)

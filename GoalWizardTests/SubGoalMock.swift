@@ -22,7 +22,7 @@ struct ErrorSubGoalMock: HasCallCodable {
             _ = try invalidMessage.content.decodedContent() as T
             action(nil)
         } catch {
-            print("Error decoding content:", error.localizedDescription)
+            debugPrint("Error decoding content:", error.localizedDescription)
             action(nil)
         }
     }
@@ -73,7 +73,7 @@ struct SubGoalMock: HasCallCodable {
             let responseObject = try decoder.decode(T.self, from: jsonData)
             action(responseObject)
         } catch {
-            print("Error decoding JSON: \(error)")
+            debugPrint("Error decoding JSON: \(error)")
             action(nil)
         }
     }

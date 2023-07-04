@@ -80,7 +80,7 @@ extension NSManagedObjectContext {
             try save()
         } catch {
             #if DEBUG
-            print((error as? NSError)?.userInfo as Any)
+            debugPrint((error as? NSError)?.userInfo as Any)
             #endif
         }
     }

@@ -77,7 +77,7 @@ final class GoalWizardUITests: XCTestCase {
             app.collectionViews["Goal List"].otherElements["goal_cell_0"].isHittable {
                 app.collectionViews["Goal List"].otherElements["goal_cell_0"].swipeLeft(velocity: .slow)
         } else {
-            print(
+            debugPrint(
                 """
                 Couldn't delete \(title)
                 exists: \(app.staticTexts[title].exists)

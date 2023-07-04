@@ -63,7 +63,7 @@ struct GoalView: View {
 #else
                         Button(action: {
                             // Tap home button.
-                            print("home")
+                            debugPrint("home")
                         }) {
                             Image.house
                         }
@@ -176,31 +176,48 @@ struct GoalView: View {
                             }
                         ) {}
                     } else if goal.subGoals.isEmpty && !showSearchView {
-                        Section(
-                            header: HStack(alignment: .center) {
-                                Text(goal.notOptionalTitle)
-                                    .font(.largeTitle)
-                                    .fontWeight(.bold)
+                        Section(header:
+                                    VStack(alignment: .center) {
+                            Text(goal.notOptionalTitle)
+                                .font(.largeTitle)
+                                .fontWeight(.bold)
+                            HStack {
                                 Spacer()
                                     .frame(width: 20)
-                                Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
-                                    .resizable()
-                                    .frame(width: 24, height: 24)
-                                    .onTapGesture {
-                                        goal.thisCompleted.toggle()
-                                        if goal.thisCompleted {
-                                            goal.completedDates.appendIfUnique(Date())
-                                        }
-                                        Goal.context.updateGoal(
-                                            goal: goal,
-                                            title: goal.notOptionalTitle,
-                                            estimatedTime: goal.daysEstimate,
-                                            importance: goal.importance
-                                        )
+                                VStack {
+                                    if goal.thisCompleted {
+                                        Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                            .foregroundColor(Color.goalGreen)
+                                        GreenGlowingText(text: "Done")
+                                    } else {
+                                        Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
+                                            .resizable()
+                                            .frame(width: 24, height: 24)
+                                        Text("Done?")
                                     }
+                                }
+                                .onTapGesture {
+                                    goal.thisCompleted.toggle()
+                                    if goal.thisCompleted {
+                                        goal.completedDates.appendIfUnique(Date())
+                                    }
+                                    Goal.context.updateGoal(
+                                        goal: goal,
+                                        title: goal.notOptionalTitle,
+                                        estimatedTime: goal.daysEstimate,
+                                        importance: goal.importance
+                                    )
+                                }
                                 Spacer()
                                     .frame(width: 20)
-                                Button(action: { modifyState = .edit }) { Image.edit }
+                                Button(action: { modifyState = .edit }) {
+                                    VStack {
+                                        Image.edit
+                                        Text("Edit").font(Font.caption2)
+                                    }
+                                }
                                 if buttonState == .normal && isDebug {
                                     // Make a ui test for this and record the response!.
                                     Button(action: {
@@ -221,7 +238,7 @@ struct GoalView: View {
                                     ProgressView()
                                 }
                             }
-                        ) {}
+                        }) {}
 
                     } else if !showSearchView {
                         // In a UI Test go to a step Goal View then add a step goal
@@ -232,7 +249,12 @@ struct GoalView: View {
                                         .font(.largeTitle)
                                         .fontWeight(.bold)
                                     Spacer()
-                                    Button(action: { modifyState = .edit }) { Image.edit }
+                                    Button(action: { modifyState = .edit }) {
+                                        VStack {
+                                            Image.edit
+                                            Text("Edit").font(Font.caption2)
+                                        }
+                                    }
                                     Spacer()
                                         .frame(width: 10)
                                 }
@@ -266,7 +288,7 @@ struct GoalView: View {
                             header: HStack {
                                 Button(action: {
                                     // Handle tap action here
-                                    print("Incomplete section tapped!")
+                                    debugPrint("Incomplete section tapped!")
                                     self.showCopiedMessage = true
                                     UIPasteboard.general.string = goal.generateSubGoalCopyText()
                                     DispatchQueue.main.asyncAfter(deadline: .now() + 0.2) {

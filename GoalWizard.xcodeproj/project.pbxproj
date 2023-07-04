@@ -25,6 +25,7 @@
 		7566A75D2A0F3794001FEF0E /* NSManagedObjectContextTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A75C2A0F3794001FEF0E /* NSManagedObjectContextTests.swift */; };
 		7566A75F2A0F4FAA001FEF0E /* NSFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */; };
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
+		75B01CB32A54707D007F27C5 /* debugPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB22A54707D007F27C5 /* debugPrint.swift */; };
 		75BC3D802A0F197300713D1B /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC3D7F2A0F197300713D1B /* Image.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
@@ -98,6 +99,7 @@
 		7566A75C2A0F3794001FEF0E /* NSManagedObjectContextTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSManagedObjectContextTests.swift; sourceTree = "<group>"; };
 		7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFetchRequest.swift; sourceTree = "<group>"; };
 		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
+		75B01CB22A54707D007F27C5 /* debugPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = debugPrint.swift; sourceTree = "<group>"; };
 		75BC3D7F2A0F197300713D1B /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardApp.swift; sourceTree = "<group>"; };
@@ -171,6 +173,7 @@
 			isa = PBXGroup;
 			children = (
 				7520632A2A2D3AAB00B27384 /* CodableGoal.swift */,
+				75B01CB22A54707D007F27C5 /* debugPrint.swift */,
 			);
 			path = Migration;
 			sourceTree = "<group>";
@@ -465,6 +468,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				75B01CB32A54707D007F27C5 /* debugPrint.swift in Sources */,
 				75C8B7FA29DEA54500493D9C /* String.swift in Sources */,
 				75BC3D802A0F197300713D1B /* Image.swift in Sources */,
 				75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */,

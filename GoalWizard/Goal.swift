@@ -38,18 +38,22 @@ extension Goal {
         return result.reversed()
     }
 
+    var ancestorsSanzFirst: [Goal] {
+        var buffer = ancestors
+        buffer.removeFirst()
+        return buffer
+    }
+
     var fullAncestorPath: String {
-        if let first = ancestors.first, let last = ancestors.last {
-            return first === last ? first.notOptionalTitle : ancestors.map(\.notOptionalTitle).joined(separator: "->\n")
-        }
-        return ""
+        ancestors.chained
+    }
+
+    var fullAncestorPathSanzFirst: String {
+        ancestorsSanzFirst.chained
     }
 
     var shortenedAncesterPath: String {
-        if let first = ancestors.first, let last = ancestors.last {
-            return first === last ? first.notOptionalTitle : first.notOptionalTitle + "..." + last.notOptionalTitle
-        }
-        return ""
+        ancestors.condensedPath
     }
 
     var closedDates: [Date] {
@@ -115,6 +119,11 @@ extension Goal {
     /// The view is updating this when changing the estimates.
     public var notOptionalProgressPercentage: String {
         progressPercentage ?? "-"
+    }
+
+    /// A more context specific name without having to migrate
+    var createdDate: Date? {
+        timeStamp
     }
 
     static var empty: Goal {
@@ -286,10 +295,29 @@ extension Goal {
         }
         return result
     }
+
+    var accumulatedImportance: Decimal {
+        ancestorsSanzFirst.importanceSum + (importance?.decimal ?? 0)
+    }
 }
 
 // Provided in this file because of fileprivate computed properties.
 extension [Goal] {
+
+    var condensedPath: String {
+        guard let first, let last else { return "" }
+        return first === last ? first.notOptionalTitle : first.notOptionalTitle + "..." + last.notOptionalTitle
+
+    }
+
+    var importanceSum: Decimal {
+        compactMap(\.importance?.decimal).reduce(0, +)
+    }
+
+    var chained: String {
+        guard let first, let last else { return "" }
+        return first === last ? first.notOptionalTitle : map(\.notOptionalTitle).joined(separator: "->\n")
+    }
 
     var totalDays: Int64 {
         reduce(0) { $0 + $1.totalDays }
