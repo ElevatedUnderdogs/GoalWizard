@@ -102,6 +102,10 @@ extension Goal {
         return result
     }
 
+    var notOptionalTitleClipped: String {
+        notOptionalTitle.count > 16 ? notOptionalTitle.clipped(to: 13) : notOptionalTitle
+    }
+
     public var notOptionalTitle: String {
         get {
             return title ?? ""
@@ -285,7 +289,7 @@ extension Goal {
     }
 
     func generateSubGoalCopyText() -> String {
-        let sortedGoals = steps?.goals.filteredSteps(with: "", flatten: true).incomplete ?? []
+        let sortedGoals = steps?.goals.filteredSteps(with: "", flatten: true).incompletes ?? []
         var result = ""
         for (index, goal) in sortedGoals.enumerated() {
             let goalName = goal.title ?? ""
@@ -334,7 +338,7 @@ extension [Goal] {
         return Double(totalDays - daysLeft) / Double(totalDays)
     }
 
-    func filteredSteps(with searchText: String, flatten: Bool) -> (incomplete: [Goal], completed: [Goal]) {
+    func filteredSteps(with searchText: String, flatten: Bool) -> (incompletes: [Goal], completed: [Goal]) {
         let filteredGoals: [Goal]
 
         if searchText.isEmpty {
@@ -368,7 +372,7 @@ extension [Goal] {
             }
 
         let completedGoals = filteredGoals.filter { $0.progress == 1 }
-        return (incomplete: incompleteGoals, completed: completedGoals)
+        return (incompletes: incompleteGoals, completed: completedGoals)
     }
 
     var leaves: Self {

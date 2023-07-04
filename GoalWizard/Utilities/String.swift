@@ -31,6 +31,15 @@ extension String {
         return try JSONDecoder().decode(T.self, from: data)
     }
 
+    func clipped(to length: Int) -> String {
+        let endIndex = self.index(self.startIndex, offsetBy: min(length, self.count))
+        var result = String(self[..<endIndex])
+        if self.count > length {
+            result += "…"
+        }
+        return result
+    }
+
     static var appIcon: String {
         "AppIcon"
     }

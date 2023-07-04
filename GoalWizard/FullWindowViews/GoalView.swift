@@ -39,13 +39,13 @@ struct GoalView: View {
         self.pasteBoard = pasteBoard
     }
 
-    var filteredSteps: (incomplete: [Goal], completed: [Goal]) {
+    var filteredSteps: (incompletes: [Goal], completed: [Goal]) {
         goal.subGoals.filteredSteps(with: searchText, flatten: flattened)
     }
 
     // Top section
     func delete(impcomplete offsets: IndexSet) {
-        Goal.context.deleteGoal(goals: offsets.map { filteredSteps.incomplete[$0] })
+        Goal.context.deleteGoal(goals: offsets.map { filteredSteps.incompletes[$0] })
     }
 
     // bottom section
@@ -79,7 +79,7 @@ struct GoalView: View {
                             }) {
                                 VStack {
                                     Image.tree
-                                    Text("Tree")
+                                    Text("Tree").font(Font.caption2)
                                 }
                             }.buttonStyle(SkeuomorphicButtonStyle())
                         } else {
@@ -89,7 +89,7 @@ struct GoalView: View {
                             }) {
                                 VStack {
                                     Image.flattened
-                                    Text("Flatten")
+                                    Text("Flatten").font(Font.caption2)
                                 }
                             }.buttonStyle(SkeuomorphicButtonStyle())
                         }
@@ -129,7 +129,10 @@ struct GoalView: View {
                         } onRelease: {
                             isCutButtonTouchdown = false
                         } content: {
-                            Image.cut
+                            VStack {
+                                Image.cut
+                                Text("Cut").font(.footnote)
+                            }
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
                     }
@@ -141,7 +144,13 @@ struct GoalView: View {
                         Image.search
                     }
                     .buttonStyle(SkeuomorphicButtonStyle())
-                    Button(action: { modifyState = .add }) { Image.add }
+                    Button(action: { modifyState = .add }) {
+                        VStack {
+                            Image.add
+                            Text(goal.topGoal ? "Add goal": "Sub")
+                                .font(Font.caption2)
+                        }
+                    }
                     .buttonStyle(SkeuomorphicButtonStyle())
                 }
                 .padding(.horizontal)
@@ -176,69 +185,70 @@ struct GoalView: View {
                             }
                         ) {}
                     } else if goal.subGoals.isEmpty && !showSearchView {
-                        Section(header:
-                                    VStack(alignment: .center) {
-                            Text(goal.notOptionalTitle)
-                                .font(.largeTitle)
-                                .fontWeight(.bold)
-                            HStack {
-                                Spacer()
-                                    .frame(width: 20)
-                                VStack {
-                                    if goal.thisCompleted {
-                                        Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
-                                            .resizable()
-                                            .frame(width: 24, height: 24)
-                                            .foregroundColor(Color.goalGreen)
-                                        GreenGlowingText(text: "Done")
-                                    } else {
-                                        Image(systemName: goal.thisCompleted ? "largecircle.fill.circle" : "circle")
-                                            .resizable()
-                                            .frame(width: 24, height: 24)
-                                        Text("Done?")
-                                    }
-                                }
-                                .onTapGesture {
-                                    goal.thisCompleted.toggle()
-                                    if goal.thisCompleted {
-                                        goal.completedDates.appendIfUnique(Date())
-                                    }
-                                    Goal.context.updateGoal(
-                                        goal: goal,
-                                        title: goal.notOptionalTitle,
-                                        estimatedTime: goal.daysEstimate,
-                                        importance: goal.importance
-                                    )
-                                }
-                                Spacer()
-                                    .frame(width: 20)
-                                Button(action: { modifyState = .edit }) {
-                                    VStack {
-                                        Image.edit
-                                        Text("Edit").font(Font.caption2)
-                                    }
-                                }
-                                if buttonState == .normal && isDebug {
-                                    // Make a ui test for this and record the response!.
-                                    Button(action: {
-                                        buttonState = .loading
-                                        goal.gptAddSubGoals { _ in
-                                            buttonState = .hidden
+                        Section(
+                            header:
+                                VStack(alignment: .center) {
+                                    Text(goal.notOptionalTitle)
+                                        .font(.largeTitle)
+                                        .fontWeight(.bold)
+                                    HStack {
+                                        Spacer()
+                                            .frame(width: 20)
+                                        VStack {
+                                            if goal.thisCompleted {
+                                                Image.circle(completed: goal.thisCompleted)
+                                                    .resizable()
+                                                    .frame(width: 24, height: 24)
+                                                    .foregroundColor(Color.goalGreen)
+                                                GreenGlowingText(text: "Done")
+                                            } else {
+                                                Image.circle(completed: goal.thisCompleted)
+                                                    .resizable()
+                                                    .frame(width: 24, height: 24)
+                                                Text("Done?")
+                                            }
                                         }
-                                        UIApplication.matchIconToMode()
-                                    }) {
-                                        Image.openaiWizard
-                                    }
+                                        .onTapGesture {
+                                            goal.thisCompleted.toggle()
+                                            if goal.thisCompleted {
+                                                goal.completedDates.appendIfUnique(Date())
+                                            }
+                                            Goal.context.updateGoal(
+                                                goal: goal,
+                                                title: goal.notOptionalTitle,
+                                                estimatedTime: goal.daysEstimate,
+                                                importance: goal.importance
+                                            )
+                                        }
+                                        Spacer()
+                                            .frame(width: 20)
+                                        Button(action: { modifyState = .edit }) {
+                                            VStack {
+                                                Image.edit
+                                                Text("Edit").font(Font.caption2)
+                                            }
+                                        }
+                                        if buttonState == .normal && isDebug {
+                                            // Make a ui test for this and record the response!.
+                                            Button(action: {
+                                                buttonState = .loading
+                                                goal.gptAddSubGoals { _ in
+                                                    buttonState = .hidden
+                                                }
+                                                UIApplication.matchIconToMode()
+                                            }) {
+                                                Image.openaiWizard
+                                            }
 #if os(macOS)
-                                    .background(Color.clear)
-                                    .clipShape(Circle())
-                                    .frame(width: 100, height: 100)
+                                            .background(Color.clear)
+                                            .clipShape(Circle())
+                                            .frame(width: 100, height: 100)
 #endif
-                                } else if buttonState == .loading {
-                                    ProgressView()
-                                }
-                            }
-                        }) {}
+                                        } else if buttonState == .loading {
+                                            ProgressView()
+                                        }
+                                    }
+                                }) {}
 
                     } else if !showSearchView {
                         // In a UI Test go to a step Goal View then add a step goal
@@ -273,17 +283,17 @@ struct GoalView: View {
                             }
                         ) {}
                     }
-                    if filteredSteps.incomplete.isEmpty && filteredSteps.completed.isEmpty && goal.topGoal {
+                    if filteredSteps.incompletes.isEmpty && filteredSteps.completed.isEmpty && goal.topGoal {
                         Button(action: { modifyState = .add }) {
                             HStack {
                                 Image.add
-                                Text("Add a goal!")
+                                Text(goal.topGoal ? "Add a goal!": "Add a sub goal.")
                             }
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
                         .padding()
                     }
-                    if !filteredSteps.incomplete.isEmpty {
+                    if !filteredSteps.incompletes.isEmpty {
                         Section(
                             header: HStack {
                                 Button(action: {
@@ -295,7 +305,7 @@ struct GoalView: View {
                                         self.showCopiedMessage = false
                                     }
                                 }) {
-                                    Text("Incomplete")
+                                    Text("Incomplete: \(filteredSteps.incompletes.count)")
                                         .font(.headline)
                                         .foregroundColor(.gray)
                                 }
@@ -305,7 +315,7 @@ struct GoalView: View {
                             }
                         ) {
                             ForEach(Array(
-                                filteredSteps.incomplete.enumerated()),
+                                filteredSteps.incompletes.enumerated()),
                                     id: \.1.id
                             ) { index, step in
                                 // Tap a goal cell in the incompleted section (needs a completed)
@@ -354,7 +364,7 @@ struct GoalView: View {
 
             }
 #if os(iOS)
-            .navigationBarTitle("", displayMode: .inline)
+            .navigationBarTitle(goal.notOptionalTitleClipped, displayMode: .inline)
             .navigationBarHidden(goal.topGoal)
 #endif
             .sheet(

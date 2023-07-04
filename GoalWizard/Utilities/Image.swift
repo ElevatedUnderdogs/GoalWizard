@@ -71,4 +71,8 @@ extension Image {
             .aspectRatio(contentMode: .fit)
             .foregroundColor(.green)
     }
+
+    static func circle(completed: Bool) -> Image {
+        Image(systemName: completed ? "largecircle.fill.circle" : "circle")
+    }
 }
