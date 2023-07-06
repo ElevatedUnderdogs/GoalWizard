@@ -57,104 +57,6 @@ struct GoalView: View {
     var body: some View {
         VersionBasedNavigationStack {
             VStack {
-                HStack {
-                    if !goal.topGoal && isDebug {
-#if os(macOS)
-#else
-                        Button(action: {
-                            // Tap home button.
-                            debugPrint("home")
-                        }) {
-                            Image.house
-                        }
-                        .buttonStyle(SkeuomorphicButtonStyle())
-#endif
-                    }
-                    Spacer()
-                    if goal.stepCount > 0 {
-                        if flattened {
-                            Button(action: {
-                                flattened.toggle()
-                                UIApplication.matchIconToMode()
-                            }) {
-                                VStack {
-                                    Image.tree
-                                    Text("Tree").font(Font.caption2)
-                                }
-                            }.buttonStyle(SkeuomorphicButtonStyle())
-                        } else {
-                            Button(action: {
-                                flattened.toggle()
-                                UIApplication.matchIconToMode()
-                            }) {
-                                VStack {
-                                    Image.flattened
-                                    Text("Flatten").font(Font.caption2)
-                                }
-                            }.buttonStyle(SkeuomorphicButtonStyle())
-                        }
-                    }
-
-                    if let pasteGoal = pasteBoard.cutGoal {
-                        Button(action: {
-                            pasteGoal.isUserMarkedForDeletion = false
-                            goal.add(sub: pasteGoal)
-                            pasteBoard.cutGoal = nil
-                            UIApplication.matchIconToMode()
-                        }) {
-                            // paste mode.
-                            VStack {
-                                Image.paste
-                                VStack {
-                                    Text("Paste").font(.footnote)
-                                    if let name = pasteBoard
-                                        .cutGoal?
-                                        .notOptionalTitle
-                                        .components(separatedBy: " ")
-                                        .first {
-                                        Text(name.count > 5 ? (String(name.prefix(5)) + "...") : name)
-                                            .font(.footnote)
-                                    }
-                                }
-                            }
-                        }
-                        .buttonStyle(SkeuomorphicButtonStyle())
-                    } else if !goal.topGoal {
-                        PressDownButton {
-                            pasteBoard.cutGoal = goal.cutOut()
-                            presentationMode.wrappedValue.dismiss()
-                            UIApplication.matchIconToMode()
-                        } onPress: {
-                            isCutButtonTouchdown = true
-                        } onRelease: {
-                            isCutButtonTouchdown = false
-                        } content: {
-                            VStack {
-                                Image.cut
-                                Text("Cut").font(.footnote)
-                            }
-                        }
-                        .buttonStyle(SkeuomorphicButtonStyle())
-                    }
-                    Button(action: {
-                        // Tap the search view button.
-                        showSearchView.toggle()
-                        UIApplication.matchIconToMode()
-                    }) {
-                        Image.search
-                    }
-                    .buttonStyle(SkeuomorphicButtonStyle())
-                    Button(action: { modifyState = .add }) {
-                        VStack {
-                            Image.add
-                            Text(goal.topGoal ? "Add goal": "Sub")
-                                .font(Font.caption2)
-                        }
-                    }
-                    .buttonStyle(SkeuomorphicButtonStyle())
-                }
-                .padding(.horizontal)
-
                 if showSearchView {
                     // We can reach this by tapping the search button.
                     TextField("Search \(goal.notOptionalTitle) steps", text: $searchText)
@@ -361,7 +263,105 @@ struct GoalView: View {
                 Spacer()
 
                 // MARK: Horizontal Scroll view for buttons.
+                ScrollView(.horizontal, showsIndicators: false) {
+                    HStack {
+                        if !goal.topGoal && isDebug {
+    #if os(macOS)
+    #else
+                            Button(action: {
+                                // Tap home button.
+                                debugPrint("home")
+                            }) {
+                                Image.house
+                            }
+                            .buttonStyle(SkeuomorphicButtonStyle())
+    #endif
+                        }
+                        Spacer()
+                        if goal.stepCount > 0 {
+                            if flattened {
+                                Button(action: {
+                                    flattened.toggle()
+                                    UIApplication.matchIconToMode()
+                                }) {
+                                    VStack {
+                                        Image.tree
+                                        Text("Tree").font(Font.caption2)
+                                    }
+                                }.buttonStyle(SkeuomorphicButtonStyle())
+                            } else {
+                                Button(action: {
+                                    flattened.toggle()
+                                    UIApplication.matchIconToMode()
+                                }) {
+                                    VStack {
+                                        Image.flattened
+                                        Text("Flatten").font(Font.caption2)
+                                    }
+                                }.buttonStyle(SkeuomorphicButtonStyle())
+                            }
+                        }
 
+                        if let pasteGoal = pasteBoard.cutGoal {
+                            Button(action: {
+                                pasteGoal.isUserMarkedForDeletion = false
+                                goal.add(sub: pasteGoal)
+                                pasteBoard.cutGoal = nil
+                                UIApplication.matchIconToMode()
+                            }) {
+                                // paste mode.
+                                VStack {
+                                    Image.paste
+                                    VStack {
+                                        Text("Paste").font(.footnote)
+                                        if let name = pasteBoard
+                                            .cutGoal?
+                                            .notOptionalTitle
+                                            .components(separatedBy: " ")
+                                            .first {
+                                            Text(name.count > 5 ? (String(name.prefix(5)) + "...") : name)
+                                                .font(.footnote)
+                                        }
+                                    }
+                                }
+                            }
+                            .buttonStyle(SkeuomorphicButtonStyle())
+                        } else if !goal.topGoal {
+                            PressDownButton {
+                                pasteBoard.cutGoal = goal.cutOut()
+                                presentationMode.wrappedValue.dismiss()
+                                UIApplication.matchIconToMode()
+                            } onPress: {
+                                isCutButtonTouchdown = true
+                            } onRelease: {
+                                isCutButtonTouchdown = false
+                            } content: {
+                                VStack {
+                                    Image.cut
+                                    Text("Cut").font(.footnote)
+                                }
+                            }
+                            .buttonStyle(SkeuomorphicButtonStyle())
+                        }
+                        Button(action: {
+                            // Tap the search view button.
+                            showSearchView.toggle()
+                            UIApplication.matchIconToMode()
+                        }) {
+                            Image.search
+                        }
+                        .buttonStyle(SkeuomorphicButtonStyle())
+                        Button(action: { modifyState = .add }) {
+                            VStack {
+                                Image.add
+                                Text(goal.topGoal ? "Add goal": "Sub")
+                                    .font(Font.caption2)
+                            }
+                        }
+                        .buttonStyle(SkeuomorphicButtonStyle())
+                    }
+                    //.padding(.horizontal)
+                }
             }
 #if os(iOS)
             .navigationBarTitle(goal.notOptionalTitleClipped, displayMode: .inline)
