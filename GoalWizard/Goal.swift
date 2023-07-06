@@ -102,6 +102,15 @@ extension Goal {
         return result
     }
 
+    var importanceText: String {
+        "Importance/Priority" + (maxStepImportance.map { ", highest: \($0.string)" } ?? "")
+    }
+
+    var maxStepImportance: Decimal? {
+        steps?.goals.count == 0 ? nil :
+        steps?.goals.compactMap(\.importance?.decimal).reduce(0, +)
+    }
+
     var notOptionalTitleClipped: String {
         notOptionalTitle.count > 16 ? notOptionalTitle.clipped(to: 13) : notOptionalTitle
     }
@@ -153,17 +162,18 @@ extension Goal {
         steps.goals.count + steps.goals.reduce(0) { $0 + $1.subGoalCount }
     }
 
+    @discardableResult
     func addSuBGoal(
         title: String,
         estimatedTime: Int64,
         importance: String
-    ) {
+    ) -> UUID? {
         Goal.context.createAndSaveGoal(
             title: title,
             estimatedTime: estimatedTime,
             importance: importance,
             parent: self
-        )
+        ).id
     }
 
     func cutOut() -> Goal {
