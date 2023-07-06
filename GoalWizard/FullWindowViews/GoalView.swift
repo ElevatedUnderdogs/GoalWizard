@@ -283,7 +283,7 @@ struct GoalView: View {
                             }
                         ) {}
                     }
-                    if filteredSteps.incompletes.isEmpty && filteredSteps.completed.isEmpty && goal.topGoal {
+                    if filteredSteps.incompletes.isEmpty && filteredSteps.completed.isEmpty {
                         Button(action: { modifyState = .add }) {
                             HStack {
                                 Image.add
