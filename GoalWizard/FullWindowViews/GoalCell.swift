@@ -103,7 +103,7 @@ struct GoalCell: View {
                 }
                 if let importance = step.importance?.decimal, importance != 1 {
                     HStack {
-                        if let pathPresentation {
+                        if pathPresentation != nil {
                             Text("Branch importance: \(step.accumulatedImportance.roundedTo(digit: 2).string)")
                                 .font(.caption2)
                                 .foregroundColor(Color.systemCompatibleTeal)

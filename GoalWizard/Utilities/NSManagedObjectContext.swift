@@ -12,7 +12,7 @@ extension NSManagedObjectContext {
     func mergeTopGoals(
         topGoals: [Goal] = Goal.context.allGoals.filter(\.topGoal)
     ) {
-        guard let firstNotMarked = topGoals.filter { !$0.isUserMarkedForDeletion }.first else {
+        guard let firstNotMarked = topGoals.filter({ !$0.isUserMarkedForDeletion }).first else {
             return
         }
 
@@ -80,7 +80,7 @@ extension NSManagedObjectContext {
             try save()
         } catch {
             #if DEBUG
-            debugPrint((error as? NSError)?.userInfo as Any)
+            debugPrint((error as NSError).userInfo as Any)
             #endif
         }
     }
