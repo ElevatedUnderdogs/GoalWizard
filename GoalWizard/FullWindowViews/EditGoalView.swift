@@ -11,6 +11,12 @@ struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal
 
+    @State var reminder1: Date?
+    @State var reminder2: Date?
+
+    @State var showReminder1Picker = false
+    @State var showReminder2Picker = false
+
     func dismiss() {
         presentationMode.wrappedValue.dismiss()
     }
@@ -61,62 +67,148 @@ struct EditGoalView: View {
             set: { set(importance: $0) }
         )
         NavigationView {
-            VStack {
+            ScrollView {
+                VStack {
 #if os(iOS) || os(tvOS)
-                EmptyView()
+                    EmptyView()
 #else
-                HStack {
-                    Text("Edit Goal")
-                        .font(.headline)
-                        .padding(.leading)
-                    Spacer()
-                    Button("Done") {
-                        dismiss()
+                    HStack {
+                        Text("Edit Goal")
+                            .font(.headline)
+                            .padding(.leading)
+                        Spacer()
+                        Button("Done") {
+                            dismiss()
+                        }
+                        .padding(.trailing)
                     }
-                    .padding(.trailing)
-                }
 #endif
-                MultiPlatformTextEditor(
-                    title: titleBinder,
-                    placeholder: "Edit goal",
-                    macOSAccessibility: "EditGoalTextField",
-                    iOSAccessibility: "EditGoalTextField"
-                )
-                HStack {
-                    Text("Days Estimate")
-                        .foregroundColor(.gray)
-                    NumberTextField(
-                        placeholder: "",
-                        text: daysEstimateBinding,
-                        accessibilityIdentifier: "DaysEstimateTextField"
+                    MultiPlatformTextEditor(
+                        title: titleBinder,
+                        placeholder: "Edit goal",
+                        macOSAccessibility: "EditGoalTextField",
+                        iOSAccessibility: "EditGoalTextField"
                     )
-                }
-                HStack {
-                    Text("Importance/Priority")
-                        .foregroundColor(.gray)
-                    NumberTextField(
-                        placeholder: "Importance/Priority (Default is 1 day)",
-                        text: importanceBinding,
-                        accessibilityIdentifier: "ImportanceTextField",
-                        hasDecimals: true
+                    .frame(minHeight: 200)
+                    HStack {
+                        Text("Days Estimate")
+                            .foregroundColor(.gray)
+                        NumberTextField(
+                            placeholder: "",
+                            text: daysEstimateBinding,
+                            accessibilityIdentifier: "DaysEstimateTextField"
+                        )
+                    }
+                    HStack {
+                        Text("Importance/Priority")
+                            .foregroundColor(.gray)
+                        NumberTextField(
+                            placeholder: "Importance/Priority (Default is 1 day)",
+                            text: importanceBinding,
+                            accessibilityIdentifier: "ImportanceTextField",
+                            hasDecimals: true
+                        )
+                    }
+                    Toggle(isOn: $showReminder1Picker) {
+                        Text("Reminder" + (reminder1.map { ": \($0.typical), \($0.clockTime)" } ?? " 1"))
+                    }
+                    .onChange(of: showReminder1Picker) { newValue in
+                        if newValue {
+                            UIApplication.shared.endEditing()
+                        }
+                    }
+                    if showReminder1Picker {
+                        ReminderField(
+                            reminder: Binding<Date>(
+                                get: { self.reminder1 ?? Date() },
+                                set: { self.reminder1 = $0 }
+                            ),
+                            label: "Add Reminder 1"
+                        )
+                    }
+
+                    Toggle(isOn: $showReminder2Picker) {
+                        Text("Reminder" + (reminder2.map { ": \($0.typical), \($0.clockTime)" } ?? " 2"))
+                    }
+                    .onChange(of: showReminder2Picker) { newValue in
+                        if newValue {
+                            UIApplication.shared.endEditing()
+                        }
+                    }
+                    if showReminder2Picker {
+                        ReminderField(
+                            reminder: Binding<Date>(
+                                get: { self.reminder2 ?? Date() },
+                                set: { self.reminder2 = $0 }
+                            ),
+                            label: "Reminder 2"
+                        )
+                    }
+
+                    MultiPlatformActionButton(
+                        title: "Save",
+                        accessibilityId: "Edit Close Button",
+                        action: {
+                            let notificationCenter = UNUserNotificationCenter.current()
+                            notificationCenter.requestAuthorization(options: [.alert, .sound]) { accepted, _ in
+                                guard accepted else { return }
+                                if let goalId = goal.id {
+                                    let id1 = "\(goalId.uuidString)-reminder1"
+                                    let id2 = "\(goalId.uuidString)-reminder2"
+                                    // Remove existing notifications
+                                    notificationCenter.removeNotification(id: id1)
+                                    notificationCenter.removeNotification(id: id2)
+
+                                    // Update new notifications if reminders are set
+                                    if let reminder1 {
+                                        notificationCenter.scheduleNotification(
+                                            id: id1,
+                                            title: "Reminder",
+                                            body: "Don't forget to work on your goal: \(goal.title ?? "")",
+                                            date: reminder1
+                                        )
+                                    }
+
+                                    if let reminder2 {
+                                        notificationCenter.scheduleNotification(
+                                            id: id2,
+                                            title: "Reminder",
+                                            body: "Don't forget to work on your goal: \(goal.title ?? "")",
+                                            date: reminder2
+                                        )
+                                    }
+                                }
+                            }
+                            dismiss()
+                        }
                     )
+                    .padding(.top, 20)
+                    Spacer()
                 }
-                MultiPlatformActionButton(
-                    title: "Close (Saved)",
-                    accessibilityId: "Edit Close Button",
-                    action: dismiss
-                )
-                .padding(.top, 20)
-                Spacer()
-            }
-            .padding(.horizontal)
+                .padding(.horizontal)
 #if os(iOS) || os(tvOS)
-            .navigationBarTitle("Edit goal", displayMode: .inline)
-            .navigationBarItems(trailing: Button("Done") {
-                // I can make an editView ui test and tap the done button. 
-                dismiss()
-            }.accessibilityIdentifier("DoneButton"))
+                .navigationBarTitle("Edit goal", displayMode: .inline)
+                .navigationBarItems(trailing: Button("Done") {
+                    // I can make an editView ui test and tap the done button.
+                    dismiss()
+                }.accessibilityIdentifier("DoneButton"))
 #endif
+                .onAppear {
+                    guard let goalId = goal.id else { return }
+                    let reminder1Id = "\(goalId.uuidString)-reminder1"
+                    let reminder2Id = "\(goalId.uuidString)-reminder2"
+
+                    UNUserNotificationCenter
+                        .current()
+                        .fetchReminders(
+                            with: [reminder1Id, reminder2Id]
+                        ) { reminderDates in
+                            debugPrint(reminderDates[reminder1Id] as Any, reminderDates[reminder2Id] as Any)
+                            self.reminder1 = reminderDates[reminder1Id]
+                            self.reminder2 = reminderDates[reminder2Id]
+                        }
+                }
+            }
         }
     }
 }
@@ -124,6 +216,6 @@ struct EditGoalView: View {
 struct EditGoalView_Previews: PreviewProvider {
     // I can initialize a preview and read the body.
     static var previews: some View {
-        EditGoalView(goal: Goal.start)
+        EditGoalView(goal: .start)
     }
 }
