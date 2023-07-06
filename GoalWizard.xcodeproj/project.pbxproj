@@ -26,6 +26,8 @@
 		7566A75F2A0F4FAA001FEF0E /* NSFetchRequest.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */; };
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
 		75B01CB32A54707D007F27C5 /* debugPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB22A54707D007F27C5 /* debugPrint.swift */; };
+		75B01CB72A549CE3007F27C5 /* UNUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */; };
+		75B01CB92A549D21007F27C5 /* ReminderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB82A549D21007F27C5 /* ReminderField.swift */; };
 		75BC3D802A0F197300713D1B /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC3D7F2A0F197300713D1B /* Image.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
@@ -100,6 +102,8 @@
 		7566A75E2A0F4FAA001FEF0E /* NSFetchRequest.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NSFetchRequest.swift; sourceTree = "<group>"; };
 		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
 		75B01CB22A54707D007F27C5 /* debugPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = debugPrint.swift; sourceTree = "<group>"; };
+		75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNUserNotificationCenter.swift; sourceTree = "<group>"; };
+		75B01CB82A549D21007F27C5 /* ReminderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderField.swift; sourceTree = "<group>"; };
 		75BC3D7F2A0F197300713D1B /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardApp.swift; sourceTree = "<group>"; };
@@ -274,6 +278,7 @@
 				75C8B88029E3FBF400493D9C /* TestableHelpers.swift */,
 				75C8B7F429DE932B00493D9C /* URLRequest.swift */,
 				7560E8D12A48CB5B0041126D /* UIApplication.swift */,
+				75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */,
 				75C8B7F929DEA54500493D9C /* String.swift */,
 			);
 			path = Utilities;
@@ -286,6 +291,7 @@
 				75C8B88429E4F18900493D9C /* GoalCell.swift */,
 				75C0B13329D8BACD00D886CA /* AddGoalView.swift */,
 				75C0B1EC29DA197400D886CA /* EditGoalView.swift */,
+				75B01CB82A549D21007F27C5 /* ReminderField.swift */,
 			);
 			path = FullWindowViews;
 			sourceTree = "<group>";
@@ -471,6 +477,7 @@
 				75B01CB32A54707D007F27C5 /* debugPrint.swift in Sources */,
 				75C8B7FA29DEA54500493D9C /* String.swift in Sources */,
 				75BC3D802A0F197300713D1B /* Image.swift in Sources */,
+				75B01CB72A549CE3007F27C5 /* UNUserNotificationCenter.swift in Sources */,
 				75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */,
 				75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */,
 				75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */,
@@ -497,6 +504,7 @@
 				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
 				75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */,
+				75B01CB92A549D21007F27C5 /* ReminderField.swift in Sources */,
 				75111ADA2A11547C004441CB /* MultiPlatformActionButton.swift in Sources */,
 				7560E8D42A4BD54B0041126D /* PressDownButton.swift in Sources */,
 			);
