@@ -8,5 +8,5 @@
 import Foundation
 
 struct Secrets {
-    static let openAIKey = "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"
+    static let openAIKey = ""
 }
