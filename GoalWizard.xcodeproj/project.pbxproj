@@ -28,6 +28,7 @@
 		75B01CB32A54707D007F27C5 /* debugPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB22A54707D007F27C5 /* debugPrint.swift */; };
 		75B01CB72A549CE3007F27C5 /* UNUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */; };
 		75B01CB92A549D21007F27C5 /* ReminderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB82A549D21007F27C5 /* ReminderField.swift */; };
+		75B01CBB2A5693E3007F27C5 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CBA2A5693E3007F27C5 /* View.swift */; };
 		75BC3D802A0F197300713D1B /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC3D7F2A0F197300713D1B /* Image.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
 		75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10329D7EEA900D886CA /* GoalView.swift */; };
@@ -104,6 +105,7 @@
 		75B01CB22A54707D007F27C5 /* debugPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = debugPrint.swift; sourceTree = "<group>"; };
 		75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNUserNotificationCenter.swift; sourceTree = "<group>"; };
 		75B01CB82A549D21007F27C5 /* ReminderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderField.swift; sourceTree = "<group>"; };
+		75B01CBA2A5693E3007F27C5 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		75BC3D7F2A0F197300713D1B /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalWizardApp.swift; sourceTree = "<group>"; };
@@ -280,6 +282,7 @@
 				7560E8D12A48CB5B0041126D /* UIApplication.swift */,
 				75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */,
 				75C8B7F929DEA54500493D9C /* String.swift */,
+				75B01CBA2A5693E3007F27C5 /* View.swift */,
 			);
 			path = Utilities;
 			sourceTree = "<group>";
@@ -478,6 +481,7 @@
 				75C8B7FA29DEA54500493D9C /* String.swift in Sources */,
 				75BC3D802A0F197300713D1B /* Image.swift in Sources */,
 				75B01CB72A549CE3007F27C5 /* UNUserNotificationCenter.swift in Sources */,
+				75B01CBB2A5693E3007F27C5 /* View.swift in Sources */,
 				75C8B7EF29DCF8F700493D9C /* NSOrderedSet.swift in Sources */,
 				75C0B10429D7EEA900D886CA /* GoalView.swift in Sources */,
 				75C8B7E029DBABC200493D9C /* NSPersistenceContainer.swift in Sources */,
@@ -702,7 +706,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottlydon.GoalWizard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
@@ -745,7 +749,7 @@
 				LD_RUNPATH_SEARCH_PATHS = "@executable_path/Frameworks";
 				"LD_RUNPATH_SEARCH_PATHS[sdk=macosx*]" = "@executable_path/../Frameworks";
 				MACOSX_DEPLOYMENT_TARGET = 13.3;
-				MARKETING_VERSION = 1.2.0;
+				MARKETING_VERSION = 1.3.0;
 				PRODUCT_BUNDLE_IDENTIFIER = com.scottlydon.GoalWizard;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				SDKROOT = auto;
