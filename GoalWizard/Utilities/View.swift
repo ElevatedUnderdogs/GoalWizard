@@ -8,7 +8,7 @@
 import SwiftUI
 
 extension View {
-    func searchFieldStyle() -> some View {
+    var searchFieldStyle: some View {
          padding()
             .overlay(
                 RoundedRectangle(cornerRadius: 10)

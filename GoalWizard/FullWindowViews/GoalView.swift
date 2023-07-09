@@ -60,15 +60,7 @@ struct GoalView: View {
                 if showSearchView {
                     // We can reach this by tapping the search button.
                     TextField("Search \(goal.notOptionalTitle) steps", text: $searchText)
-                        .padding()
-                        .overlay(
-                            RoundedRectangle(cornerRadius: 10)
-                                .stroke(Color.gray, lineWidth: 1)
-                        )
-                        .padding(.leading, 20)
-                        .padding(.trailing, 20)
-                        .background(RoundedRectangle(cornerRadius: 10).fill(Color.systemGray6))
-                        .accessibilityIdentifier("Search TextField")
+                        .searchFieldStyle
                 }
 
                 if isCutButtonTouchdown {
@@ -256,7 +248,7 @@ struct GoalView: View {
                     }
                 }
                 .overlay(isCutButtonTouchdown ?
-                    RoundedRectangle(cornerRadius: 10)
+                         RoundedRectangle(cornerRadius: 10)
                     .stroke(Color.gray, lineWidth: 2) : nil
                 )
                 .accessibilityIdentifier("Goal List")
@@ -266,8 +258,8 @@ struct GoalView: View {
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
                         if !goal.topGoal && isDebug {
-    #if os(macOS)
-    #else
+#if os(macOS)
+#else
                             Button(action: {
                                 // Tap home button.
                                 debugPrint("home")
@@ -275,7 +267,7 @@ struct GoalView: View {
                                 Image.house
                             }
                             .buttonStyle(SkeuomorphicButtonStyle())
-    #endif
+#endif
                         }
                         Spacer()
                         if goal.stepCount > 0 {
@@ -301,7 +293,6 @@ struct GoalView: View {
                                 }.buttonStyle(SkeuomorphicButtonStyle())
                             }
                         }
-
                         if let pasteGoal = pasteBoard.cutGoal {
                             Button(action: {
                                 pasteGoal.isUserMarkedForDeletion = false
