@@ -105,11 +105,11 @@ class FilteredStepsTests: XCTestCase {
         let searchText = "Goal"
         var filteredSteps = goals.filteredSteps(with: searchText, flatten: false)
 
-        XCTAssertEqual(filteredSteps.incomplete.count, 2)
+        XCTAssertEqual(filteredSteps.incompletes.count, 2)
         XCTAssertEqual(filteredSteps.completed.count, 0)
 
-        XCTAssertTrue(filteredSteps.incomplete.contains(goal1))
-        XCTAssertTrue(filteredSteps.incomplete.contains(goal2))
+        XCTAssertTrue(filteredSteps.incompletes.contains(goal1))
+        XCTAssertTrue(filteredSteps.incompletes.contains(goal2))
         XCTAssertFalse(filteredSteps.completed.contains(goal3))
         goal2.add(sub: goal3) // 0/1
         goal3.daysEstimate = 2 // 0/2
@@ -120,7 +120,7 @@ class FilteredStepsTests: XCTestCase {
 
         debugPrint(goal2.progress, goal1.progress)
         filteredSteps = goals.filteredSteps(with: searchText, flatten: false)
-        XCTAssertEqual(filteredSteps.incomplete.first, goal2)
-        XCTAssertEqual(filteredSteps.incomplete.last, goal1)
+        XCTAssertEqual(filteredSteps.incompletes.first, goal2)
+        XCTAssertEqual(filteredSteps.incompletes.last, goal1)
     }
 }

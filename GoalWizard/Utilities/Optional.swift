@@ -15,11 +15,6 @@ extension Optional<NSSet> {
         guard let self else { return [] }
         return (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion} ?? []
     }
-
-    var goalsMarkedForDeletion: [Goal] {
-        guard let self else { return [] }
-        return (self.array as? [Goal])?.filter(\.isUserMarkedForDeletion) ?? []
-    }
 }
 
 extension NSSet {
@@ -27,14 +22,17 @@ extension NSSet {
     var goals: [Goal] {
         (self.array as? [Goal])?.filter { !$0.isUserMarkedForDeletion } ?? []
     }
-
-    var goalsMarkedForDeletion: [Goal] {
-        (self.array as? [Goal])?.filter(\.isUserMarkedForDeletion) ?? []
-    }
 }
 
 public extension Optional where Wrapped: ExpressibleByArrayLiteral, Wrapped: Equatable {
     var isEmpty: Bool {
         self == [] || self == nil
+    }
+}
+
+extension Optional where Wrapped == Date {
+
+    func reminderText(for version: String) -> String {
+        "Reminder" + (self.map { ": \($0.typical), \($0.clockTime)" } ?? " \(version)")
     }
 }

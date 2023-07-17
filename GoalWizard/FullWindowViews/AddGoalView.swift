@@ -65,27 +65,11 @@ struct AddGoalView: View {
                             hasDecimals: true
                         )
                     }
-                    Toggle(isOn: $showReminder1Picker) {
-                        Text("Set Reminder 1")
+                    ContentRevealerToggle(toggleText: "Set Reminder 1") {
+                        ReminderDatePicker(reminder: $reminder1, label: "Reminder 1")
                     }
-                    .onChange(of: showReminder1Picker) { newValue in
-                        if newValue {
-                            UIApplication.shared.endEditing()
-                        }
-                    }
-                    if showReminder1Picker {
-                        ReminderField(reminder: $reminder1, label: "Reminder 1")
-                    }
-                    Toggle(isOn: $showReminder2Picker) {
-                        Text("Set Reminder 2")
-                    }
-                    .onChange(of: showReminder2Picker) { newValue in
-                        if newValue {
-                            UIApplication.shared.endEditing()
-                        }
-                    }
-                    if showReminder2Picker {
-                        ReminderField(reminder: $reminder2, label: "Reminder 2")
+                    ContentRevealerToggle(toggleText: "Set Reminder 2") {
+                        ReminderDatePicker(reminder: $reminder1, label: "Reminder 2")
                     }
                     MultiPlatformActionButton(
                         title: "Add Goal",

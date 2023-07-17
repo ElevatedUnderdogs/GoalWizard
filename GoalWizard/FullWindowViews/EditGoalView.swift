@@ -11,8 +11,8 @@ struct EditGoalView: View {
     @Environment(\.presentationMode) var presentationMode
     @ObservedObject var goal: Goal
 
-    @State var reminder1: Date?
-    @State var reminder2: Date?
+    @State var reminderDate: Date?
+    @State var reminderDate2: Date?
 
     @State var showReminder1Picker = false
     @State var showReminder2Picker = false
@@ -109,42 +109,25 @@ struct EditGoalView: View {
                             hasDecimals: true
                         )
                     }
-                    Toggle(isOn: $showReminder1Picker) {
-                        Text("Reminder" + (reminder1.map { ": \($0.typical), \($0.clockTime)" } ?? " 1"))
-                    }
-                    .onChange(of: showReminder1Picker) { newValue in
-                        if newValue {
-                            UIApplication.shared.endEditing()
-                        }
-                    }
-                    if showReminder1Picker {
-                        ReminderField(
+                    ContentRevealerToggle(toggleText: reminderDate.reminderText(for: "1")) {
+                        ReminderDatePicker(
                             reminder: Binding<Date>(
-                                get: { self.reminder1 ?? Date() },
-                                set: { self.reminder1 = $0 }
+                                get: { self.reminderDate ?? Date() },
+                                set: { self.reminderDate = $0 }
                             ),
                             label: "Add Reminder 1"
                         )
                     }
 
-                    Toggle(isOn: $showReminder2Picker) {
-                        Text("Reminder" + (reminder2.map { ": \($0.typical), \($0.clockTime)" } ?? " 2"))
-                    }
-                    .onChange(of: showReminder2Picker) { newValue in
-                        if newValue {
-                            UIApplication.shared.endEditing()
-                        }
-                    }
-                    if showReminder2Picker {
-                        ReminderField(
+                    ContentRevealerToggle(toggleText: reminderDate2.reminderText(for: "2")) {
+                        ReminderDatePicker(
                             reminder: Binding<Date>(
-                                get: { self.reminder2 ?? Date() },
-                                set: { self.reminder2 = $0 }
+                                get: { self.reminderDate2 ?? Date() },
+                                set: { self.reminderDate2 = $0 }
                             ),
                             label: "Reminder 2"
                         )
                     }
-
                     MultiPlatformActionButton(
                         title: "Save",
                         accessibilityId: "Edit Close Button",
@@ -160,21 +143,21 @@ struct EditGoalView: View {
                                     notificationCenter.removeNotification(id: id2)
 
                                     // Update new notifications if reminders are set
-                                    if let reminder1 {
+                                    if let reminderDate {
                                         notificationCenter.scheduleNotification(
                                             id: id1,
                                             title: "Reminder",
                                             body: "Don't forget to work on your goal: \(goal.title ?? "")",
-                                            date: reminder1
+                                            date: reminderDate
                                         )
                                     }
 
-                                    if let reminder2 {
+                                    if let reminderDate2 {
                                         notificationCenter.scheduleNotification(
                                             id: id2,
                                             title: "Reminder",
                                             body: "Don't forget to work on your goal: \(goal.title ?? "")",
-                                            date: reminder2
+                                            date: reminderDate2
                                         )
                                     }
                                 }
@@ -204,8 +187,8 @@ struct EditGoalView: View {
                             with: [reminder1Id, reminder2Id]
                         ) { reminderDates in
                             debugPrint(reminderDates[reminder1Id] as Any, reminderDates[reminder2Id] as Any)
-                            self.reminder1 = reminderDates[reminder1Id]
-                            self.reminder2 = reminderDates[reminder2Id]
+                            self.reminderDate = reminderDates[reminder1Id]
+                            self.reminderDate2 = reminderDates[reminder2Id]
                         }
                 }
             }

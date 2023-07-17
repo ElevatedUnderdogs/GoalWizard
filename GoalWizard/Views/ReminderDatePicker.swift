@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-struct ReminderField: View {
+struct ReminderDatePicker: View {
     @Binding var reminder: Date
     var label: String
 

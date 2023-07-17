@@ -348,7 +348,10 @@ extension [Goal] {
         return Double(totalDays - daysLeft) / Double(totalDays)
     }
 
-    func filteredSteps(with searchText: String, flatten: Bool) -> (incompletes: [Goal], completed: [Goal]) {
+    func filteredSteps(
+        with searchText: String,
+        flatten: Bool
+    ) -> (incompletes: [Goal], completed: [Goal]) {
         let filteredGoals: [Goal]
 
         if searchText.isEmpty {

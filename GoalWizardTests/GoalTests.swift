@@ -152,7 +152,7 @@ fatalError("These tests should only run on a simulator, not on a physical device
     func testAncestorStringOneElement() {
         let first = Goal.start
         first.title = "first"
-        var second = Goal.empty
+        let second = Goal.empty
         second.title = "second"
         first.add(sub: second)
         XCTAssertEqual(second.fullAncestorPath, "first")

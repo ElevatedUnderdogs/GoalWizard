@@ -18,6 +18,8 @@ var isDebug: Bool {
     return result
 }
 
+// Swiftui can be more expressive with more contents in View body.
+// swiftlint: disable type_body_length
 struct GoalView: View {
 
     @ObservedObject var goal: Goal
@@ -142,7 +144,61 @@ struct GoalView: View {
                                             ProgressView()
                                         }
                                     }
-                                }) {}
+                                    // Won't Finish toggle and text field
+                                    Toggle(isOn: Binding(
+                                        get: { self.goal.wontFixText != nil },
+                                        set: {
+                                            if $0 {
+                                                self.goal.wontFixText = $0 ? (goal.wontFixText ?? "") : nil
+                                            } else {
+                                                self.goal.wontFixText = nil
+                                            }
+                                        }
+                                    )) {
+                                        Text("Won't Finish")
+                                    }
+                                    .padding()
+
+                                    if goal.wontFixText != nil {
+                                        TextField(
+                                            "Reason to not finish",
+                                            text: Binding(
+                                                get: { self.goal.wontFixText ?? "" },
+                                                set: {
+                                                    if goal.wontFixText == nil && $0 == "" {
+
+                                                    } else {
+                                                        goal.wontFixText = $0
+                                                    }
+                                                }
+                                            )
+                                        )
+                                        .padding()
+                                        .border(Color.gray, width: 0.5)
+                                    }
+
+                                    // In Motion toggle and date picker
+                                    Toggle(isOn: Binding(
+                                        get: { self.goal.inMotionFollowUpDate != nil },
+                                        set: { self.goal.inMotionFollowUpDate = $0 ? Date.distantFuture : nil }
+                                    )) {
+                                        Text("In Motion")
+                                    }.padding()
+
+                                    if let inMotionFollowUpDate = goal.inMotionFollowUpDate {
+                                        DatePicker(
+                                            "Select a date",
+                                            selection: Binding(
+                                                get: { self.goal.inMotionFollowUpDate ?? Date.distantFuture },
+                                                set: { newValue in self.goal.inMotionFollowUpDate = newValue }
+                                            ),
+                                            in: Date()...,
+                                            displayedComponents: .date
+                                        )
+                                        .padding()
+                                    }
+                                }
+                        ) {}
 
                     } else if !showSearchView {
                         // In a UI Test go to a step Goal View then add a step goal
@@ -257,18 +313,6 @@ struct GoalView: View {
                 // MARK: Horizontal Scroll view for buttons.
                 ScrollView(.horizontal, showsIndicators: false) {
                     HStack {
-                        if !goal.topGoal && isDebug {
-#if os(macOS)
-#else
-                            Button(action: {
-                                // Tap home button.
-                                debugPrint("home")
-                            }) {
-                                Image.house
-                            }
-                            .buttonStyle(SkeuomorphicButtonStyle())
-#endif
-                        }
                         Spacer()
                         if goal.stepCount > 0 {
                             if flattened {
@@ -351,7 +395,6 @@ struct GoalView: View {
                         }
                         .buttonStyle(SkeuomorphicButtonStyle())
                     }
-                    //.padding(.horizontal)
                 }
             }
 #if os(iOS)
@@ -381,6 +424,7 @@ struct GoalView: View {
         // swiftlint: enable multiple_closures_with_trailing_closure
     }
 }
+// swiftlint: enable type_body_length
 var didIt: Bool = false
 
 struct ContentView_Previews: PreviewProvider {

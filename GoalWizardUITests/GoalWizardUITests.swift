@@ -28,26 +28,37 @@ final class GoalWizardUITests: XCTestCase {
         app = XCUIApplication()
         app.launch()
 
-        let element = app.otherElements["Add"]
 
+        let element =  app.collectionViews["Goal List"].staticTexts["All Goals"]
         let timeout: TimeInterval = 1
-        let expectation = expectation(for: NSPredicate(format: "exists == true"), evaluatedWith: element, handler: nil)
 
-        _ = XCTWaiter().wait(for: [expectation], timeout: timeout)
+        _ = XCTWaiter()
+            .wait(
+                for: [expectation(
+                    for: NSPredicate(format: "exists == true"),
+                    evaluatedWith: element,
+                    handler: nil
+                )
+                ],
+                timeout: timeout
+            )
 
 #if canImport(UIKit)
         XCUIDevice.shared.orientation = UIDeviceOrientation.portrait
 #endif
+        acceptNotifications()
         clearAllCells()
     }
 
     override func tearDownWithError() throws {
+        acceptNotifications()
         clearAllCells()
         app = nil
     }
 
     override func tearDown() {
         super.tearDown()
+        acceptNotifications()
         clearAllCells()
         app = nil
     }
@@ -61,6 +72,9 @@ final class GoalWizardUITests: XCTestCase {
     }
 
     private func clearAllCells() {
+        guard let goalList = app?.collectionViews else { return }
+        let addButton = goalList.buttons["Add Button"]
+        guard !addButton.exists else { return }
         let buffer = swipeableTexts
         for text in buffer {
             deleteCellWith(title: text)
@@ -74,8 +88,8 @@ final class GoalWizardUITests: XCTestCase {
             app.staticTexts.matching(identifier: title).count <= 1 {
             app.staticTexts[title].swipeLeft(velocity: .slow)
         } else if app.collectionViews["Goal List"].otherElements["goal_cell_0"].exists &&
-            app.collectionViews["Goal List"].otherElements["goal_cell_0"].isHittable {
-                app.collectionViews["Goal List"].otherElements["goal_cell_0"].swipeLeft(velocity: .slow)
+                    app.collectionViews["Goal List"].otherElements["goal_cell_0"].isHittable {
+            app.collectionViews["Goal List"].otherElements["goal_cell_0"].swipeLeft(velocity: .slow)
         } else {
             debugPrint(
                 """
@@ -92,29 +106,42 @@ final class GoalWizardUITests: XCTestCase {
         }
     }
 
+    func tappAddSubGoalGlobal() {
+        app.scrollViews.otherElements.buttons["Add Button"].tap()
+    }
+
+    func tapCancelAddSubGoal() {
+        app
+        .navigationBars["Add Sub Goal"]
+        .buttons["CancelButton"].tap()
+    }
+
     func testCancelButton() {
-        app.buttons["Add"].tap()
-        app.navigationBars["Add Goal"].buttons["Cancel"].tap()
+        tappAddSubGoalGlobal()
+        tapCancelAddSubGoal()
     }
 
     let alphabet: String = "abcdefghijklmnopqrstuvwxys"
+
+    /// The Strings need to be long for the
+    /// swipe to delete to work sadly
     var random4Char: [String] {
-        [
-            // The Strings need to be long for the
-            // swipe to delete to work sadly
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!),
-            String(alphabet.randomElement()!)
-        ]
+        (0...12).map { _ in String(alphabet.randomElement()!) }
+    }
+
+    func tapEditButton() {
+        app.buttons["EDIT"].tap()
+    }
+
+    func acceptNotifications() {
+
+        guard let allowButton = app?
+            .alerts["“GoalWizard” Would Like to Send You Notifications"]
+            .scrollViews
+            .otherElements
+            .buttons["Allow"],
+              allowButton.exists else { return }
+        allowButton.tap()
     }
 
     func testEditTitleDays() {
@@ -123,7 +150,7 @@ final class GoalWizardUITests: XCTestCase {
 
         let goalListCollectionView = app.collectionViews["Goal List"]
         goalListCollectionView.staticTexts[longString].tap()
-        app.buttons["Edit"].tap()
+        tapEditButton()
 
         let editTextField = app.textViews["EditGoalTextField"]
 
@@ -131,10 +158,9 @@ final class GoalWizardUITests: XCTestCase {
 
         let longString2 = random4Char.joined()
         editTextField.typeText(longString2)
-
         app.buttons["Edit Close Button"].tap()
-
-        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+        acceptNotifications()
+        app.buttons["All Goals"].tap()
         let swipableTexts = swipeableTexts
         XCTAssertTrue(
             swipableTexts.contains(where: { $0.contains(longString2) }),
@@ -148,22 +174,27 @@ final class GoalWizardUITests: XCTestCase {
 
     func testEditEstimatedDays() {
         let longString = random4Char.joined()
+        print(longString)
         add(new: longString)
 
         let firstEstimates = swipeableTexts.filter { $0.contains("Est") }
         XCTAssertGreaterThan(
             firstEstimates.count, 0,
-            "There should be one that we added.")
-        let goalListCollectionView = app.collectionViews["Goal List"]
-        goalListCollectionView.staticTexts[longString].tap()
+            "There should be one that we added."
+        )
+        app.collectionViews["Goal List"].staticTexts[longString].tap()
+        print(longString)
 
-        app.buttons["Edit"].tap()
+        tapEditButton()
         let daysEstimateTextField = app.textFields["DaysEstimateTextField"]
         daysEstimateTextField.tap()
         daysEstimateTextField.typeText("20")
         app.navigationBars["Edit goal"].buttons["DoneButton"].tap()
-        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+
+        app.buttons["All Goals"].tap()
+
         let newEstimates = swipeableTexts.filter { $0.contains("Est") }
+        print(newEstimates)
         XCTAssertNotEqual(firstEstimates, newEstimates)
     }
 
@@ -177,13 +208,13 @@ final class GoalWizardUITests: XCTestCase {
             "There should be one that we added.")
         let goalListCollectionView = app.collectionViews["Goal List"]
         goalListCollectionView.staticTexts[longString].tap()
-        app.buttons["Edit"].tap()
+        tapEditButton()
 
         let importanceTextField = app.textFields["ImportanceTextField"]
         importanceTextField.tap()
         importanceTextField.typeText("7")
         app.navigationBars["Edit goal"].buttons["DoneButton"].tap()
-        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+        app.buttons["All Goals"].tap()
         let seven = swipeableTexts.filter { $0.contains("7") }
         XCTAssertNotEqual(firstEstimates, seven)
     }
@@ -192,24 +223,24 @@ final class GoalWizardUITests: XCTestCase {
     func testAddEditGoal() {
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 8 {
-            app.buttons["Add"].tap()
+            tappAddSubGoalGlobal()
             app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
             app.textViews["TitleTextEditor"].typeText(rand4.joined())
             app.buttons["AddGoalButton"].tap()
 
-            //  XCUIApplication().collectionViews["Goal List"].tap()
             goalList.staticTexts[rand4.joined()].tap()
-            app.buttons["Edit"].tap()
+            tapEditButton()
             app.textViews["EditGoalTextField"].tap()
             let rand2: String = random4Char.joined()
             app.textViews["EditGoalTextField"].typeText(rand2)
 
             app.buttons["Edit Close Button"].tap()
-            app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+            acceptNotifications()
+            app.buttons["All Goals"].tap()
             let swipableTexts = swipeableTexts
             XCTAssertTrue(
-                swipableTexts.contains(where: { $0.contains(rand2) }),
+                swipableTexts.contains(where: { $0.uppercased().contains(rand2.uppercased()) }),
                 "longString: " + rand2 + swipableTexts.joined(separator: ",")
             )
 
@@ -239,16 +270,15 @@ final class GoalWizardUITests: XCTestCase {
 
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 50 {
-            app.buttons["Add"].tap()
+            tappAddSubGoalGlobal()
             app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
             app.textViews["TitleTextEditor"].typeText(rand4.joined())
             app.buttons["AddGoalButton"].tap()
             XCTAssertTrue(app.staticTexts["0%"].exists)
             goalList.staticTexts[rand4.joined()].tap()
-
-            app.images["circle"].tap()
-            let backButton = app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"]
+            app.images["CIRCLE"].tap()
+            let backButton = app.buttons["All Goals"]
             backButton.tap()
 
             XCTAssertTrue(app.staticTexts["100%"].exists)
@@ -275,7 +305,7 @@ final class GoalWizardUITests: XCTestCase {
     func testGpTCall() {
         let goalList = app.collectionViews["Goal List"]
         if goalList.staticTexts.count < 8 {
-            app.buttons["Add"].tap()
+            tappAddSubGoalGlobal()
             app.textViews["TitleTextEditor"].tap()
             let eatMoreVegetables: String = "Eat more vegetables"
             app.textViews["TitleTextEditor"].typeText(eatMoreVegetables)
@@ -286,20 +316,6 @@ final class GoalWizardUITests: XCTestCase {
             // app.buttons["goalWizardGenicon"].tap()
             goalListCollectionView.staticTexts["Research vegetable options"].tap()
             goalListCollectionView.staticTexts["Look up different types of vegetables"].tap()
-        }
-    }
-
-    func testHome() {
-        let goalList = app.collectionViews["Goal List"]
-        if goalList.staticTexts.count < 10 {
-            app.buttons["Add"].tap()
-            app.textViews["TitleTextEditor"].tap()
-            let random: String = random4Char.joined()
-            app.textViews["TitleTextEditor"].typeText(random)
-            app.buttons["AddGoalButton"].tap()
-            app.staticTexts[random].tap()
-            app.buttons["Home Button"].tap()
-            XCTAssert(app.staticTexts["All Goals"].exists)
         }
     }
 
@@ -326,7 +342,7 @@ final class GoalWizardUITests: XCTestCase {
     }
 
     func add(new: String, returnAfter: Bool = true) {
-        app.buttons["Add"].tap()
+        tappAddSubGoalGlobal()
         app.textViews["TitleTextEditor"].tap()
         app.textViews["TitleTextEditor"].typeText(new)
         if returnAfter {
@@ -335,14 +351,12 @@ final class GoalWizardUITests: XCTestCase {
     }
 
     func testImportanceRating() {
-        let app = XCUIApplication()
-        let addButtonButton = app.buttons["Add Button"]
-        addButtonButton.tap()
+        tappAddSubGoalGlobal()
         let titletexteditorTextView = app.textViews["TitleTextEditor"]
         titletexteditorTextView.tap()
         let addgoalbuttonButton = app.buttons["AddGoalButton"]
         addgoalbuttonButton.tap()
-        addButtonButton.tap()
+        tappAddSubGoalGlobal()
         titletexteditorTextView.tap()
         titletexteditorTextView.tap()
         let importancetextfieldTextField = app.textFields["ImportanceTextField"]
@@ -356,7 +370,7 @@ final class GoalWizardUITests: XCTestCase {
         let goalList = app.collectionViews["Goal List"]
 
         if goalList.staticTexts.count < 8 {
-            app.buttons["Add"].tap()
+            tappAddSubGoalGlobal()
             app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
             app.textViews["TitleTextEditor"].typeText(rand4.joined())
@@ -366,33 +380,37 @@ final class GoalWizardUITests: XCTestCase {
             let app = XCUIApplication()
 
             for newGoal in ["Second", "Third"] {
-                app.buttons["Add Button"].tap()
+                tappAddSubGoalGlobal()
                 let textEditor = app.textViews["TitleTextEditor"]
                 textEditor.tap()
                 textEditor.typeText(newGoal)
                 app.buttons["AddGoalButton"].tap()
                 app.collectionViews["Goal List"].staticTexts[newGoal].tap()
             }
-            let backButton = app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"]
-            backButton.tap()
-            backButton.tap()
-            backButton.tap()
+            app.buttons["Second"].tap()
+            app.buttons[rand4.joined()].tap()
+            app.buttons["All Goals"].tap()
+//            backButton.tap()
+//            backButton.tap()
+//            backButton.tap()
             if app.buttons["Flattened button"].exists {
                 app.buttons["Flattened button"].tap()
             }
-            goalList.children(matching: .cell).element(boundBy: 1).buttons["All Goals...Second"].tap()
-            backButton.tap()
-            XCTAssertTrue(goalList.buttons["All Goals->\n\(rand4.joined())->\nSecond"].exists)
-            goalList.buttons["All Goals->\n\(rand4.joined())->\nSecond"].tap()
-            backButton.tap()
-            XCTAssertTrue(goalList.buttons["All Goals...Second"].exists)
+
+            XCUIApplication().collectionViews["Goal List"].buttons["All Goals...Second"].tap()
+            app.buttons["All Goals"].tap()
+           // goalList.children(matching: .cell).element(boundBy: 1).buttons["All Goals...Second"].tap()
+//            backButton.tap()
+            app.collectionViews["Goal List"].buttons["\(rand4.joined())->\nSecond"].tap()
+            app.buttons["All Goals"].tap()
+
         } else {
             XCTFail("you might not be clearing cells properly")
         }
     }
 
     func tapBackButton() {
-        app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+        app.buttons["All Goals"].tap()
     }
 
     /// Goes to new goal
@@ -409,8 +427,8 @@ final class GoalWizardUITests: XCTestCase {
         addGoalDepth(text: first)
         addGoalDepth(text: second)
         addGoalDepth(text: third)
-        tapBackButton()
-        app.buttons["Edit"].tap()
+        app.buttons[second].tap()
+        tapEditButton()
         XCTAssertTrue(swipeableTexts.contains(where: { $0.contains(second) }))
     }
 
@@ -423,9 +441,9 @@ final class GoalWizardUITests: XCTestCase {
         let third = random4Char.joined()
         add(new: third)
         app.collectionViews["Goal List"].staticTexts[third].tap()
-        app.images["circle"].tap()
+        app.images["CIRCLE"].tap()
 
-        tapBackButton()
+        app.buttons[second].tap()
         tapBackButton()
 
         app.buttons["Flattened button"].tap()
@@ -433,7 +451,7 @@ final class GoalWizardUITests: XCTestCase {
         let goalListCollectionView = app.collectionViews["Goal List"]
         goalListCollectionView.buttons["All Goals...\(second)"].tap()
         tapBackButton()
-        XCTAssertTrue(goalListCollectionView.buttons["All Goals->\n\(second)"].exists)
+        XCTAssertTrue(goalListCollectionView.buttons[second].exists)
         app.buttons["Expand to tree"].tap()
         XCTAssertTrue(app.collectionViews["Goal List"].staticTexts[second].exists)
     }
@@ -442,18 +460,19 @@ final class GoalWizardUITests: XCTestCase {
         let goalList = app.collectionViews["Goal List"]
 
         if goalList.staticTexts.count < 8 {
-            app.buttons["Add"].tap()
+            tappAddSubGoalGlobal()
             app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
             app.textViews["TitleTextEditor"].typeText(rand4.joined())
             app.buttons["AddGoalButton"].tap()
             let goalListCollectionView = app.collectionViews["Goal List"]
             goalListCollectionView.staticTexts[rand4.joined()].tap()
-            let circleImage = app.images["circle"]
+            let circleImage = app.images["CIRCLE"]
             circleImage.tap()
-            app.images["largecircle.fill.circle"].tap()
+            app.images["LARGECIRCLE.FILL.CIRCLE"].tap()
+
             circleImage.tap()
-            app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+            app.buttons["All Goals"].tap()
             XCTAssertTrue(goalListCollectionView.staticTexts["100%"].exists)
         } else {
             // not worth it case.
@@ -479,7 +498,7 @@ final class GoalWizardUITests: XCTestCase {
         let goalList = app.collectionViews["Goal List"]
 
         if goalList.staticTexts.count < 8 {
-            app.buttons["Add"].tap()
+            tappAddSubGoalGlobal()
             app.textViews["TitleTextEditor"].tap()
             let rand4: [String] = random4Char
             app.textViews["TitleTextEditor"].typeText(rand4.joined())
@@ -487,7 +506,7 @@ final class GoalWizardUITests: XCTestCase {
 
             let goalListCollectionView = app.collectionViews["Goal List"]
             goalListCollectionView.staticTexts[rand4.joined()].tap()
-            app.buttons["Add Button"].tap()
+            tappAddSubGoalGlobal()
 
             let rand42: [String] = random4Char
             app.textViews["TitleTextEditor"].tap()
@@ -495,7 +514,7 @@ final class GoalWizardUITests: XCTestCase {
             app.buttons["AddGoalButton"].tap()
             goalListCollectionView.staticTexts[rand42.joined()].tap()
             app.buttons["cut Button"].tap()
-            app.navigationBars["_TtGC7SwiftUI32NavigationStackHosting"].buttons["Back"].tap()
+            app.buttons["All Goals"].tap()
             app.buttons["paste Button"].tap()
             XCTAssertTrue(goalListCollectionView.staticTexts[rand42.joined()].exists)
         } else {

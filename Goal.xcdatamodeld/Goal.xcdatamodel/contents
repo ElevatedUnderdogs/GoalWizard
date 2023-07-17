@@ -8,6 +8,7 @@
         <attribute name="forceUpdate" optional="YES" attributeType="String"/>
         <attribute name="id" optional="YES" attributeType="UUID" usesScalarValueType="NO"/>
         <attribute name="importance" attributeType="String" defaultValueString="1"/>
+        <attribute name="inMotionFollowUpDate" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="isUserMarkedForDeletion" optional="YES" attributeType="Boolean" usesScalarValueType="YES"/>
         <attribute name="progress" attributeType="Double" defaultValueString="0.0" usesScalarValueType="YES"/>
         <attribute name="progressPercentage" attributeType="String" defaultValueString="&quot;&quot;"/>
@@ -15,6 +16,7 @@
         <attribute name="timeStamp" optional="YES" attributeType="Date" usesScalarValueType="NO"/>
         <attribute name="title" attributeType="String" defaultValueString=""/>
         <attribute name="topGoal" attributeType="Boolean" defaultValueString="NO" usesScalarValueType="YES"/>
+        <attribute name="wontFixText" optional="YES" attributeType="String"/>
         <relationship name="parent" optional="YES" maxCount="1" deletionRule="Nullify" destinationEntity="Goal" inverseName="steps" inverseEntity="Goal"/>
         <relationship name="steps" optional="YES" toMany="YES" deletionRule="Nullify" destinationEntity="Goal" inverseName="parent" inverseEntity="Goal"/>
     </entity>

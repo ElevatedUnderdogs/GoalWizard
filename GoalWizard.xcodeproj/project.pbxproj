@@ -27,7 +27,7 @@
 		7596AC5229E64FF0003A68AA /* GoalViewTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7596AC5129E64FF0003A68AA /* GoalViewTests.swift */; };
 		75B01CB32A54707D007F27C5 /* debugPrint.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB22A54707D007F27C5 /* debugPrint.swift */; };
 		75B01CB72A549CE3007F27C5 /* UNUserNotificationCenter.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */; };
-		75B01CB92A549D21007F27C5 /* ReminderField.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB82A549D21007F27C5 /* ReminderField.swift */; };
+		75B01CB92A549D21007F27C5 /* ReminderDatePicker.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CB82A549D21007F27C5 /* ReminderDatePicker.swift */; };
 		75B01CBB2A5693E3007F27C5 /* View.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75B01CBA2A5693E3007F27C5 /* View.swift */; };
 		75BC3D802A0F197300713D1B /* Image.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75BC3D7F2A0F197300713D1B /* Image.swift */; };
 		75C0B10229D7EEA900D886CA /* GoalWizardApp.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */; };
@@ -65,6 +65,8 @@
 		75DE909029E7DE470089E35A /* ColorTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE908F29E7DE470089E35A /* ColorTests.swift */; };
 		75DE909229E7E1AC0089E35A /* DateFormatterTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */; };
 		75DE909829E7E6230089E35A /* OptionalNSOrderedSetTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */; };
+		75F910F92A5A9A72005C3108 /* CodableGoalMatchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F910F82A5A9A72005C3108 /* CodableGoalMatchTests.swift */; };
+		75F910FB2A5FD9E8005C3108 /* ContentRevealerToggle.swift in Sources */ = {isa = PBXBuildFile; fileRef = 75F910FA2A5FD9E8005C3108 /* ContentRevealerToggle.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -104,7 +106,7 @@
 		7596AC5129E64FF0003A68AA /* GoalViewTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GoalViewTests.swift; sourceTree = "<group>"; };
 		75B01CB22A54707D007F27C5 /* debugPrint.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = debugPrint.swift; sourceTree = "<group>"; };
 		75B01CB62A549CE3007F27C5 /* UNUserNotificationCenter.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UNUserNotificationCenter.swift; sourceTree = "<group>"; };
-		75B01CB82A549D21007F27C5 /* ReminderField.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderField.swift; sourceTree = "<group>"; };
+		75B01CB82A549D21007F27C5 /* ReminderDatePicker.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ReminderDatePicker.swift; sourceTree = "<group>"; };
 		75B01CBA2A5693E3007F27C5 /* View.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = View.swift; sourceTree = "<group>"; };
 		75BC3D7F2A0F197300713D1B /* Image.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Image.swift; sourceTree = "<group>"; };
 		75C0B0FE29D7EEA900D886CA /* GoalWizard.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = GoalWizard.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -145,6 +147,8 @@
 		75DE908F29E7DE470089E35A /* ColorTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ColorTests.swift; sourceTree = "<group>"; };
 		75DE909129E7E1AC0089E35A /* DateFormatterTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DateFormatterTests.swift; sourceTree = "<group>"; };
 		75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionalNSOrderedSetTests.swift; sourceTree = "<group>"; };
+		75F910F82A5A9A72005C3108 /* CodableGoalMatchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CodableGoalMatchTests.swift; sourceTree = "<group>"; };
+		75F910FA2A5FD9E8005C3108 /* ContentRevealerToggle.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ContentRevealerToggle.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -211,9 +215,9 @@
 				75DBE5CE29EC8F5D00EEBB83 /* Info.plist */,
 				75C0B10129D7EEA900D886CA /* GoalWizardApp.swift */,
 				75C0B12C29D7F2CF00D886CA /* Goal.swift */,
-				7520632C2A2D3AB300B27384 /* Migration */,
 				75C0B13E29D8C46F00D886CA /* FullWindowViews */,
 				75C0B1EE29DA3E0400D886CA /* Views */,
+				7520632C2A2D3AB300B27384 /* Migration */,
 				75C0B13D29D8C46500D886CA /* Utilities */,
 				75C0B10529D7EEAA00D886CA /* Assets.xcassets */,
 				75C0B10729D7EEAA00D886CA /* GoalWizard.entitlements */,
@@ -249,6 +253,7 @@
 				75DE909729E7E6230089E35A /* OptionalNSOrderedSetTests.swift */,
 				7513DE5729E8BC2300CB4468 /* MiscTestsForEdgeCases.swift */,
 				7566A75C2A0F3794001FEF0E /* NSManagedObjectContextTests.swift */,
+				75F910F82A5A9A72005C3108 /* CodableGoalMatchTests.swift */,
 			);
 			path = GoalWizardTests;
 			sourceTree = "<group>";
@@ -291,10 +296,8 @@
 			isa = PBXGroup;
 			children = (
 				75C0B10329D7EEA900D886CA /* GoalView.swift */,
-				75C8B88429E4F18900493D9C /* GoalCell.swift */,
 				75C0B13329D8BACD00D886CA /* AddGoalView.swift */,
 				75C0B1EC29DA197400D886CA /* EditGoalView.swift */,
-				75B01CB82A549D21007F27C5 /* ReminderField.swift */,
 			);
 			path = FullWindowViews;
 			sourceTree = "<group>";
@@ -302,6 +305,9 @@
 		75C0B1EE29DA3E0400D886CA /* Views */ = {
 			isa = PBXGroup;
 			children = (
+				75C8B88429E4F18900493D9C /* GoalCell.swift */,
+				75B01CB82A549D21007F27C5 /* ReminderDatePicker.swift */,
+				75F910FA2A5FD9E8005C3108 /* ContentRevealerToggle.swift */,
 				75111AD72A114814004441CB /* MultiPlatformTextField.swift */,
 				75111AD92A11547C004441CB /* MultiPlatformActionButton.swift */,
 				75111ADB2A115663004441CB /* NumberTextField.swift */,
@@ -508,7 +514,8 @@
 				75C0B14029D9223400D886CA /* ProgressBar.swift in Sources */,
 				75C0B13429D8BACD00D886CA /* AddGoalView.swift in Sources */,
 				75C8B87D29E3F00300493D9C /* GoalView.Models.swift in Sources */,
-				75B01CB92A549D21007F27C5 /* ReminderField.swift in Sources */,
+				75F910FB2A5FD9E8005C3108 /* ContentRevealerToggle.swift in Sources */,
+				75B01CB92A549D21007F27C5 /* ReminderDatePicker.swift in Sources */,
 				75111ADA2A11547C004441CB /* MultiPlatformActionButton.swift in Sources */,
 				7560E8D42A4BD54B0041126D /* PressDownButton.swift in Sources */,
 			);
@@ -525,6 +532,7 @@
 				75C7676C2A0EEECA0071419D /* AddGoalViewTests.swift in Sources */,
 				75DE909229E7E1AC0089E35A /* DateFormatterTests.swift in Sources */,
 				75DE909829E7E6230089E35A /* OptionalNSOrderedSetTests.swift in Sources */,
+				75F910F92A5A9A72005C3108 /* CodableGoalMatchTests.swift in Sources */,
 				75C0B12F29D7F79900D886CA /* GoalTests.swift in Sources */,
 				7546B0CA29E67E4600524F3C /* StringTest.swift in Sources */,
 				75296A0229E8C45F00C0A06C /* CustomViewTests.swift in Sources */,

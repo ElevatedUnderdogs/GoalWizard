@@ -91,12 +91,12 @@ final class GoalViewTests: XCTestCase {
         )
 
         XCTAssertEqual(
-            Set(goalView.filteredSteps.incomplete.map(\.title)),
+            Set(goalView.filteredSteps.incompletes.map(\.title)),
             Set([text2, text3])
         )
         goalView.delete(impcomplete: [0])
         XCTAssertEqual(
-            Set(goalView.filteredSteps.incomplete.map(\.title)),
+            Set(goalView.filteredSteps.incompletes.map(\.title)),
             Set([text3])
         )
         XCTAssertEqual(
